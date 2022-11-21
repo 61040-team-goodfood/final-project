@@ -11,7 +11,6 @@ export type User = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   username: string;
   password: string;
-  dateJoined: Date;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -26,11 +25,6 @@ const UserSchema = new Schema({
   // The user's password
   password: {
     type: String,
-    required: true
-  },
-  // The date the user joined
-  dateJoined: {
-    type: Date,
     required: true
   }
 });

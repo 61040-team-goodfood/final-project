@@ -1,21 +1,11 @@
 import type {HydratedDocument} from 'mongoose';
-import moment from 'moment';
 import type {User} from './model';
 
 // Update this if you add a property to the User type!
 type UserResponse = {
   _id: string;
   username: string;
-  dateJoined: string;
 };
-
-/**
- * Encode a date as an unambiguous string
- *
- * @param {Date} date - A date object
- * @returns {string} - formatted date as string
- */
-const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:mm:ss a');
 
 /**
  * Transform a raw User object from the database into an object
@@ -34,8 +24,7 @@ const constructUserResponse = (user: HydratedDocument<User>): UserResponse => {
   delete userCopy.password;
   return {
     ...userCopy,
-    _id: userCopy._id.toString(),
-    dateJoined: formatDate(user.dateJoined)
+    _id: userCopy._id.toString()
   };
 };
 

@@ -9,8 +9,8 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
-    filter: null, // Username to filter shown freets by (null = show all)
-    freets: [], // All freets created in the app
+    // inPantry: true, // Status to filter shown items by (true = in pantry, false = in history)
+    groceryItems: [], // All groceryItems created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
@@ -31,27 +31,28 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
-    updateFilter(state, filter) {
+    // updateFilter(state, inPantry) {
+    //   /**
+    //    * Update the stored grocery items filter to the specified one.
+    //    * @param inPantry - Status of the grocery tiems to filter by
+    //    */
+    //   state.inPantry = inPantry;
+    // },
+    updateGroceryItems(state, groceryItems) {
       /**
-       * Update the stored freets filter to the specified one.
-       * @param filter - Username of the user to fitler freets by
+       * Update the stored grocery items to the provided ones.
+       * @param groceryItems - grocery items to store
        */
-      state.filter = filter;
+      state.groceryItems = groceryItems;
     },
-    updateFreets(state, freets) {
-      /**
-       * Update the stored freets to the provided freets.
-       * @param freets - Freets to store
-       */
-      state.freets = freets;
-    },
-    async refreshFreets(state) {
+    async refreshGroceryItems(state, inPantry) {
       /**
        * Request the server for the currently available freets.
+       * @param inPantry - boolean denoting whether to filter items by currently in pantry
        */
-      const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
+      const url = `/api/groceryItems?status=${inPantry}`;
       const res = await fetch(url).then(async r => r.json());
-      state.freets = res;
+      state.groceryItems = res;
     }
   },
   // Store data across page refreshes, only discard on browser close

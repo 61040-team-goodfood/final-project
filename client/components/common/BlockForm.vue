@@ -18,6 +18,21 @@
           :value="field.value"
           @input="field.value = $event.target.value"
         />
+        <select 
+          v-else-if="field.id === 'unit'" 
+          :name="field.id"
+          :value="field.value" 
+          @change="field.value = $event.target.value"
+        >
+          <option v-for="opt in field.options" v-bind:value="opt.id">{{ opt.value }}</option>
+        </select>
+        <input
+          v-else-if="field.id === 'expiration'"
+          type="date"
+          :name="field.id"
+          :value="field.value"
+          @input="field.value = $event.target.value"
+        />
         <input
           v-else
           :type="field.id === 'password' ? 'password' : 'text'"
@@ -25,6 +40,7 @@
           :value="field.value"
           @input="field.value = $event.target.value"
         >
+        <p v-if="field.append">{{ field.append }}</p>
       </div>
     </article>
     <article v-else>
@@ -60,7 +76,7 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      refreshFreets: false, // Whether or not stored freets should be updated after form submission
+      refreshGroceryItems: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null // Function to run after successful form submission
     };
@@ -99,8 +115,8 @@ export default {
           this.$store.commit('setUsername', res.user ? res.user.username : null);
         }
 
-        if (this.refreshFreets) {
-          this.$store.commit('refreshFreets');
+        if (this.refreshGroceryItems) {
+          this.$store.commit('refreshGroceryItems', true);
         }
 
         if (this.callback) {

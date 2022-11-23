@@ -13,12 +13,12 @@ export default {
       hasBody: true,
       setUsername: true,
       fields: [
-        {id: 'username', label: 'Username', value: ''},
-        {id: 'password', label: 'Password', value: ''}
+        { type: 'text', id: 'username', label: 'Username', value: '' },
+        { type: 'password', id: 'password', label: 'Password', value: '' }
       ],
-      title: 'Sign in',
+      title: 'Sign In',
       callback: () => {
-        this.$router.push({name: 'Home'});
+        this.$router.push({ name: 'Home' });
         this.$store.commit('alert', {
           message: 'You are now signed in!', status: 'success'
         });

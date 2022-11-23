@@ -13,15 +13,17 @@ export default {
       hasBody: true,
       setUsername: true,
       fields: [
-        {id: 'username', label: 'Username', value: ''},
-        {id: 'password', label: 'Password', value: ''}
+        { type: 'text', id: 'username', label: 'Username', value: '' },
+        { type: 'password', id: 'password', label: 'Password', value: '' }
       ],
-      title: 'Create account',
+      title: 'Create Account',
       callback: () => {
         const message = 'Successfully created an account!';
-        this.$router.push({name: 'Home'});
-        this.$set(this.alerts, message, 'success');
-        setTimeout(() => this.$delete(this.alerts, message), 3000);
+        this.$router.push({ name: 'Home' });
+        this.$store.commit('alert', {
+          message: message,
+          status: 'success'
+        });
       }
     };
   }

@@ -3,7 +3,7 @@ import UserCollection from '../user/collection';
 
 /**
  * Checks if the current session user (if any) still exists in the database, for instance,
- * a user may try to post a freet in some browser while the account has been deleted in another or
+ * a user may try to make a change in some browser while the account has been deleted in another or
  * when a user tries to modify an account in some browser while it has been deleted in another
  */
 const isCurrentSessionUserExists = async (req: Request, res: Response, next: NextFunction) => {
@@ -56,10 +56,10 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
  * Checks if a user with username and password in req.body exists
  */
 const isAccountExists = async (req: Request, res: Response, next: NextFunction) => {
-  const {username, password} = req.body as {username: string; password: string};
+  const { username, password } = req.body as { username: string; password: string };
 
   if (!username || !password) {
-    res.status(400).json({error: `Missing ${username ? 'password' : 'username'} credentials for sign in.`});
+    res.status(400).json({ error: `Missing ${username ? 'password' : 'username'} credentials for sign in.` });
     return;
   }
 
@@ -70,7 +70,7 @@ const isAccountExists = async (req: Request, res: Response, next: NextFunction) 
   if (user) {
     next();
   } else {
-    res.status(401).json({error: 'Invalid user login credentials provided.'});
+    res.status(401).json({ error: 'Invalid user login credentials provided.' });
   }
 };
 

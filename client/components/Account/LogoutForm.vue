@@ -11,11 +11,11 @@ export default {
       url: '/api/users/session',
       method: 'DELETE',
       setUsername: true,
-      title: 'Sign out',
+      title: 'Sign Out',
       fields: [],
       content: 'Taking a break? See you later.',
       callback: () => {
-        this.$router.push({name: 'Home'}); // Goes to Home page after signing out
+        this.$router.push({ name: 'Home' }); // Goes to Home page after signing out
         this.$store.commit('alert', {
           message: 'You are now signed out!', status: 'success'
         });
@@ -24,3 +24,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+button {
+  border: #6c757d;
+  background-color: #6c757d;
+}
+
+button:hover {
+  border: #545b62;
+  background-color: #5a6268;
+}
+</style>

@@ -12,13 +12,15 @@ export default {
       method: 'PATCH',
       hasBody: true,
       fields: [
-        {id: 'password', label: 'Password', value: ''}
+        { type: 'password', id: 'password', label: 'Password', value: '' }
       ],
-      title: 'Change password',
+      title: 'Change Password',
       callback: () => {
         const message = 'Successfully changed password!';
-        this.$set(this.alerts, message, 'success');
-        setTimeout(() => this.$delete(this.alerts, message), 3000);
+        this.$store.commit('alert', {
+          message: message,
+          status: 'success'
+        });
       }
     };
   }

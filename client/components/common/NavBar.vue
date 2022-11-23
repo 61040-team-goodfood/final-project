@@ -3,85 +3,101 @@
 <!-- This navbar takes advantage of both flex and grid layouts for positioning elements; feel free to redesign as you see fit! -->
 
 <template>
-  <nav>
-    <div class="left">
-      <img src="../../public/logo.svg">
-      <h1 class="title">
-        Fritter
-      </h1>
+  <div 
+    class="sidebar d-flex flex-column flex-shrink-0 p-4 text-white bg-dark" 
+  >
+    <router-link 
+      class="text-white"
+      to="/"
+    >
+      <h2 class="fs-4 mb-4">
+        GoodFood
+      </h2>
+    </router-link>
+    <br/>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item mb-3">
+        <router-link 
+          class="text-white"
+          to="/"
+        >
+          <i class="bi bi-house mx-2"></i>
+          <span class="fs-4">Home</span>
+        </router-link>
+      </li>
+      <li class="nav-item mb-3" v-if="$store.state.username">
+        <router-link 
+          class="text-white"
+          to="/account"
+        >
+          <i class="bi bi-speedometer2 mx-2"></i>
+          <span class="fs-4">Account</span>
+        </router-link>
+      </li>
+    </ul>
+    <div v-if="$store.state.username">
+      <a 
+        class="text-white"
+        to="/"
+        @click.prevent="logout"
+      >
+        <i class="bi bi-box-arrow-left mx-2"></i>
+        <span class="fs-4">Sign Out</span>
+    </a>
     </div>
-    <div class="right">
-      <router-link to="/">
-        Home
-      </router-link>
+    <div v-else>
       <router-link 
-        v-if="$store.state.username"
-        to="/pantry"
-      >
-        Pantry
-      </router-link>
-      <router-link
-        v-if="$store.state.username"
-        to="/account"
-      >
-        Account
-      </router-link>
-      <router-link
-        v-else
+        class="text-white"
         to="/login"
       >
-        Login
+        <i class="bi bi-person-circle mx-2"></i>
+        <span class="fs-4">Sign In</span>
       </router-link>
     </div>
-    <section class="alerts">
-      <article
-        v-for="(status, alert, index) in $store.state.alerts"
-        :key="index"
-        :class="status"
-      >
-        <p>{{ alert }}</p>
-      </article>
-    </section>
-  </nav>
+  </div>
 </template>
 
+<script>
+export default {
+  name: 'NavBar',
+  methods: {
+    async logout() {
+      const options = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'same-origin' // Sends express-session credentials with request
+      };
+      try {
+        const r = await fetch('/api/users/session', options);
+        if (!r.ok) {
+          // If response is not okay, we throw an error and enter the catch block
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+        this.$store.commit('setUsername', null);
+        this.$store.commit('alert', {
+          message: 'You are now signed out!',
+          status: 'success'
+        });
+        this.$router.push({name: 'Home'});
+      } catch (e) {
+        this.$store.commit('alert', {
+          message: e, 
+          status: 'danger'
+        });
+      }
+    }
+  }
+}
+</script>
+
 <style scoped>
-nav {
-    padding: 1vw 2vw;
-    background-color: #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
+.sidebar {
+  height: 100vh;
+  width: 100%;
 }
 
-.title {
-    font-size: 32px;
-    margin: 0 5px;
-}
-
-img {
-    height: 32px;
-}
-
-.left {
-	display: flex;
-	align-items: center;
-}
-
-.right {
-    font-size: 20px;
-    display: grid;
-    gap: 16px;
-    grid-auto-flow: column;
-    align-items: center;
-}
-
-.right a {
-    margin-left: 5px;
-}
-
-.alerts {
-    width: 25%;
+a:hover {
+  text-decoration: underline !important;
 }
 </style>

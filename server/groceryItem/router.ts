@@ -79,7 +79,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const item = await GroceryItemCollection.addOne(userId, req.body.name, req.body.quantity, req.body.unit, req.body.expiration, req.body.remindDays);
+    const item = await GroceryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
 
     res.status(201).json({
       message: 'Your grocery item was created successfully.',

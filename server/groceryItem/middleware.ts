@@ -39,8 +39,8 @@ const isValidName = (req: Request, res: Response, next: NextFunction) => {
  * i.e not negative
  */
 const isValidQuantity = (req: Request, res: Response, next: NextFunction) => {
-  const {quantity} = req.body as {quantity: number};
-  if (quantity < 0) {
+  const {value} = req.body.quantity as {value: number};
+  if (value < 0) {
     res.status(405).json({
       error: 'Quantity cannot be negative.'
     });
@@ -55,7 +55,7 @@ const isValidQuantity = (req: Request, res: Response, next: NextFunction) => {
  * i.e not empty
  */
 const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
-  const {unit} = req.body as {unit: string};
+  const {unit} = req.body.quantity as {unit: string};
   if (!unit.trim()) {
     res.status(400).json({
       error: 'Unit must be specified.'

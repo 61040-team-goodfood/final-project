@@ -23,6 +23,7 @@
           @input="field.value = $event.target.value"
           required
         />
+        
         <div v-else-if="field.type === 'collection'">
           <input 
             class="form-control" 
@@ -108,7 +109,8 @@
               type="date"
               :name="field.id"
               :value="field.value"
-              :required="field.required"
+              :required="expires"
+              :disabled="!expires"
               @input="field.value = $event.target.value" 
             >
           </div>
@@ -119,8 +121,8 @@
               class="form-check-input" 
               type="checkbox" value="" 
               :id="field.id"
-              :checked="!field.required"
-              @change="field.required = !field.required"
+              :checked="!expires"
+              @change="expires = !expires"
             >
             <label 
               class="form-check-label" 
@@ -129,6 +131,25 @@
               None
             </label>
           </div>
+        </div>
+        <div 
+          v-else-if="field.type === 'reminder'"
+          class="row"
+        >
+          <div class="col-9">
+            <input 
+              class="form-control"
+              type="number" 
+              :name="field.id" 
+              :value="field.value"
+              :placeholder="field.placeholder"
+              :disabled="!expires"
+              min="1" 
+              @input="field.value = $event.target.value" 
+              required
+            >
+          </div>
+          days in advance
         </div>
         <div
           v-else-if="field.type === 'ingredients'"
@@ -267,14 +288,11 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-<<<<<<< HEAD
       refreshGroceryItems: false,
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
-=======
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
->>>>>>> main
+      expires: true,
     };
   },
   created() {
@@ -369,10 +387,14 @@ export default {
                 unit: unit
               }];
             } else if (type === 'date') {
-              const { id, value, required } = field;
+              const { id, value } = field;
               field.value = '';
-              field.required = false;
-              return required ? [id, value] : [id, null];
+              this.expires = true;
+              return this.expires ? [id, value] : [id, null];
+            } else if (type === 'reminder') {
+              const {id, value} = field;
+              field.value = 3;
+              return [id, value];
             } else if (type === 'baskets') {
               const { id } = field;
               const baskets = this.checkedBaskets;
@@ -401,13 +423,10 @@ export default {
           this.$store.commit('setUsername', res.user ? res.user.username : null);
         }
 
-<<<<<<< HEAD
         if (this.refreshGroceryItems) {
           this.$store.commit('refreshGroceryItems', true);
         }
 
-=======
->>>>>>> main
         if (this.callback) {
           this.callback();
         }

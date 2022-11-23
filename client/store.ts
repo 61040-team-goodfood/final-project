@@ -10,7 +10,28 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     username: null, // Username of the logged in user
-    alerts: {} // global success/error messages encountered during submissions to non-visible forms
+    alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
+    units: [
+      'count',
+      'mL',
+      'L',
+      'tsp',
+      'tbsp',
+      'fl oz',
+      'c',
+      'pt',
+      'qt',
+      'gal',
+      'mg',
+      'g',
+      'kg',
+      'lb',
+      'oz'
+    ], // Fixed list of units
+    baskets: [
+      'basket1',
+      'basket2'
+    ] // Make API call to populate, fixed list for now
   },
   mutations: {
     alert(state, payload) {

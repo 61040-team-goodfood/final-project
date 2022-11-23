@@ -20,42 +20,225 @@
           :name="field.id" 
           :value="field.value"
           :placeholder="field.placeholder" 
-          @input="field.value = $event.target.value" 
+          @input="field.value = $event.target.value"
+          required
         />
-        <div v-else>
-          <div v-if="field.type === 'collection'">
-            <input 
-              class="form-control" 
-              :name="field.id" 
-              :value="field.value" 
-              :placeholder="field.placeholder"
-              @input="field.value = $event.target.value" 
-              @keydown.enter.prevent="{
-                addItem(field.collection, $event.target.value);
-                field.value = '';
-              }">
-            <span 
-              v-for="(item, index) in field.collection" 
-              :key="item"
-              class="badge badge-pill badge-secondary px-2 mx-1 py-1"
-            >
-              {{ item }}
-              <span 
-                class="bi bi-x-circle" 
-                @click="removeItem(field.collection, index)" 
-              />
-            </span>
-          </div>
+        <div v-else-if="field.type === 'collection'">
           <input 
-            v-else 
             class="form-control" 
-            :type="field.type === 'password' ? 'password' : 'text'" 
-            :name="field.id"
+            :name="field.id" 
             :value="field.value" 
-            :placeholder="field.placeholder" 
-            @input="field.value = $event.target.value"
+            :placeholder="field.placeholder"
+            @input="field.value = $event.target.value" 
+            @keydown.enter.prevent="{
+              addItem(field.collection, $event.target.value);
+              field.value = '';
+            }"
           >
+          <span 
+            v-for="(item, index) in field.collection" 
+            :key="item"
+            class="badge badge-pill badge-secondary px-2 mx-1 py-1"
+          >
+            {{ item }}
+            <span 
+              class="bi bi-x-circle" 
+              @click="removeItem(field.collection, index)" 
+            />
+          </span>
         </div>
+        <div 
+          v-else-if="field.type === 'quantity'"
+          class="row"
+        >
+          <div class="col-6">
+            <input 
+              class="form-control"
+              type="number" 
+              :name="field.id" 
+              :value="field.value"
+              :placeholder="field.placeholder"
+              min="1" 
+              @input="field.value = $event.target.value" 
+              required
+            >
+          </div>
+          <div class="col-6">
+            <select 
+              class="form-control"
+              @change="field.unit = $event.target.value"
+              required
+            >
+              <option 
+                value="" 
+                :selected="field.unit === ''"
+                disabled
+              >Select a unit</option>
+              <option
+                v-for="unit in $store.state.units"
+                :key="unit"
+                :value="unit"
+                :selected="field.unit === unit"
+              >
+                {{ unit }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <input
+          v-else-if="field.type === 'numerical'"
+          class="form-control"
+          type="number"
+          :name="field.id"
+          :value="field.value"
+          :placeholder="field.placeholder"
+          min="0"
+          @input="field.value = $event.target.value" 
+          required
+        >
+        <div
+          v-else-if="field.type === 'date'"
+          class="row date"
+        >
+          <div
+            class="col-10"
+          >
+            <input
+              class="form-control"
+              type="date"
+              :name="field.id"
+              :value="field.value"
+              :required="field.required"
+              @input="field.value = $event.target.value" 
+            >
+          </div>
+          <div 
+            class="form-check col-2 align-middle"
+          >
+            <input 
+              class="form-check-input" 
+              type="checkbox" value="" 
+              :id="field.id"
+              :checked="!field.required"
+              @change="field.required = !field.required"
+            >
+            <label 
+              class="form-check-label" 
+              :for="field.id"
+            >
+              None
+            </label>
+          </div>
+        </div>
+        <div
+          v-else-if="field.type === 'ingredients'"
+        >
+          <div class="row">
+            <div class="col-5">
+              <input 
+                class="form-control" 
+                type="text" 
+                :name="field.id" 
+                :value="field.name"
+                placeholder="Name" 
+                @input="field.name = $event.target.value"
+              >
+            </div>
+            <div class="col-3">
+              <input 
+                class="form-control"
+                type="number" 
+                :name="field.id" 
+                :value="field.quantity"
+                placeholder="Quantity"
+                min="1" 
+                @input="field.quantity = $event.target.value" 
+              >
+            </div>
+            <div class="col-3">
+              <select 
+                class="form-control"
+                @change="field.unit = $event.target.value"
+              >
+                <option 
+                  value="" 
+                  :selected="field.unit === ''"
+                  disabled
+                >Select a unit</option>
+                <option
+                  v-for="unit in $store.state.units"
+                  :key="unit"
+                  :value="unit"
+                  :selected="field.unit === unit"
+                >
+                  {{ unit }}
+                </option>
+              </select>
+            </div>
+            <div class="col-1">
+              <button 
+                class="btn btn-info"
+                @click.prevent="{
+                  addIngredient(field.ingredients, field.name, field.quantity, field.unit);
+                  field.name = '';
+                  field.quantity = '';
+                  field.unit = '';
+                };"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+          <ul class="list-group">
+            <li 
+              v-for="(item, index) in field.ingredients"
+              :key="item"
+              class="list-group-item"
+            >
+              {{ item.name }} × {{ item.quantity }} {{ item.unit }}
+              <span 
+                class="bi bi-x-circle float-right" 
+                @click="removeItem(field.ingredients, index)" 
+              />
+            </li>
+          </ul>
+        </div>
+
+        <div
+          v-else-if="field.type === 'baskets'"
+          class="form-check"
+        >
+          <div
+            v-for="basket in $store.state.baskets"
+            :key="basket"
+          >
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              :value="basket" 
+              :id="basket"
+              v-model="checkedBaskets"
+              :checked="checkedBaskets.includes(basket)"
+              @input="field.value = $event.target.value"
+            >
+            <label 
+              class="form-check-label" 
+              :for="basket"
+            >
+              {{ basket }}
+            </label>
+          </div>
+        </div>
+        <input 
+          v-else 
+          class="form-control" 
+          :type="field.type === 'password' ? 'password' : 'text'" 
+          :name="field.id"
+          :value="field.value" 
+          :placeholder="field.placeholder" 
+          @input="field.value = $event.target.value"
+          required
+        >
       </div>
     </article>
     <article v-else>
@@ -83,26 +266,63 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission 
+      checkedBaskets: [],
     };
+  },
+  created() {
+    for (const field of this.fields) {
+      if (field.type === 'quantity') {
+        this.selections[field.id] = null;
+      }
+    }
   },
   methods: {
     addItem(collection, item) {
       const regex = /^[a-zA-Z]+$/i;
       if (!regex.test(item)) {
-        const formattingErrorMessage = `Item must be nonempty words.`
+        const formattingErrorMessage = 'Item must be nonempty words.';
         this.$store.commit('alert', {
           message: formattingErrorMessage,
           status: 'danger'
         });
       } else if (collection.includes(item)) {
-        const duplicateErrorMessage = `You have already added this item!`;
+        const duplicateErrorMessage = 'You have already added this item!';
         this.$store.commit('alert', {
           message: duplicateErrorMessage,
           status: 'danger'
         });
       } else {
         collection.push(item);
+      }
+    },
+    addIngredient(ingredients, name, quantity, unit) {
+      const regex = /^[a-zA-Z]+$/i;
+
+      if (name === '' || quantity === '' || unit === '') {
+        const emptyFieldMessage = 'Fields cannot be left empty!';
+        this.$store.commit('alert', {
+          message: emptyFieldMessage,
+          status: 'danger'
+        });
+      } else if (!regex.test(name)) {
+        const formattingErrorMessage = 'Name must be nonempty words.';
+        this.$store.commit('alert', {
+          message: formattingErrorMessage,
+          status: 'danger'
+        });
+      } else if (ingredients.some(ingredient => ingredient.name === name)) {
+        const duplicateErrorMessage = 'You have already added this ingredient!';
+        this.$store.commit('alert', {
+          message: duplicateErrorMessage,
+          status: 'danger'
+        });
+      } else {
+        ingredients.push({
+          name: name,
+          quantity: quantity,
+          unit: unit
+        });
       }
     },
     removeItem(collection, index) {
@@ -122,9 +342,35 @@ export default {
           this.fields.map(field => {
             const { type } = field;
             if (type === 'collection') {
-              const { collectionName, collection } = field;
+              const { id, collection } = field;
+              field.value = '';
               field.collection = [];
-              return [collectionName, collection];
+              return [id, collection];
+            } else if (type === 'ingredients') {
+              const { id, ingredients } = field;
+              field.name = '';
+              field.quantity = '';
+              field.unit = '';
+              field.ingredients = [];
+              return [id, ingredients];
+            } else if (type === 'quantity') {
+              const { id, value, unit } = field;
+              field.value = '';
+              field.unit = '';
+              return [id, { 
+                value: value, 
+                unit: unit
+              }];
+            } else if (type === 'date') {
+              const { id, value, required } = field;
+              field.value = '';
+              field.required = false;
+              return required ? [id, value] : [id, null];
+            } else if (type === 'baskets') {
+              const { id } = field;
+              const baskets = this.checkedBaskets;
+              this.checkedBaskets = [];
+              return [id, baskets];
             } else {
               const { id, value } = field;
               field.value = '';
@@ -192,5 +438,14 @@ form h3 {
 textarea {
   font-family: inherit;
   font-size: inherit;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+}
+
+.btn-info {
+  width: 100%;
 }
 </style>

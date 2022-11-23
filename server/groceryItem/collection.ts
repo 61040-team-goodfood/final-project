@@ -23,6 +23,12 @@ class GroceryItemCollection {
     const date = new Date();
     const expirationDate = expiration ? new Date(expiration) : null;
     const remindDate = expirationDate ? new Date(expiration) : new Date(date);
+    if (expiration && !remindDays) {
+      remindDays = 3;
+    }
+
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
 
     const groceryItem = new GroceryItemModel({
       owner,
@@ -34,6 +40,7 @@ class GroceryItemCollection {
       remindDate: expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1)),
       inPantry: true
     });
+
     await groceryItem.save(); // Saves item to MongoDB
     return groceryItem.populate('owner');
   }
@@ -96,11 +103,14 @@ class GroceryItemCollection {
     const expirationDate = expiration ? new Date(expiration) : null;
     const remindDate = expirationDate ? new Date(expiration) : new Date(groceryItem.dateAdded);
 
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+
     // Required values that should not be empty
     groceryItem.name = name;
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
-    groceryItem.expirationDate = expiration ? new Date(expiration) : null;
+    groceryItem.expirationDate = expirationDate
     groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
     if (quantity === 0) {
@@ -116,7 +126,7 @@ class GroceryItemCollection {
    *
    * @param {Types.ObjectId | string} groceryItemId - The id of the item to be updated
    * @param {boolean} inPantry - The status to update to for the item
-   * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated freet
+   * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated item
    */
    static async updateOneStatus(groceryItemId: Types.ObjectId | string, inPantry: boolean): Promise<HydratedDocument<GroceryItem>> {
     const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});

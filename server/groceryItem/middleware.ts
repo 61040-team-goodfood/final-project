@@ -3,7 +3,7 @@ import {Types} from 'mongoose';
 import GroceryItemCollection from './collection';
 
 /**
- * Checks if a freet with freetId is req.params exists
+ * Checks if a grocery item exists
  */
 const isItemExists = async (req: Request, res: Response, next: NextFunction) => {
   const validFormat = Types.ObjectId.isValid(req.params.groceryItemId);

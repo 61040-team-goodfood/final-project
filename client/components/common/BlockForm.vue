@@ -34,6 +34,12 @@
           @input="field.value = $event.target.value"
         />
         <input
+          v-else-if="field.id === 'remindDays'"
+          :name="field.id"
+          :value="field.value"
+          @change="field.value = $event.target.value"
+        />
+        <input
           v-else
           :type="field.id === 'password' ? 'password' : 'text'"
           :name="field.id"

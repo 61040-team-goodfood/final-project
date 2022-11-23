@@ -19,7 +19,7 @@ class GroceryItemCollection {
    * @param {number} remindDays - The number of days preceding expiration date to send a reminder, if given
    * @return {Promise<HydratedDocument<GroceryItem>>} - The newly created grocery item
    */
-  static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
+  static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
     const date = new Date();
     const expirationDate = expiration ? new Date(expiration) : null;
     const remindDate = expirationDate ? new Date(expiration) : new Date(date);
@@ -27,7 +27,9 @@ class GroceryItemCollection {
       remindDays = 3;
     }
 
-    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    if (expirationDate) {
+      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    }
     remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
 
     const groceryItem = new GroceryItemModel({
@@ -98,19 +100,21 @@ class GroceryItemCollection {
    * @param {number} remindDays - The number of days preceding the expriation date to send a reminder, if given
    * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated freet
    */
-  static async updateOneInfo(groceryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string, remindDays: number): Promise<HydratedDocument<GroceryItem>> {
+  static async updateOneInfo(groceryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number): Promise<HydratedDocument<GroceryItem>> {
     const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});
     const expirationDate = expiration ? new Date(expiration) : null;
     const remindDate = expirationDate ? new Date(expiration) : new Date(groceryItem.dateAdded);
 
-    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    if (expirationDate) {
+      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    }
     remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
 
     // Required values that should not be empty
     groceryItem.name = name;
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
-    groceryItem.expirationDate = expirationDate
+    groceryItem.expirationDate = expirationDate;
     groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
     if (quantity === 0) {

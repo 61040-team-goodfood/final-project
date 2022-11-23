@@ -72,25 +72,23 @@ const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
  */
 const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) => {
   const {expiration, remindDays} = req.body as {expiration: string, remindDays: number};
-  if (!expiration) {
-    next();
-  }
+  if (expiration) {
+    const expirationDate = new Date(expiration);
+    const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
 
-  const expirationDate = new Date(expiration);
-  const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
+    if (expirationDate < dateAdded) {
+      res.status(400).json({
+        error: 'Expiration date must be later than the item creation date.'
+      });
+      return;
+    }
 
-  if (expirationDate < dateAdded) {
-    res.status(400).json({
-      error: 'Expiration date must be later than the item creation date.'
-    });
-    return;
-  }
-
-  if (remindDays < 0) {
-    res.status(400).json({
-      error: 'Expiration date must be later than the reminder date.'
-    });
-    return;
+    if (remindDays < 0) {
+      res.status(400).json({
+        error: 'Expiration date must be later than the reminder date.'
+      });
+      return;
+    }
   }
 
   next();
@@ -102,19 +100,18 @@ const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) 
  */
 const isValidRemindDate = (req: Request, res: Response, next: NextFunction) => {
   const {expiration, remindDays} = req.body as {expiration: string, remindDays: number};
-  if (!expiration) {
-    next();
+  if (expiration) {
+    const expirationDate = new Date(expiration);
+    const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
+    const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
+    if (remindDate < dateAdded) {
+      res.status(400).json({
+        error: 'Reminder date must be later than the item creation date.'
+      });
+      return;
+    }
   }
-  const expirationDate = new Date(expiration);
-  const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
-  const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
-  if (remindDate < dateAdded) {
-    res.status(400).json({
-      error: 'Reminder date must be later than the item creation date.'
-    });
-    return;
-  }
-
+  
   next();
 };
 

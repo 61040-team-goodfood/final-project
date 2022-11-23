@@ -15,7 +15,7 @@ export type GroceryItem = {
   quantity: number;
   unit: string;
   dateAdded: Date;
-  expirationDate: Date;
+  expirationDate: Date | null;
   remindDate: Date;
   inPantry: boolean;
 };
@@ -27,7 +27,7 @@ export type PopulatedGroceryItem = {
   quantity: number;
   unit: string;
   dateAdded: Date;
-  expirationDate: Date;
+  expirationDate: Date | null;
   remindDate: Date;
   inPantry: boolean;
 };

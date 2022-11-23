@@ -57,7 +57,7 @@ router.get(
  * @param {string} name - The given name of the item
  * @param {number} quantity - The nonnegative amount of the item
  * @param {string} unit - The type of unit for the item
- * @param {string} expiration - The expiration date as a string for the item, if one is given
+ * @param {string | null} expiration - The expiration date as a string for the item, if one is given
  * @param {number} remindDays - The date to send a reminder for this item, if one is given
  * @return {GroceryItemResponse} - The created grocery item
  * @throws {403} - If the user is not logged in

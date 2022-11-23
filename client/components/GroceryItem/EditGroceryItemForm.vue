@@ -30,23 +30,27 @@ export default {
           {id: 'teaspoons', value: 'Teaspoons'},
           {id: 'grams', value: 'Grams'}
         ]},
-        {id: 'expiration', label: 'Expiration Date', value: this.groceryItem.expirationDate},
+        {
+          id: 'expiration', 
+          label: 'Expiration Date', 
+          value: this.groceryItem.expirationDate
+        },
         {
           id: 'remindDays', 
-          label: 'Remind me', 
-          value: new Date(this.groceryItem.expirationDate) - new Date(this.groceryItem.remindDate),
+          label: 'Remind me',
           value: this.groceryItem.expirationDate ? Math.ceil((new Date(this.groceryItem.expirationDate) - new Date(this.groceryItem.remindDate))/ (1000 * 60 * 60 * 24)) : 0, 
           append: 'days in advance'
         }
       ],
       title: 'Save',
-      // refreshGroceryItems: true,
+      refreshGroceryItems: true,
       callback: () => {
-        this.$store.commit('refreshGroceryItems', true);
-        const message = 'Successfully added a grocery item!';
+        const message = 'Successfully edited grocery item!';
         this.$set(this.alerts, message, 'success');
         setTimeout(() => this.$delete(this.alerts, message), 3000);
-        this.$emit('stopEditing');
+        if (!this.alerts.length) {
+          this.$emit('stopEditing');
+        }
       }
     };
   }

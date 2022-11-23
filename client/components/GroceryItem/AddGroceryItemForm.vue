@@ -22,7 +22,7 @@ export default {
           {id: 'teaspoons', value: 'Teaspoons'},
           {id: 'grams', value: 'Grams'}
         ]},
-        {id: 'expiration', label: 'Expiration Date', value: ''},
+        {id: 'expiration', label: 'Expiration Date', value: null},
         {id: 'remindDays', label: 'Remind me', value: 3, append: 'days in advance'}
       ],
       title: 'Add New Item',

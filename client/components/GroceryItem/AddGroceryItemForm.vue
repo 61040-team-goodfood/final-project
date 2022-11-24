@@ -10,10 +10,10 @@ export default {
       method: 'POST',
       hasBody: true,
       fields: [
-        { type: 'text', id: 'name', label: 'Name', value: '' }, 
+        { type: 'text', id: 'name', label: 'Name', value: '', placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: '', placeholder: 'Enter number...', unit: '' },
-        { type: 'date', id: 'expiration', label: 'Expiration Date', value: '' },
-        { type: 'reminder', id: 'remindDays', label: 'Remind Me', value: 3 }
+        { type: 'date', id: 'expiration', label: 'Expiration Date', value: '', expires: true },
+        { type: 'reminder', id: 'remindDays', label: 'Remind Me', value: 3, placeholder: 'Enter number...' }
       ],
       title: 'Add New Item',
       refreshGroceryItems: true,

@@ -2,7 +2,7 @@
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
-  <article class="groceryItem">
+  <article class="border rounded my-2 p-4">
     <section v-if="editing">
       <EditGroceryItemForm 
         :groceryItem=this.groceryItem 
@@ -10,22 +10,29 @@
       />
     </section>
     <section v-else>
-      <button @click="startEditing">
+      <button 
+        class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
+        @click="startEditing"
+      >
         Edit
       </button>
-      <button @click="deleteItem">
+      <button 
+        class="btn btn-danger btn-sm my-2 bi bi-trash"
+        @click="deleteItem"
+      >
         Delete
       </button>
       <div>
-        {{ groceryItem.name }} x {{ groceryItem.quantity }} {{ groceryItem.unit }}
+        <b>Name:</b> {{ groceryItem.name }} <br>
+        <b>Quantity:</b> {{ groceryItem.quantity }} {{ groceryItem.unit }}
+      </div>
+      <div>
+        <b>In pantry since:</b> {{ groceryItem.dateAdded }}
       </div>
       <div v-if="groceryItem.expirationDate">
-        Expires on: {{ groceryItem.expirationDate }}
+        <b>Expires on:</b> {{ groceryItem.expirationDate }} <br>
+        <b>Reminder on:</b> {{ groceryItem.remindDate }}
       </div>
-      <div v-else>
-        In pantry since: {{ groceryItem.dateAdded }}
-      </div>
-      <div>Reminder on: {{ groceryItem.remindDate }}</div>
     </section>
   </article>
 </template>
@@ -110,11 +117,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.groceryItem {
-    border: 1px solid #111;
-    padding: 20px;
-    position: relative;
-}
-</style>

@@ -119,7 +119,8 @@
           >
             <input 
               class="form-check-input" 
-              type="checkbox" value="" 
+              type="checkbox" 
+              value="" 
               :id="field.id"
               :checked="!expires"
               @change="expires = !expires"
@@ -276,6 +277,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 
 export default {
   name: 'BlockForm',
@@ -298,8 +300,8 @@ export default {
   },
   created() {
     for (const field of this.fields) {
-      if (field.type === 'quantity') {
-        this.selections[field.id] = null;
+      if (field.type === 'date') {
+        this.expires = field.expires;
       }
     }
   },
@@ -355,6 +357,35 @@ export default {
       collection.splice(index, 1);
     },
     async submit() {
+      // Error checking entries before submission.
+      let expireDate = null;
+      for (const field of this.fields) {
+        if (field.type === 'date') {
+          expireDate = new Date(field.value);
+
+          if (expireDate <= new Date()) {
+            const expirationDateErrorMessage = 'Expiration date must be in the future!';
+            this.$store.commit('alert', {
+              message: expirationDateErrorMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        } 
+
+        if (field.type === 'reminder' && expireDate !== null) {
+          const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
+          if (remindDate <= new Date()) {
+            const reminderDateErrorMessage = 'Reminder date must be in the future!';
+            this.$store.commit('alert', {
+              message: reminderDateErrorMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        }
+      }
+
       /**
         * Submits a form with the specified options from data().
         */
@@ -412,7 +443,6 @@ export default {
       }
 
       try {
-        console.log(options.body)
         const r = await fetch(this.url, options);
         if (!r.ok) {
           // If response is not okay, we throw an error and enter the catch block

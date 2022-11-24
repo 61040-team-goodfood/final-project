@@ -16,7 +16,7 @@ export default {
         { type: 'collection', id: 'tags', label: 'Tags', value: '', placeholder: 'Type tag and press enter...', collection: [] },
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: '', placeholder: 'Enter number...', unit: '' },
         { type: 'numerical', id: 'remindMe', label: 'Remind Me', value: '', placeholder: 'Enter number...' },
-        { type: 'date', id: 'expirationDate', label: 'Expiration Date', value: '', required: false },
+        { type: 'date', id: 'expirationDate', label: 'Expiration Date', value: '', expires: false },
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },
         { type: 'baskets', id: 'baskets', label: 'Baskets' }
       ],

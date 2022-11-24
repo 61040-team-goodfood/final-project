@@ -4,20 +4,22 @@
   <main>
     <section v-if="$store.state.username">
       <header>
-        <h2>Welcome @{{ $store.state.username }}</h2>
+        <h2 class="display-4">Welcome @{{ $store.state.username }}!</h2>
       </header>
-      <DummyForm />
+      <!-- <DummyForm /> -->
     </section>
     <section v-else>
       <header>
-        <h2>Welcome to GoodFood!</h2>
+        <h2 class="display-4">Welcome to GoodFood!</h2>
       </header>
       <article>
         <h3>
-          <router-link to="/login">
-            Sign in
-          </router-link>
-          to manage your groceries.
+          <i>
+            <router-link to="/login">
+              Sign in
+            </router-link>
+            to manage your groceries.
+          </i>
         </h3>
       </article>
     </section>

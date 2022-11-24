@@ -1,5 +1,5 @@
 import type {HydratedDocument} from 'mongoose';
-import moment from 'moment';
+import * as moment from 'moment-timezone';
 import type {GroceryItem, PopulatedGroceryItem} from './model';
 
 export type GroceryItemResponse = {
@@ -20,9 +20,7 @@ export type GroceryItemResponse = {
  * @param {Date} date - A date object
  * @returns {string} - formatted date as string
  */
-const formatDate = (date: Date): string =>{ 
-  return date ? moment.utc(date).local().format('YYYY-MM-DD') : '';
-};
+const formatDate = (date: Date): string => date ? moment.utc(date).tz('America/New_York').format('YYYY-MM-DD') : '';
 
 /**
  * Transform a raw GroceryItem object from the database into an object

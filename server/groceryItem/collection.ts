@@ -22,15 +22,15 @@ class GroceryItemCollection {
   static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
     const date = new Date();
     const expirationDate = expiration ? new Date(expiration) : null;
-    const remindDate_ = expirationDate ? new Date(expiration) : new Date();
-    const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
-
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
     }
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    const remindDate_ = expirationDate ? new Date(expiration) : new Date();
+    const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
 
+    // remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+    // date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    console.log(date, date.toLocaleDateString(), remindDate, remindDate.toLocaleDateString() );
     const groceryItem = new GroceryItemModel({
       owner,
       name,

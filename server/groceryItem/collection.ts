@@ -29,7 +29,6 @@ class GroceryItemCollection {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
     }
     remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
     const groceryItem = new GroceryItemModel({
       owner,

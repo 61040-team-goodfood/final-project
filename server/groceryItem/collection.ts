@@ -25,12 +25,8 @@ class GroceryItemCollection {
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
     }
-<<<<<<< HEAD
     const remindDate_ = expirationDate ? new Date(expiration) : new Date();
     const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
-=======
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
->>>>>>> f912c3b68bef955e41620022bfebd9da724a86ae
 
     // remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
     // date.setMinutes(date.getMinutes() + date.getTimezoneOffset());

@@ -9,6 +9,8 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
+    // inPantry: true, // Status to filter shown items by (true = in pantry, false = in history)
+    groceryItems: [], // All groceryItems created in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
     units: [
@@ -49,9 +51,31 @@ const store = new Vuex.Store({
        * @param username - new username to set
        */
       state.username = username;
+    },
+    // updateFilter(state, inPantry) {
+    //   /**
+    //    * Update the stored grocery items filter to the specified one.
+    //    * @param inPantry - Status of the grocery tiems to filter by
+    //    */
+    //   state.inPantry = inPantry;
+    // },
+    updateGroceryItems(state, groceryItems) {
+      /**
+       * Update the stored grocery items to the provided ones.
+       * @param groceryItems - grocery items to store
+       */
+      state.groceryItems = groceryItems;
+    },
+    async refreshGroceryItems(state, inPantry) {
+      /**
+       * Request the server for the currently available freets.
+       * @param inPantry - boolean denoting whether to filter items by currently in pantry
+       */
+      const url = `/api/groceryItems?status=${inPantry}`;
+      const res = await fetch(url).then(async r => r.json());
+      state.groceryItems = res;
     }
   },
-  // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]
 });
 

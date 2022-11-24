@@ -27,10 +27,6 @@ class GroceryItemCollection {
     }
     const remindDate_ = expirationDate ? new Date(expiration) : new Date();
     const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
-
-    // remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    // date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-    console.log(date, date.toLocaleDateString(), remindDate, remindDate.toLocaleDateString() );
     const groceryItem = new GroceryItemModel({
       owner,
       name,
@@ -106,8 +102,8 @@ class GroceryItemCollection {
 
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
     }
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
 
     // Required values that should not be empty
     groceryItem.name = name;

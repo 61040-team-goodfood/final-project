@@ -21,7 +21,7 @@ export type GroceryItemResponse = {
  * @returns {string} - formatted date as string
  */
 const formatDate = (date: Date): string =>{ 
-  return date ? moment.utc(date).format('YYYY-MM-DD') : '';
+  return date ? moment.utc(date).local().format('YYYY-MM-DD') : '';
 };
 
 /**

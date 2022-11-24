@@ -22,10 +22,8 @@ class GroceryItemCollection {
   static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
     const date = new Date();
     const expirationDate = expiration ? new Date(expiration) : null;
-    const remindDate = expirationDate ? new Date(expiration) : new Date(date);
-    if (expiration && !remindDays) {
-      remindDays = 3;
-    }
+    const remindDate_ = expirationDate ? new Date(expiration) : new Date();
+    const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1))
 
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
@@ -39,7 +37,7 @@ class GroceryItemCollection {
       unit,
       dateAdded: date,
       expirationDate,
-      remindDate: expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1)),
+      remindDate,
       inPantry: true
     });
 

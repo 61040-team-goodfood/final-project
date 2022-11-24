@@ -293,6 +293,7 @@ export default {
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
       expires: true,
+      editing: false,
     };
   },
   created() {
@@ -389,8 +390,9 @@ export default {
             } else if (type === 'date') {
               const { id, value } = field;
               field.value = '';
+              const hasExpiration = this.expires;
               this.expires = true;
-              return this.expires ? [id, value] : [id, null];
+              return hasExpiration ? [id, value] : [id, null];
             } else if (type === 'reminder') {
               const {id, value} = field;
               field.value = 3;
@@ -410,6 +412,7 @@ export default {
       }
 
       try {
+        console.log(options.body)
         const r = await fetch(this.url, options);
         if (!r.ok) {
           // If response is not okay, we throw an error and enter the catch block

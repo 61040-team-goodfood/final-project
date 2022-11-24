@@ -143,7 +143,7 @@ router.patch(
     groceryItemValidator.isValidRemindDate
   ],
   async (req: Request, res: Response) => {
-    let item = await GroceryItemCollection.updateOneInfo(req.params.groceryItemId, req.body.name, req.body.quantity, req.body.unit, req.body.expiration, req.body.remindDays);
+    let item = await GroceryItemCollection.updateOneInfo(req.params.groceryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
     if (req.body.inPantry) {
       item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
     }

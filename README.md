@@ -180,18 +180,3 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
-
-#### `GET /api/lists` - Get all the lists
-
-**Returns**
-- An array of lists sorted in increasing alphabetical order by list name
-
-#### `GET /api/lists?owner=USERNAME` - Get lists by owner
-
-**Returns**
-- An array of lists created by user with username `author`
-
-**Throws**
-- `400` if `owner` is not given
-- `404` if `owner` is not a recognized username of any user
-

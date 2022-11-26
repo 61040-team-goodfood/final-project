@@ -43,6 +43,7 @@
       </button>
       <button 
         class="btn btn-primary btn-sm mr-2 my-2 bi"
+        @click="openAddToBasket"
       >
         Add to Baskets
       </button>
@@ -53,16 +54,23 @@
         @stopEditing="closeAddToPantry" 
       />
     </section>
+    <section v-if="addToBasket">
+      <AddToBasketForm 
+        :groceryItem=this.groceryItem 
+        @stopEditing="closeAddToBasket" 
+      />
+    </section>
   </article>
 </template>
 
 <script>
 import EditGroceryItemForm from '@/components/GroceryItem/EditGroceryItemForm.vue';
 import AddToPantryForm from '@/components/GroceryItem/AddToPantryForm.vue';
+import AddToBasketForm from '@/components/GroceryItem/AddToBasketForm.vue';
 
 export default {
   name: 'GroceryItemComponent',
-  components: {EditGroceryItemForm, AddToPantryForm},
+  components: {EditGroceryItemForm, AddToPantryForm, AddToBasketForm},
   props: {
     // Data from the stored item
     groceryItem: {
@@ -78,7 +86,7 @@ export default {
     return {
       editing: false, // Whether or not this grocery item is in edit mode
       addToPantry: false,
-      // draft: this.freet.content, // Potentially-new content for this freet
+      addToBasket: false,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
@@ -100,6 +108,12 @@ export default {
     },
     closeAddToPantry() {
       this.addToPantry = false;
+    },
+    openAddToBasket() {
+      this.addToBasket = true;
+    },
+    closeAddToBasket() {
+      this.addToBasket = false;
     },
     deleteItem() {
       /**

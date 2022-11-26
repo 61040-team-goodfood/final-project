@@ -39,7 +39,7 @@
           class="text-white"
           to="/history"
         >
-          <i class="bi bi-bookshelf mx-2"></i>
+          <i class="bi bi-clock mx-2"></i>
           <span class="fs-4">History</span>
         </router-link>
       </li>

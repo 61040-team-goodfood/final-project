@@ -11,7 +11,6 @@ export type GroceryItemResponse = {
   dateAdded: string;
   expirationDate: string;
   remindDate: string;
-  inPantry: boolean;
 };
 
 /**

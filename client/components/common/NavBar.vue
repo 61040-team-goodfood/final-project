@@ -37,6 +37,15 @@
       <li class="nav-item mb-3" v-if="$store.state.username">
         <router-link 
           class="text-white"
+          to="/history"
+        >
+          <i class="bi bi-bookshelf mx-2"></i>
+          <span class="fs-4">History</span>
+        </router-link>
+      </li>
+      <li class="nav-item mb-3" v-if="$store.state.username">
+        <router-link 
+          class="text-white"
           to="/account"
         >
           <i class="bi bi-speedometer2 mx-2"></i>

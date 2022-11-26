@@ -83,7 +83,18 @@ class GroceryItemCollection {
    */
   static async findAllByStatus(userId: Types.ObjectId | string, inPantry: boolean | string): Promise<Array<HydratedDocument<GroceryItem>>> {
     const owner = await UserCollection.findOneByUserId(userId);
-    return GroceryItemModel.find({owner: owner._id, inPantry: inPantry as boolean}).sort({dateAdded: -1}).populate('owner');
+    const status = inPantry as string;
+    if (status === 'true') {
+      return GroceryItemModel.find({
+        owner: owner._id, 
+        $or: [
+          {expirationDate: null},
+          {expirationDate:{$gt: new Date()}}
+        ]
+      }).sort({dateAdded: -1}).populate('owner');
+    } else {
+      return GroceryItemModel.find({owner: owner._id, expirationDate: {$lte: new Date()}}).sort({dateAdded: -1}).populate('owner');
+    }
   }
 
   /**

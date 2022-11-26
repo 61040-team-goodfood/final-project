@@ -3,7 +3,7 @@
 
 <template>
   <article class="border rounded my-2 p-4">
-    <section v-if="editing">
+    <section v-if="editing && isPantry">
       <EditGroceryItemForm 
         :groceryItem=this.groceryItem 
         @stopEditing="this.stopEditing" 
@@ -11,6 +11,7 @@
     </section>
     <section v-else>
       <button 
+        v-if="isPantry"
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
         @click="startEditing"
       >
@@ -33,26 +34,50 @@
         <b>Expires on:</b> {{ groceryItem.expirationDate }} <br>
         <b>Reminder on:</b> {{ groceryItem.remindDate }}
       </div>
+      <button 
+        v-if="!isPantry"
+        class="btn btn-primary btn-sm mr-2 my-2 bi"
+        @click="openAddToPantry"
+      >
+        Add to Pantry
+      </button>
+      <button 
+        class="btn btn-primary btn-sm mr-2 my-2 bi"
+      >
+        Add to Baskets
+      </button>
+    </section>
+    <section v-if="addToPantry && !isPantry">
+      <AddToPantryForm 
+        :groceryItem=this.groceryItem 
+        @stopEditing="closeAddToPantry" 
+      />
     </section>
   </article>
 </template>
 
 <script>
 import EditGroceryItemForm from '@/components/GroceryItem/EditGroceryItemForm.vue';
+import AddToPantryForm from '@/components/GroceryItem/AddToPantryForm.vue';
 
 export default {
   name: 'GroceryItemComponent',
-  components: {EditGroceryItemForm},
+  components: {EditGroceryItemForm, AddToPantryForm},
   props: {
     // Data from the stored item
     groceryItem: {
       type: Object,
       required: true
+    },
+    isPantry: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      editing: false, // Whether or not this freet is in edit mode
+      editing: false, // Whether or not this grocery item is in edit mode
+      addToPantry: false,
       // draft: this.freet.content, // Potentially-new content for this freet
       alerts: {} // Displays success/error messages encountered during freet modification
     };
@@ -69,6 +94,12 @@ export default {
        * Disables edit mode on this freet.
        */
       this.editing = false;
+    },
+    openAddToPantry() {
+      this.addToPantry = true;
+    },
+    closeAddToPantry() {
+      this.addToPantry = false;
     },
     deleteItem() {
       /**

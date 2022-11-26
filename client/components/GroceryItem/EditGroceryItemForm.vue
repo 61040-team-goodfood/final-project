@@ -24,6 +24,7 @@ export default {
       ],
       title: 'Edit Item',
       refreshGroceryItems: true,
+      isPantry: true,
       expires: true,
       callback: () => {
         const message = 'Successfully edited grocery item!';

@@ -28,7 +28,7 @@ const router = express.Router();
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
-    // Check if author query parameter was supplied
+    // Check if status query parameter was provided
     if (req.query.status === undefined) {
       next();
       return;
@@ -42,6 +42,7 @@ router.get(
     userValidator.isUserLoggedIn
   ],
   async (req: Request, res: Response) => {
+    // retrieve all items that have been created by this user
     const items = await GroceryItemCollection.findAllByUserId(req.session.userId);
     const response = items.map(util.constructGroceryItemResponse);
     res.status(200).json(response);
@@ -133,6 +134,17 @@ router.delete(
  */
 router.patch(
   '/:groceryItemId?',
+  async  (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.inPantry === undefined) {
+      next();
+      return;
+    }
+    let item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
+    res.status(200).json({
+      message: 'Your grocery item status was updated successfully.',
+      groceryItem: util.constructGroceryItemResponse(item)
+    });
+  },
   [
     userValidator.isUserLoggedIn,
     groceryItemValidator.isItemExists,

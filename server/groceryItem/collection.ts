@@ -37,7 +37,8 @@ class GroceryItemCollection {
       unit,
       dateAdded: date,
       expirationDate,
-      remindDate
+      remindDate,
+      inPantry: true
     });
 
     await groceryItem.save(); // Saves item to MongoDB
@@ -89,13 +90,10 @@ class GroceryItemCollection {
     if (status === 'true') {
       return GroceryItemModel.find({
         owner: owner._id, 
-        $or: [
-          {expirationDate: null},
-          {expirationDate:{$gt: new Date()}}
-        ]
+        inPantry: true
       }).sort({dateAdded: -1}).populate('owner');
     } else {
-      return GroceryItemModel.find({owner: owner._id, expirationDate: {$lte: new Date()}}).sort({dateAdded: -1}).populate('owner');
+      return GroceryItemModel.find({owner: owner._id}).sort({dateAdded: -1}).populate('owner');
     }
   }
 
@@ -118,13 +116,27 @@ class GroceryItemCollection {
       remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
     }
 
-    // Required values that should not be empty
+    // update stored values
     groceryItem.name = name;
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
     groceryItem.expirationDate = expirationDate;
     groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
+    await groceryItem.save();
+    return groceryItem.populate('owner');
+  }
+
+  /**
+   * Update a grocery item with the new stats
+   *
+   * @param {Types.ObjectId | string} groceryItemId - The id of the item to be updated
+   * @param {boolean | null} inPantry - the status to set for this item
+   * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated freet
+   */
+  static async updateOneStatus(groceryItemId: Types.ObjectId | string, inPantry: boolean | null): Promise<HydratedDocument<GroceryItem>> {
+    const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});
+    groceryItem.inPantry = inPantry as boolean;
     await groceryItem.save();
     return groceryItem.populate('owner');
   }

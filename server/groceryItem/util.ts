@@ -11,6 +11,7 @@ export type GroceryItemResponse = {
   dateAdded: string;
   expirationDate: string;
   remindDate: string;
+  inPantry: string;
 };
 
 /**
@@ -43,7 +44,8 @@ const constructGroceryItemResponse = (groceryItem: HydratedDocument<GroceryItem>
     quantity: itemCopy.quantity.toString(),
     dateAdded: formatDate(itemCopy.dateAdded),
     expirationDate: formatDate(itemCopy.expirationDate),
-    remindDate: formatDate(itemCopy.remindDate)
+    remindDate: formatDate(itemCopy.remindDate),
+    inPantry: itemCopy.inPantry.toString()
   };
 };
 

@@ -17,6 +17,7 @@ export type GroceryItem = {
   dateAdded: Date;
   expirationDate: Date | null;
   remindDate: Date;
+  inPantry: boolean;
 };
 
 export type PopulatedGroceryItem = {
@@ -28,6 +29,7 @@ export type PopulatedGroceryItem = {
   dateAdded: Date;
   expirationDate: Date | null;
   remindDate: Date;
+  inPantry: boolean;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -69,6 +71,11 @@ const GroceryItemSchema = new Schema<GroceryItem>({
   // The set reminder date for this item
   remindDate: {
     type: Date,
+    required: true
+  },
+  // The status denoting whether this item should be currently displayed in pantry
+  inPantry: {
+    type: Boolean,
     required: true
   }
 });

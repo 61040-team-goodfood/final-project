@@ -105,12 +105,14 @@ export default {
     },
     openAddToPantry() {
       this.addToPantry = true;
+      this.addToBasket = false;
     },
     closeAddToPantry() {
       this.addToPantry = false;
     },
     openAddToBasket() {
       this.addToBasket = true;
+      this.addToPantry = false;
     },
     closeAddToBasket() {
       this.addToBasket = false;
@@ -120,11 +122,17 @@ export default {
        * Deletes this item.
        */
       const params = {
-        method: 'DELETE',
+        method: this.isPantry ? 'PATCH' : 'DELETE',
         callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted item', status: 'success'
-          });
+          if (this.isPantry) {
+            this.$store.commit('alert', {
+              message: 'Successfully removed item from current pantry', status: 'success'
+            });
+          } else {
+            this.$store.commit('alert', {
+              message: 'Successfully removed item from history', status: 'success'
+            });
+          }
         }
       };
       this.request(params);
@@ -139,8 +147,8 @@ export default {
       const options = {
         method: params.method, headers: {'Content-Type': 'application/json'}
       };
-      if (params.body) {
-        options.body = params.body;
+      if (this.isPantry) {
+        options.body = JSON.stringify({inPantry: false});
       }
 
       try {
@@ -151,7 +159,7 @@ export default {
         }
 
         this.editing = false;
-        this.$store.commit('refreshGroceryItems', true);
+        this.$store.commit('refreshGroceryItems', this.isPantry);
 
         params.callback();
       } catch (e) {

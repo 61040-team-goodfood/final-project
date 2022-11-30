@@ -67,11 +67,11 @@ const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
- * Checks if the expiration date is valid, 
+ * Checks if the expiration date is valid,
  * i.e after item creation and after reminder date
  */
 const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) => {
-  const {expiration, remindDays} = req.body as {expiration: string, remindDays: number};
+  const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
   if (expiration) {
     const expirationDate = new Date(expiration);
     const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
@@ -95,11 +95,11 @@ const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) 
 };
 
 /**
- * Checks if the reminder date is valid, 
+ * Checks if the reminder date is valid,
  * i.e after item creation and before item expiration
  */
 const isValidRemindDate = (req: Request, res: Response, next: NextFunction) => {
-  const {expiration, remindDays} = req.body as {expiration: string, remindDays: number};
+  const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
   if (expiration) {
     const expirationDate = new Date(expiration);
     const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
@@ -111,7 +111,7 @@ const isValidRemindDate = (req: Request, res: Response, next: NextFunction) => {
       return;
     }
   }
-  
+
   next();
 };
 

@@ -2,10 +2,9 @@
 
 <template>
   <main>
-    <header>
-      <h2>My Pantry</h2>
-    </header>
     <AddGroceryItemForm />
+    <hr>
+    <h2 class="display-4">My Pantry</h2>
     <section
       v-if="$store.state.groceryItems.length"
     >

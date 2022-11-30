@@ -63,6 +63,17 @@ class RecipeCollection {
   }
 
   /**
+   * Get all the recipes with keywords in name
+   *
+   * @param {string} keywords - The keywords to search for
+   * @param {Array<string>} ingredients - The list of ingredient names that the recipe contains.
+   * @return {Promise<HydratedDocument<Recipe>[]>} - An array of all of the recipes with the keywords and ingredients sorted by name alphabetically.
+   */
+   static async findAllByKeywordsAndIngredients(keywords: string, ingredients: Array<string>): Promise<Array<HydratedDocument<Recipe>>> {
+    return RecipeModel.find({name: { $regex: keywords, $options: "i" }, ingredients: {$all: ingredients.map(name => ({$elemMatch: {'name': name}}))}}).sort('name').populate('author').populate('ingredients');
+  }
+
+  /**
    * Update a recipe with the new information
    *
    * @param {Types.ObjectId | string} receipeId - The id of the grocery to be updated
@@ -106,4 +117,4 @@ class RecipeCollection {
   }
 }
 
-export default GroceryItemCollection;
+export default RecipeCollection;

@@ -43,6 +43,15 @@ class RecipeCollection {
   }
 
   /**
+   * Find all recipes
+   *
+   * @return {Promise<HydratedDocument<Recipe>[]>} - An array of all of the recipes sorted alphabetically by name.
+   */
+   static async findAll(): Promise<Array<HydratedDocument<Recipe>>> {
+    return RecipeModel.find({}).sort('name').populate('author').populate('ingredients');
+  }
+
+  /**
    * Get all the recipes that contains a list of ingredients
    *
    * @param {Array<string>} ingredients - The list of ingredient names that the recipe contains.

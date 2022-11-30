@@ -14,13 +14,6 @@ export type Ingredient = {
   unit: string;
 };
 
-export type PopulatedIngredient = {
-  _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
-  name: string;
-  quantity: number;
-  unit: string;
-};
-
 // Mongoose schema definition for interfacing with a MongoDB table
 // Ingredient stored in this table will have these fields, with the
 // type given by the type property, inside MongoDB

@@ -1,6 +1,6 @@
 import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
-import type { GroceryItem } from '../groceryItem/model';
+import type { Ingredient } from '../ingredient/model';
 import type {User} from '../user/model';
 
 /**
@@ -23,7 +23,7 @@ export type PopulatedRecipe = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   author: User;
   name: string;
-  ingredients: [GroceryItem];
+  ingredients: [Ingredient];
   instructions: string;
   cookTime: number; // stores the cook time as number of minutes
   // image: { data: Buffer, contentType: String }; TODO: stretch feature
@@ -47,7 +47,7 @@ const RecipeSchema = new Schema<Recipe>({
   },
   // The ingredients used in the recipe
   ingredients: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'GroceryItem' }],
+    type: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
     required: true,
   },
   // The instructions of the recipe

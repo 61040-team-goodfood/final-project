@@ -1,8 +1,6 @@
 import type {HydratedDocument, Types} from 'mongoose';
 import type {Recipe} from './model';
 import RecipeModel from './model';
-import UserCollection from '../user/collection';
-import GroceryItemCollection from '../groceryItem/collection';
 
 /**
  * This files contains a class that has the functionality to explore recipes

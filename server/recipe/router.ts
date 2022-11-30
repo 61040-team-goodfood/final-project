@@ -4,7 +4,7 @@ import RecipeCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as recipeValidator from './middleware';
 import * as util from './util';
-import GroceryItemCollection from '../groceryItem/collection';
+import IngredientCollection from '../ingredient/collection';
 
 const router = express.Router();
 
@@ -49,7 +49,7 @@ router.post(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const ingredients = await Promise.all(req.body.ingredients.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-        const ingredient = await GroceryItemCollection.addOne(userId, name, quantity, unit, null, null);
+        const ingredient = await IngredientCollection.addOne(name, quantity, unit);
         return ingredient._id.toString();
       }));
     const recipe = await RecipeCollection.addOne(userId, req.body.name, ingredients, req.body.instructions, req.body.cookTime);

@@ -13,10 +13,10 @@ class BasketCollection {
    *
    * @param {Types.ObjectId | string} owner - The id of the owner of the basket
    * @param {string} name - The given name of the basket
-   * @param {Set<Types.ObjectId>} items - The items of the basket
+   * @param {Array<Types.ObjectId | string>} items - The items of the basket
    * @return {Promise<HydratedDocument<Basket>>} - The newly created basket
    */
-  static async addOne(owner: Types.ObjectId | string, name: string, items: Set<Types.ObjectId> | null): Promise<HydratedDocument<Basket>> {
+  static async addOne(owner: Types.ObjectId | string, name: string, items: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
     const basket = new BasketModel({
       owner,
       name,
@@ -64,15 +64,15 @@ class BasketCollection {
    *
    * @param {Types.ObjectId | string} basketId - The id of the item to be updated
    * @param {string} name - The given name of the basket
-   * @param {Set<Types.ObjectId>} items - The items of the basket
+   * @param {Array<Types.ObjectId | string>} items - The items of the basket
    * @return {Promise<HydratedDocument<Basket>>} - The newly updated basket
    */
-  static async updateOneInfo(basketId: Types.ObjectId | string, name: string, items: Set<Types.ObjectId> | null): Promise<HydratedDocument<Basket>> {
+  static async updateOneInfo(basketId: Types.ObjectId | string, name: string, items: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
     const basket = await BasketModel.findOne({_id: basketId});
 
     // Required values that should not be empty
     basket.name = name;
-    basket.items = items;
+    basket.items = items as [Types.ObjectId];
     
     await basket.save();
     return basket.populate('owner', 'items');

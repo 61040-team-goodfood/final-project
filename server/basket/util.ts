@@ -5,7 +5,7 @@ export type BasketResponse = {
   _id: string;
   owner: string;
   name: string;
-  items: Set<{id: string, name: string, quantity: number, unit: string}>;
+  items: Array<{id: string, name: string, quantity: number, unit: string}>;
 };
 
 /**
@@ -16,23 +16,20 @@ export type BasketResponse = {
  * @returns {BasketResponse} - The basket object formatted for the frontend
  */
 const constructBasketResponse = (basket: HydratedDocument<Basket>): BasketResponse => {
-  const itemCopy: PopulatedBasket = {
+  const basketCopy: PopulatedBasket = {
     ...basket.toObject({
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
-  const {username} = itemCopy.owner;
-  delete itemCopy.owner;
-  const items = new Set<{id: string, name: string, quantity: number, unit: string}>();
-  for (const item of itemCopy.items) {
-    items.add({'id': item._id.toString(), 'name': item.name, 'quantity': item.quantity, 'unit': item.unit})
-  }
-  delete itemCopy.items;
+  const {username} = basketCopy.owner;
+  delete basketCopy.owner;
+  const items = basketCopy.items.map(item => ({'id': item._id.toString(), 'name': item.name, 'quantity': item.quantity, 'unit': item.unit}));
+  delete basketCopy.items;
   return {
-    ...itemCopy,
-    _id: itemCopy._id.toString(),
+    ...basketCopy,
+    _id: basketCopy._id.toString(),
     owner: username,
-    name: itemCopy.name,
+    name: basketCopy.name,
     items: items
   };
 };

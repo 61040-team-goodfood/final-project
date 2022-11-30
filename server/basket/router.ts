@@ -1,9 +1,10 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {Request, Response} from 'express';
 import express from 'express';
 import BasketCollection from './collection';
 import * as userValidator from '../user/middleware';
-import * as groceryItemValidator from '../groceryItem/middleware';
+import * as basketValidator from './middleware';
 import * as util from './util';
+import IngredientCollection from '../ingredient/collection';
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ const router = express.Router();
  *
  * @name GET /api/baskets
  *
- * @return {BasketResponse[]} - A list of all the items
+ * @return {BasketResponse[]} - A list of all the baskets
  * @throws {403} - If the user is not logged in
  */
 router.get(
@@ -32,105 +33,89 @@ router.get(
  *
  * @name POST /api/baskets
  *
- * @param {Types.ObjectId | string} owner - The id of the owner of the item
- * @param {string} name - The given name of the item
- * @param {number} quantity - The nonnegative amount of the item
- * @param {string} unit - The type of unit for the item
- * @param {string | null} expiration - The expiration date as a string for the item, if one is given
- * @param {number} remindDays - The date to send a reminder for this item, if one is given
- * @return {GroceryItemResponse} - The created grocery item
+ * @param {Types.ObjectId | string} owner - The id of the owner of the basket
+ * @param {string} name - The given name of the basket
+ * @param {Array<{name: string, quantity: number, unit: number}>} items - The items of the basket
+ * @return {BasketResponse} - The created basket
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the item name is empty or a stream of empty spaces
- * @throws {405} - If an invalid item quantity (e.g. negative) is given 
- * @throws {400} - If the item unit is not specified
- * @throws {405} - If an invalid expiration date is given 
- * @throws {405} - If an invalid reminder date is given 
  */
 router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    groceryItemValidator.isValidName,
-    groceryItemValidator.isValidQuantity,
-    groceryItemValidator.isValidUnit,
-    groceryItemValidator.isValidExpirationDate,
-    groceryItemValidator.isValidRemindDate
+    basketValidator.isValidName
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const item = await GroceryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
+    const items = await Promise.all(req.body.items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+      const item = await IngredientCollection.addOne(name, quantity, unit);
+      return item._id.toString();
+    }));
+    const basket = await BasketCollection.addOne(userId, req.body.name, items);
 
     res.status(201).json({
-      message: 'Your grocery item was created successfully.',
-      groceryItem: util.constructGroceryItemResponse(item)
+      message: 'Your basket was created successfully.',
+      groceryItem: util.constructBasketResponse(basket)
     });
   }
 );
 
 /**
- * Delete a grocery item
+ * Delete a basket
  *
- * @name DELETE /api/groceryItems/:groceryItemId
+ * @name DELETE /api/baskets/:basketId
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
- * @throws {404} - If the groceryItemId is not valid
+ * @throws {404} - If the basketId is not valid
  */
 router.delete(
-  '/:groceryItemId?',
+  '/:basketId?',
   [
     userValidator.isUserLoggedIn,
-    groceryItemValidator.isItemExists
+    basketValidator.isItemExists
   ],
   async (req: Request, res: Response) => {
-    await GroceryItemCollection.deleteOne(req.params.groceryItemId);
+    await BasketCollection.deleteOne(req.params.basketId);
     res.status(200).json({
-      message: 'Your grocery item was deleted successfully.'
+      message: 'Your basket was deleted successfully.'
     });
   }
 );
 
 /**
- * Modify a groceryItem's information
+ * Modify a basket's information
  *
- * @name PATCH /api/groceryItems/:groceryItemId
+ * @name PATCH /api/baskets/:basketId
  *
  * @param {string} name - The given name for the item
- * @param {number} quantity - The nonnegative amount of the item, if provided
- * @param {string} unit - The type of unit to use for the item
- * @param {string} expiration - The expiration date for the item, if given
- * @param {number} remindDays - The date to send a reminder for this item, if given
- * @param {boolean | null} inPantry - The status to update for this item, if provided
- * @return {GroceryItemResponse} - the updated grocery item
+ * @param {Array<{name: string, quantity: number, unit: number}>} items - The items of the basket
+ * @return {BasketResponse} - the updated grocery item
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the groceryItemId is not valid
  * @throws {400} - If the item name is empty or a stream of empty spaces
- * @throws {405} - If an invalid item quantity (e.g. negative) is given 
- * @throws {400} - If the item unit is specified
- * @throws {405} - If an invalid expiration date is given 
- * @throws {405} - If an invalid reminder date is given
  */
 router.patch(
-  '/:groceryItemId?',
+  '/:basketId?',
   [
     userValidator.isUserLoggedIn,
-    groceryItemValidator.isItemExists,
-    groceryItemValidator.isValidName,
-    groceryItemValidator.isValidQuantity,
-    groceryItemValidator.isValidUnit,
-    groceryItemValidator.isValidExpirationDate,
-    groceryItemValidator.isValidRemindDate
+    basketValidator.isItemExists,
+    basketValidator.isValidName
   ],
   async (req: Request, res: Response) => {
-    let item = await GroceryItemCollection.updateOneInfo(req.params.groceryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
-    if (req.body.inPantry) {
-      item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
-    }
+    const items = await Promise.all(req.body.items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+      const item = await IngredientCollection.addOne(name, quantity, unit);
+      return item._id.toString();
+    }));
+
+    const basket = await BasketCollection.updateOneInfo(req.params.basketId, req.body.name, items);
+    
     res.status(200).json({
-      message: 'Your grocery item was updated successfully.',
-      groceryItem: util.constructGroceryItemResponse(item)
+      message: 'Your basket was updated successfully.',
+      basket: util.constructBasketResponse(basket)
     });
   }
 );
 
-export {router as groceryItemRouter};
+export {router as BasketRouter};

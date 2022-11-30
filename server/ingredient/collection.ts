@@ -41,7 +41,7 @@ class IngredientCollection {
    *
    * @return {Promise<HydratedDocument<Ingredient>[]>} - An array of all of the ingredients, sorted alphabetically by name.
    */
-   static async findAll(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<GroceryItem>>> {
+   static async findAll(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Ingredient>>> {
     return IngredientModel.find({}).sort('name');
   }
 

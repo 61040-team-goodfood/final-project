@@ -16,7 +16,7 @@ export type Recipe = {
   ingredients: [Types.ObjectId];
   instructions: string;
   cookTime: number; // stores the cook time as number of minutes
-  image: { data: Buffer, contentType: String };
+  // image: { data: Buffer, contentType: String };  TODO: stretch feature
 };
 
 export type PopulatedRecipe = {
@@ -26,7 +26,7 @@ export type PopulatedRecipe = {
   ingredients: [GroceryItem];
   instructions: string;
   cookTime: number; // stores the cook time as number of minutes
-  image: { data: Buffer, contentType: String };
+  // image: { data: Buffer, contentType: String }; TODO: stretch feature
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -60,11 +60,11 @@ const RecipeSchema = new Schema<Recipe>({
     type: Number,
     required: true
   },
-  // The image for the recipe
-  image: {
-    type: { data: Buffer, contentType: String },
-    required: false
-  },
+  // The image for the recipe TODO: stretch feature
+  // image: {
+  //   type: { data: Buffer, contentType: String },
+  //   required: false
+  // },
 });
 
 const RecipeModel = model<Recipe>('Recipe', RecipeSchema);

@@ -11,6 +11,7 @@ const store = new Vuex.Store({
   state: {
     // inPantry: true, // Status to filter shown items by (true = in pantry, false = in history)
     groceryItems: [], // All groceryItems created in the app
+    recipes: [], // All recipes in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
     units: [
@@ -74,7 +75,15 @@ const store = new Vuex.Store({
       const url = `/api/groceryItems?status=${inPantry}`;
       const res = await fetch(url).then(async r => r.json());
       state.groceryItems = res;
-    }
+    },
+    async refreshRecipes(state) {
+      /**
+       * Request the server for the currently available recipes.
+       */
+      const url = '/api/recipes';
+      const res = await fetch(url).then(async r => r.json());
+      state.recipes = res;
+    },
   },
   plugins: [createPersistedState()]
 });

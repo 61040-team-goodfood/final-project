@@ -78,7 +78,7 @@ router.delete(
     recipeValidator.isRecipeExists,
   ],
   async (req: Request, res: Response) => {
-    await GroceryItemCollection.deleteOne(req.params.recipeId);
+    await RecipeCollection.deleteOne(req.params.recipeId);
     res.status(200).json({
       message: 'Your recipe was deleted successfully.'
     });

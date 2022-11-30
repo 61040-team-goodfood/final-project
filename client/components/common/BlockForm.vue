@@ -250,6 +250,20 @@
             </label>
           </div>
         </div>
+        <div v-else-if="field.type === 'cookTime'" class="row">
+          <div class="col-9">
+            <input 
+              class="form-control"
+              type="number" 
+              :name="field.id" 
+              :value="field.value"
+              :placeholder="field.placeholder"
+              min="1" 
+              @input="field.value = $event.target.value" 
+              required
+            >
+          </div>
+        </div>
         <input 
           v-else 
           class="form-control" 
@@ -289,6 +303,7 @@ export default {
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
       refreshGroceryItems: false,
+      refreshRecipes: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
@@ -428,6 +443,10 @@ export default {
 
         if (this.refreshGroceryItems) {
           this.$store.commit('refreshGroceryItems', true);
+        }
+
+        if (this.refreshRecipes) {
+          this.$store.commit('refreshRecipes');
         }
 
         if (this.callback) {

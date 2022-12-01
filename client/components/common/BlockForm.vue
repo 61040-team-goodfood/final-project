@@ -291,6 +291,7 @@ export default {
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
       refreshGroceryItems: false,
+      refreshBaskets: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
@@ -458,6 +459,10 @@ export default {
 
         if (this.refreshGroceryItems) {
           this.$store.commit('refreshGroceryItems', true);
+        }
+
+        if (this.refreshBaskets) {
+          this.$store.commit('refreshBaskets');
         }
 
         if (this.callback) {

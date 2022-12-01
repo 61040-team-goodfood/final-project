@@ -35,7 +35,7 @@ router.get(
  *
  * @param {Types.ObjectId | string} owner - The id of the owner of the basket
  * @param {string} name - The given name of the basket
- * @param {Array<{name: string, quantity: number, unit: number}>} items - The items of the basket
+ * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
  * @return {BasketResponse} - The created basket
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the item name is empty or a stream of empty spaces
@@ -48,11 +48,14 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const items = await Promise.all(req.body.items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-      const item = await IngredientCollection.addOne(name, quantity, unit);
-      return item._id.toString();
-    }));
-    const basket = await BasketCollection.addOne(userId, req.body.name, items);
+    let ingredients = null;
+    if (req.body.ingredients) {
+      ingredients = await Promise.all(req.body.ingredients.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+        const ingredient = await IngredientCollection.addOne(name, quantity, unit);
+        return ingredient._id.toString();
+      }));
+    }
+    const basket = await BasketCollection.addOne(userId, req.body.name, ingredients);
 
     res.status(201).json({
       message: 'Your basket was created successfully.',
@@ -90,7 +93,7 @@ router.delete(
  * @name PATCH /api/baskets/:basketId
  *
  * @param {string} name - The given name for the item
- * @param {Array<{name: string, quantity: number, unit: number}>} items - The items of the basket
+ * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
  * @return {BasketResponse} - the updated grocery item
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the groceryItemId is not valid
@@ -104,12 +107,14 @@ router.patch(
     basketValidator.isValidName
   ],
   async (req: Request, res: Response) => {
-    const items = await Promise.all(req.body.items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-      const item = await IngredientCollection.addOne(name, quantity, unit);
-      return item._id.toString();
-    }));
-
-    const basket = await BasketCollection.updateOneInfo(req.params.basketId, req.body.name, items);
+    let ingredients = null;
+    if (req.body.ingredients) {
+      ingredients = await Promise.all(req.body.ingredients.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+        const ingredient = await IngredientCollection.addOne(name, quantity, unit);
+        return ingredient._id.toString();
+      }));
+    }
+    const basket = await BasketCollection.updateOneInfo(req.params.basketId, req.body.name, ingredients);
     
     res.status(200).json({
       message: 'Your basket was updated successfully.',

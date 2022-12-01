@@ -13,18 +13,18 @@ class BasketCollection {
    *
    * @param {Types.ObjectId | string} owner - The id of the owner of the basket
    * @param {string} name - The given name of the basket
-   * @param {Array<Types.ObjectId | string>} items - The items of the basket
+   * @param {Array<Types.ObjectId | string>} ingredients - The items of the basket
    * @return {Promise<HydratedDocument<Basket>>} - The newly created basket
    */
-  static async addOne(owner: Types.ObjectId | string, name: string, items: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
+  static async addOne(owner: Types.ObjectId | string, name: string, ingredients: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
     const basket = new BasketModel({
       owner,
       name,
-      items
+      ingredients
     });
 
     await basket.save(); // Saves item to MongoDB
-    return basket.populate('owner', 'items');
+    return (await basket.populate('owner')).populate('ingredients');
   }
 
   /**
@@ -34,7 +34,7 @@ class BasketCollection {
    * @return {Promise<HydratedDocument<Basket>> | Promise<null> } - The item with the given id, if any
    */
   static async findOne(basketId: Types.ObjectId | string): Promise<HydratedDocument<Basket>> {
-    return BasketModel.findOne({_id: basketId}).populate('owner');
+    return BasketModel.findOne({_id: basketId}).populate('owner').populate('ingredients');
   }
 
   /**
@@ -45,7 +45,7 @@ class BasketCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Basket>>> {
     const owner = await UserCollection.findOneByUsername(username);
-    return BasketModel.find({owner: owner._id}).sort({name: 1}).populate('owner');
+    return BasketModel.find({owner: owner._id}).sort('name').populate('owner').populate('ingredients');
   }
 
   /**
@@ -56,7 +56,7 @@ class BasketCollection {
    */
    static async findAllByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Basket>>> {
     const owner = await UserCollection.findOneByUserId(userId);
-    return BasketModel.find({owner: owner._id}).sort({name: 1}).populate('owner');
+    return BasketModel.find({owner: owner._id}).sort('name').populate('owner').populate('ingredients');
   }
 
   /**
@@ -64,18 +64,18 @@ class BasketCollection {
    *
    * @param {Types.ObjectId | string} basketId - The id of the item to be updated
    * @param {string} name - The given name of the basket
-   * @param {Array<Types.ObjectId | string>} items - The items of the basket
+   * @param {Array<Types.ObjectId | string>} ingredients - The items of the basket
    * @return {Promise<HydratedDocument<Basket>>} - The newly updated basket
    */
-  static async updateOneInfo(basketId: Types.ObjectId | string, name: string, items: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
+  static async updateOneInfo(basketId: Types.ObjectId | string, name: string, ingredients: Array<Types.ObjectId | string> | null): Promise<HydratedDocument<Basket>> {
     const basket = await BasketModel.findOne({_id: basketId});
 
     // Required values that should not be empty
     basket.name = name;
-    basket.items = items as [Types.ObjectId];
+    basket.ingredients = ingredients as [Types.ObjectId];
     
     await basket.save();
-    return basket.populate('owner', 'items');
+    return (await basket.populate('owner')).populate('ingredients');
   }
 
   /**

@@ -13,14 +13,14 @@ export type Basket = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   owner: Types.ObjectId;
   name: string;
-  items: [Types.ObjectId];
+  ingredients: [Types.ObjectId];
 };
 
 export type PopulatedBasket = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   owner: User;
   name: string;
-  items: [Ingredient];
+  ingredients: [Ingredient];
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -40,7 +40,7 @@ const BasketSchema = new Schema<Basket>({
     required: true
   },
   // The items of the basket
-  items: {
+  ingredients: {
     type: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
     required: false
   }

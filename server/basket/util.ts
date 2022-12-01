@@ -5,7 +5,7 @@ export type BasketResponse = {
   _id: string;
   owner: string;
   name: string;
-  items: Array<{id: string, name: string, quantity: number, unit: string}>;
+  ingredients: Array<{id: string, name: string, quantity: number, unit: string}>;
 };
 
 /**
@@ -23,14 +23,14 @@ const constructBasketResponse = (basket: HydratedDocument<Basket>): BasketRespon
   };
   const {username} = basketCopy.owner;
   delete basketCopy.owner;
-  const items = basketCopy.items.map(item => ({'id': item._id.toString(), 'name': item.name, 'quantity': item.quantity, 'unit': item.unit}));
-  delete basketCopy.items;
+  const ingredients = basketCopy.ingredients ? basketCopy.ingredients.map(item => ({'id': item._id.toString(), 'name': item.name, 'quantity': item.quantity, 'unit': item.unit})) : [];
+  delete basketCopy.ingredients;
   return {
     ...basketCopy,
     _id: basketCopy._id.toString(),
     owner: username,
     name: basketCopy.name,
-    items: items
+    ingredients: ingredients
   };
 };
 

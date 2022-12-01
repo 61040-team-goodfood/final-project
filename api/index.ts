@@ -10,6 +10,7 @@ import * as userValidator from '../server/user/middleware';
 import {userRouter} from '../server/user/router';
 import {groceryItemRouter} from '../server/groceryItem/router';
 import MongoStore from 'connect-mongo';
+import { BasketRouter } from '../server/basket/router';
 
 // Load environmental variables
 dotenv.config({});
@@ -70,6 +71,7 @@ app.use(userValidator.isCurrentSessionUserExists);
 // Add routers from routes folder
 app.use('/api/users', userRouter);
 app.use('/api/groceryItems', groceryItemRouter);
+app.use('/api/baskets', BasketRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

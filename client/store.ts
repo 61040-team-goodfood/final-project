@@ -30,10 +30,7 @@ const store = new Vuex.Store({
       'lb',
       'oz'
     ], // Fixed list of units
-    baskets: [
-      'basket1',
-      'basket2'
-    ] // Make API call to populate, fixed list for now
+    baskets: []
   },
   mutations: {
     alert(state, payload) {
@@ -74,6 +71,15 @@ const store = new Vuex.Store({
       const url = `/api/groceryItems?status=${inPantry}`;
       const res = await fetch(url).then(async r => r.json());
       state.groceryItems = res;
+    },
+    async refreshBaskets(state) {
+      /**
+       * Request the server for the currently available freets.
+       * @param inPantry - boolean denoting whether to filter items by currently in pantry
+       */
+      const url = `/api/baskets`;
+      const res = await fetch(url).then(async r => r.json());
+      state.baskets = res;
     }
   },
   plugins: [createPersistedState()]

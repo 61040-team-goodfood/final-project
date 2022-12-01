@@ -12,7 +12,7 @@ export default {
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },
-        { type: 'text', id: 'instructions', label: 'Instructions', value: '' }, 
+        { type: 'content', id: 'instructions', label: 'Instructions', value: '' }, 
         { type: 'cookTime', id: 'cookTime', label: 'Cook Time', value: '' }, 
       ],
       title: 'Add New Recipe',

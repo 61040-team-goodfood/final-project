@@ -35,5 +35,5 @@ const IngredientSchema = new Schema<Ingredient>({
   },
 });
 
-const IngredientModel = model<Ingredient>('GroceryItem', IngredientSchema);
+const IngredientModel = model<Ingredient>('Ingredient', IngredientSchema);
 export default IngredientModel;

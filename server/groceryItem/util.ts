@@ -24,8 +24,8 @@ const formatDate = (date: Date): string => {
   if (!date) {
     return '';
   }
-  const utcDate = moment.utc(date).format();
-  return moment.tz(utcDate,'America/New_York').format('YYYY-MM-DD');
+  const utcDate = moment.utc(date);
+  return utcDate.clone().tz('America/New_York').format('YYYY-MM-DD');
   // date ? moment.utc(date,).tz('America/New_York').format('YYYY-MM-DD') : '';
 }
 

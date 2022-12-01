@@ -43,10 +43,6 @@
       align-items: center;
   }
   
-  button {
-      margin-right: 10px;
-  }
-  
   section .scrollbox {
     flex: 1 0 50vh;
     padding: 3%;

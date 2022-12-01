@@ -123,4 +123,4 @@ router.patch(
   }
 );
 
-export {router as BasketRouter};
+export {router as basketRouter};

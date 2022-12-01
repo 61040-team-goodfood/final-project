@@ -21,11 +21,9 @@ class GroceryItemCollection {
    */
   static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
     const date = new Date();
-    const expirationDate = expiration ? new Date(expiration) : null;
-    if (expirationDate) {
-      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-    }
-    const remindDate_ = expirationDate ? new Date(expiration) : new Date();
+      
+    const expirationDate = expiration ? new Date(`${expiration}T00:00:00.000-05:00`) : null;
+    const remindDate_ = expirationDate ? new Date(`${expiration}T00:00:00.000-05:00`) : new Date();
     const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
     const groceryItem = new GroceryItemModel({
       owner,
@@ -97,8 +95,8 @@ class GroceryItemCollection {
    */
   static async updateOneInfo(groceryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number): Promise<HydratedDocument<GroceryItem>> {
     const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});
-    const expirationDate = expiration ? new Date(expiration) : null;
-    const remindDate = expirationDate ? new Date(expiration) : new Date(groceryItem.dateAdded);
+    const expirationDate = expiration ? new Date(`${expiration}T00:00:00.000-05:00`) : null;
+    const remindDate = expirationDate ? new Date(`${expiration}T00:00:00.000-05:00`) : new Date(groceryItem.dateAdded);
 
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());

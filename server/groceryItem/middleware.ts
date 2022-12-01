@@ -75,6 +75,7 @@ const isValidExpirationDate = async (req: Request, res: Response, next: NextFunc
   if (expiration) {
     const item = req.params.groceryItemId ? await GroceryItemCollection.findOne(req.params.groceryItemId) : null;
     const expirationDate = new Date(expiration);
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
     const dateAdded = item ? item.dateAdded : new Date();
 
     if (expirationDate < dateAdded) {
@@ -104,9 +105,11 @@ const isValidRemindDate = async (req: Request, res: Response, next: NextFunction
   if (expiration) {
     const item = req.params.groceryItemId ? await GroceryItemCollection.findOne(req.params.groceryItemId): null;
     const expirationDate = new Date(expiration);
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
     const dateAdded = item ? item.dateAdded : new Date();
-
     const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
+    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+    
     if (remindDate < dateAdded) {
       res.status(400).json({
         error: 'Reminder date must be later than the item creation date.'

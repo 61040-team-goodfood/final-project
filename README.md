@@ -30,7 +30,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- A list of all the items sorted in descending order by date of reminder
+- A list of all the items sorted in descending order by date added
 
 **Throws**
 
@@ -40,7 +40,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- A list of all the items sorted in descending order by date of reminder
+- A list of all the items sorted in descending order by date added
 
 **Throws**
 
@@ -93,7 +93,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Returns**
 
 - A success message
-- An object with the updated grocery item
+- An object with the updated grocery item (either updates only the status or updates the stored item information)
 
 **Throws**
 

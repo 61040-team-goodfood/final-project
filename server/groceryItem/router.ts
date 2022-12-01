@@ -13,7 +13,7 @@ const router = express.Router();
  * @name GET /api/groceryItems
  *
  * @return {GroceryItemResponse[]} - A list of all the items sorted in descending
- *                                   order by date of reminder
+ *                                   order by date added
  * @throws {403} - If the user is not logged in
  */
 /**
@@ -22,7 +22,7 @@ const router = express.Router();
  * @name GET /api/groceryItems?status=inPantry
  *
  * @return {GroceryItemResponse[]} - A list of all the items sorted in descending
- *                                   order by date of reminder
+ *                                   order by date added
  * @throws {403} - If the user is not logged in
  */
 router.get(

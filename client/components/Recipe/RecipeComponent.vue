@@ -2,9 +2,9 @@
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
-  <article class="recipe">
+  <article class="border rounded my-2 p-4">
     <section>
-      <button class="btn btn-primary m-2" @click="deleteRecipe">
+      <button v-if="$store.state.username === recipe.author" class="btn btn-danger btn-sm my-2 bi bi-trash" @click="deleteRecipe">
         Delete
       </button>
       <h4>{{recipe.name}}</h4>
@@ -25,11 +25,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  data() {
-    return {
-      alerts: {} // Displays success/error messages encountered during recipe modification
-    };
   },
   methods: {
     deleteRecipe() {
@@ -71,8 +66,7 @@ export default {
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        this.$store.commit('alert', { message: e, status: 'danger'});
       }
     }
   }
@@ -80,9 +74,9 @@ export default {
 </script>
 
 <style scoped>
-.recipe {
+/* .recipe {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
-}
+} */
 </style>

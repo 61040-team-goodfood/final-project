@@ -13,7 +13,7 @@ export default {
         { type: 'text', id: 'name', label: 'Name', value: '' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },
         { type: 'content', id: 'instructions', label: 'Instructions', value: '' }, 
-        { type: 'cookTime', id: 'cookTime', label: 'Cook Time', value: '' }, 
+        { type: 'cookTime', id: 'cookTime', label: 'Cook Time (in minutes)', value: '', placeholder: 'Enter a number' }, 
       ],
       title: 'Add New Recipe',
       refreshRecipes: true,

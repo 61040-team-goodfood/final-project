@@ -74,8 +74,8 @@ router.delete(
   '/:recipeId?',
   [
     userValidator.isUserLoggedIn,
-    recipeValidator.isValidRecipeModifier,
     recipeValidator.isRecipeExists,
+    recipeValidator.isValidRecipeModifier,
   ],
   async (req: Request, res: Response) => {
     await RecipeCollection.deleteOne(req.params.recipeId);

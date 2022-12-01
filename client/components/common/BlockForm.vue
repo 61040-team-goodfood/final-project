@@ -363,6 +363,7 @@ export default {
         for (const field of this.fields) {
           if (field.type === 'date') {
             expireDate = new Date(field.value);
+            expireDate.setMinutes(expireDate.getMinutes() + expireDate.getTimezoneOffset());
 
             if (expireDate <= new Date()) {
               const expirationDateErrorMessage = 'Expiration date must be in the future!';
@@ -376,6 +377,7 @@ export default {
 
           if (field.type === 'reminder' && expireDate !== null) {
             const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
+            remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
             
             if (remindDate <= new Date()) {
               const reminderDateErrorMessage = 'Reminder date must be in the future!';

@@ -2,7 +2,6 @@ import type {HydratedDocument, Types} from 'mongoose';
 import type {GroceryItem} from './model';
 import GroceryItemModel from './model';
 import UserCollection from '../user/collection';
-import moment from 'moment';
 
 /**
  * This files contains a class that has the functionality to explore grocery items
@@ -21,19 +20,16 @@ class GroceryItemCollection {
    * @return {Promise<HydratedDocument<GroceryItem>>} - The newly created grocery item
    */
   static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<GroceryItem>> {
-    const date = new Date(moment.utc().format());
-    const expirationDate = expiration ? new Date(moment.utc(expiration).format()) : null;
-    const remindDate = expirationDate ? new Date(moment.utc(expiration).format()) : new Date(moment.utc().format());
-    
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    const date = new Date();
+    const expirationDate = expiration ? new Date(expiration) : null;
+    let remindDate = expirationDate ? new Date(expiration) : new Date();
+
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setDate(remindDate.getDate() - remindDays);
-    } else {
-      remindDate.setMonth(remindDate.getMonth() + 1);
+      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
     }
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-
+    remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
+  
     const groceryItem = new GroceryItemModel({
       owner,
       name,
@@ -112,23 +108,20 @@ class GroceryItemCollection {
    */
   static async updateOneInfo(groceryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number): Promise<HydratedDocument<GroceryItem>> {
     const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});
-    const expirationDate = expiration ? new Date(moment.utc(expiration).format()) : null;
-    const remindDate = expirationDate ? new Date(moment.utc(expiration).format()) : new Date(moment.utc(groceryItem.dateAdded).format());
+    const expirationDate = expiration ? new Date(expiration) : null;
+    const remindDate = expirationDate ? new Date(expiration) : new Date(groceryItem.dateAdded);
 
     if (expirationDate) {
       expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setDate(remindDate.getDate() - remindDays);
-    } else {
-      remindDate.setMonth(remindDate.getMonth() + 1);
+      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
     }
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
 
     // update stored values
     groceryItem.name = name;
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
     groceryItem.expirationDate = expirationDate;
-    groceryItem.remindDate = remindDate;
+    groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
     await groceryItem.save();
     return groceryItem.populate('owner');

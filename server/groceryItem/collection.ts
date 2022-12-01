@@ -35,7 +35,7 @@ class GroceryItemCollection {
       name,
       quantity,
       unit,
-      dateAdded: date,
+      dateAdded: new Date(date.setDate(date.getUTCDate())),
       expirationDate,
       remindDate,
       inPantry: true

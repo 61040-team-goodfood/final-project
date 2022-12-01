@@ -35,7 +35,7 @@ router.get(
     }
 
     const statusItems = await GroceryItemCollection.findAllByStatus(req.session.userId, req.query.status as string);
-    const response = statusItems.map(util.constructGroceryItemResponse);
+    const response = await statusItems.map(util.constructGroceryItemResponse);
     res.status(200).json(response);
   },
   [
@@ -44,7 +44,7 @@ router.get(
   async (req: Request, res: Response) => {
     // retrieve all items that have been created by this user
     const items = await GroceryItemCollection.findAllByUserId(req.session.userId);
-    const response = items.map(util.constructGroceryItemResponse);
+    const response = await items.map(util.constructGroceryItemResponse);
     res.status(200).json(response);
   }
 );
@@ -81,10 +81,11 @@ router.post(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const item = await GroceryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
+    const response = await util.constructGroceryItemResponse(item);
 
     res.status(201).json({
       message: 'Your grocery item was created successfully.',
-      groceryItem: util.constructGroceryItemResponse(item)
+      groceryItem: response
     });
   }
 );
@@ -140,9 +141,10 @@ router.patch(
       return;
     }
     let item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
+    const response = await util.constructGroceryItemResponse(item);
     res.status(200).json({
       message: 'Your grocery item status was updated successfully.',
-      groceryItem: util.constructGroceryItemResponse(item)
+      groceryItem: response
     });
   },
   [
@@ -156,9 +158,10 @@ router.patch(
   ],
   async (req: Request, res: Response) => {
     let item = await GroceryItemCollection.updateOneInfo(req.params.groceryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
+    const response = await util.constructGroceryItemResponse(item);
     res.status(200).json({
       message: 'Your grocery item was updated successfully.',
-      groceryItem: util.constructGroceryItemResponse(item)
+      groceryItem: response
     });
   }
 );

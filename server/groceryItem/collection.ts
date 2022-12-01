@@ -25,17 +25,16 @@ class GroceryItemCollection {
     let remindDate = expirationDate ? new Date(expiration) : new Date();
 
     if (expirationDate) {
-      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+        expirationDate.setDate(expirationDate.getUTCDate());
     }
-    remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
+    remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getUTCDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getUTCMonth() + 1));
   
     const groceryItem = new GroceryItemModel({
       owner,
       name,
       quantity,
       unit,
-      dateAdded: date,
+      dateAdded: new Date(date.setDate(date.getUTCDate())),
       expirationDate,
       remindDate,
       inPantry: true
@@ -112,8 +111,7 @@ class GroceryItemCollection {
     const remindDate = expirationDate ? new Date(expiration) : new Date(groceryItem.dateAdded);
 
     if (expirationDate) {
-      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+        expirationDate.setDate(expirationDate.getUTCDate());
     }
 
     // update stored values
@@ -121,7 +119,7 @@ class GroceryItemCollection {
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
     groceryItem.expirationDate = expirationDate;
-    groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
+    groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getUTCDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getUTCMonth() + 1));
     
     await groceryItem.save();
     return groceryItem.populate('owner');

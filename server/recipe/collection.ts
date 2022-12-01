@@ -14,7 +14,7 @@ class RecipeCollection {
    * @param {string} name - The name of the recipe
    * @param {Array<Types.ObjectId | string>} ingredients - The list of ingredients for the recipe
    * @param {string} instructions - The instructions for the recipe
-   * @param {number} cookTime - The cooktime in minutes of the receipe
+   * @param {number} cookTime - The cooktime in minutes of the recipe
    * @return {Promise<HydratedDocument<Recipe>>} - The newly created recipe
    */
   static async addOne(author: Types.ObjectId | string, name: string, ingredients: Array<Types.ObjectId | string>, instructions: string, cookTime: number): Promise<HydratedDocument<Recipe>> {
@@ -83,35 +83,35 @@ class RecipeCollection {
   /**
    * Update a recipe with the new information
    *
-   * @param {Types.ObjectId | string} receipeId - The id of the grocery to be updated
+   * @param {Types.ObjectId | string} recipeId - The id of the grocery to be updated
    * @param {string} name - The name of the recipe
    * @param {Array<Types.ObjectId | string>} ingredients - The ingredients for the recipe
    * @param {string} instructions - The instructions in the recipe
    * @param {number} cookTime - the cook time of the recipe
    * @return {Promise<HydratedDocument<Recipe>>} - The newly updated recipe
    */
-  static async updateOneInfo(receipeId: Types.ObjectId | string, name: string, ingredients: Array<Types.ObjectId | string>, instructions: string, cookTime: number): Promise<HydratedDocument<Recipe>> {
-    const receipe = await RecipeModel.findOne({_id: receipeId});
+  static async updateOneInfo(recipeId: Types.ObjectId | string, name: string, ingredients: Array<Types.ObjectId | string>, instructions: string, cookTime: number): Promise<HydratedDocument<Recipe>> {
+    const recipe = await RecipeModel.findOne({_id: recipeId});
 
-    receipe.name = name;
-    receipe.ingredients = ingredients as [Types.ObjectId];
-    receipe.instructions = instructions;
-    receipe.cookTime = cookTime;
+    recipe.name = name;
+    recipe.ingredients = ingredients as [Types.ObjectId];
+    recipe.instructions = instructions;
+    recipe.cookTime = cookTime;
     
-    await receipe.save();
-    return (await receipe.populate('author')).populate('ingredients');
+    await recipe.save();
+    return (await recipe.populate('author')).populate('ingredients');
   }
 
 
   /**
    * Delete a recipe with given recipeId.
    *
-   * @param {Types.ObjectId | string} receipeId - id of recipe to delete
+   * @param {Types.ObjectId | string} recipeId - id of recipe to delete
    * @return {Promise<Boolean>} - true if the recipe has been deleted, false otherwise
    */
-  static async deleteOne(receipeId: Types.ObjectId | string): Promise<boolean> {
-    const receipe = await RecipeModel.deleteOne({_id: receipeId});
-    return receipe !== null;
+  static async deleteOne(recipeId: Types.ObjectId | string): Promise<boolean> {
+    const recipe = await RecipeModel.deleteOne({_id: recipeId});
+    return recipe !== null;
   }
 
   /**

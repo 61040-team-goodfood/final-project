@@ -180,3 +180,45 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `GET /api/recipes` - Get all the recipes
+
+**Returns**
+
+- a list of all recipes sorted alphabetically by name
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/recipes` - Create a new recipe
+
+**Body**
+
+- `name` _{string}_ - The name of the recipe
+- `ingredients` _{Array<{name: string, quantity: number, unit: number}>}_ - The ingredients needed for the recipe
+- `instructions` _{string}_ - The instructions for the recipe
+- `cookTime` _{number}_ - The cook time in minutes needed for the recipe
+
+**Returns**
+
+- A success message
+- The created recipe
+
+**Throws**
+
+- `403` if the user is already logged in
+- `400` if the recipe name or instructions is empty or a stream of empty spaces
+- `400` if the ingredients list is empty
+- `405` if an invalid cook time (e.g. negative or zero) is given invalid
+
+#### `DELETE /api/recipes/:recipeId` - Delete a recipe
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if user is not logged in
+- `404` if the recipeId is not valid

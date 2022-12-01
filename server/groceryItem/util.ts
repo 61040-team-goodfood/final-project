@@ -20,7 +20,14 @@ export type GroceryItemResponse = {
  * @param {Date} date - A date object
  * @returns {string} - formatted date as string
  */
-const formatDate = (date: Date): string => date ? moment.utc(date).tz('America/New_York').format('YYYY-MM-DD') : '';
+const formatDate = (date: Date): string => {
+  if (!date) {
+    return '';
+  }
+  const utcDate = moment.utc(date).format();
+  return moment.tz(utcDate,'America/New_York').format('YYYY-MM-DD');
+  // date ? moment.utc(date,).tz('America/New_York').format('YYYY-MM-DD') : '';
+}
 
 /**
  * Transform a raw GroceryItem object from the database into an object

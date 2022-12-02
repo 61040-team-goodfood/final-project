@@ -63,9 +63,9 @@
         :visible="addToBasket" 
       />
     </section>
-    <br>
     <section>
       <EditPantryItemForm 
+        class="mt-4"
         :pantryItem=this.pantryItem 
         :visible=editing
       />

@@ -14,6 +14,8 @@ const store = new Vuex.Store({
     recipes: [], // All recipes in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
+    keyword: null,
+    ingredients: [],
     units: [
       'count',
       'mL',
@@ -56,6 +58,10 @@ const store = new Vuex.Store({
        */
       state.pantryItems = pantryItems;
     },
+    updateFilter(state, filter) {
+      state.keyword = filter.keyword;
+      state.ingredients = [...filter.ingredients];
+    },
     async refreshPantryItems(state, inPantry) {
       /**
        * Request the server for the currently available pantry items.
@@ -77,7 +83,10 @@ const store = new Vuex.Store({
       /**
        * Request the server for the currently available recipes.
        */
-      const url = '/api/recipes';
+
+      const keyword = state.keyword ? state.keyword : '';
+      const ingredients = state.ingredients ? state.ingredients.join(',') : '';
+      const url = `/api/recipes?keyword=${keyword}&ingredients=${ingredients}`;
       const res = await fetch(url).then(async r => r.json());
       state.recipes = res;
     },

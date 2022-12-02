@@ -2,12 +2,12 @@ import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
 
 /**
- * This file defines the properties stored in an Ingredient
+ * This file defines the properties stored in an FoodItem
  * DO NOT implement operations here ---> use collection file
  */
 
-// Type definition for Ingredient on the backend
-export type Ingredient = {
+// Type definition for FoodItem on the backend
+export type FoodItem = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   name: string;
   quantity: number;
@@ -15,25 +15,25 @@ export type Ingredient = {
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
-// Ingredient stored in this table will have these fields, with the
+// FoodItem stored in this table will have these fields, with the
 // type given by the type property, inside MongoDB
-const IngredientSchema = new Schema<Ingredient>({
-  // The name of the ingredient
+const FoodItemSchema = new Schema<FoodItem>({
+  // The name of the food item
   name: {
     type: String,
     required: true
   },
-  // The nonnegative integer quantity of the ingredient
+  // The nonnegative integer quantity of the food item
   quantity: {
     type: Number,
     required: true
   },
-  // The unit for the grocery ingredient
+  // The unit for the grocery food item
   unit: {
     type: String,
     required: true
   },
 });
 
-const IngredientModel = model<Ingredient>('Ingredient', IngredientSchema);
-export default IngredientModel;
+const FoodItemModel = model<FoodItem>('FoodItem', FoodItemSchema);
+export default FoodItemModel;

@@ -5,12 +5,12 @@
     <hr>
     <h2 class="display-4">History</h2>
     <section
-      v-if="$store.state.groceryItems.length"
+      v-if="$store.state.pantryItems.length"
     >
-      <GroceryItemComponent
-        v-for="item in $store.state.groceryItems"
+      <PantryItemComponent
+        v-for="item in $store.state.pantryItems"
         :key="item.id"
-        :groceryItem="item"
+        :pantryItem="item"
         :isPantry="false"
       />
     </section>
@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import GroceryItemComponent from '@/components/GroceryItem/GroceryItemComponent.vue';
+import PantryItemComponent from '@/components/PantryItem/PantryItemComponent.vue';
 
 export default {
-  name: 'GroceryItemsPage',
-  components: {GroceryItemComponent},
+  name: 'PantryItemsPage',
+  components: {PantryItemComponent},
   mounted() {
-    this.$store.commit('refreshGroceryItems', false);
+    this.$store.commit('refreshPantryItems', false);
   }
 };
 </script>

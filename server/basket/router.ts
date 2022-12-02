@@ -4,7 +4,7 @@ import BasketCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as basketValidator from './middleware';
 import * as util from './util';
-import IngredientCollection from '../ingredient/collection';
+import FoodItemCollection from '../foodItem/collection';
 
 const router = express.Router();
 
@@ -52,7 +52,7 @@ router.post(
     let ingredients = null;
     if (req.body.ingredients) {
       ingredients = await Promise.all(req.body.ingredients.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-        const ingredient = await IngredientCollection.addOne(name, quantity, unit);
+        const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
         return ingredient._id.toString();
       }));
     }
@@ -112,7 +112,7 @@ router.patch(
     let ingredients = null;
     if (req.body.ingredients) {
       ingredients = await Promise.all(req.body.ingredients.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-        const ingredient = await IngredientCollection.addOne(name, quantity, unit);
+        const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
         return ingredient._id.toString();
       }));
     }

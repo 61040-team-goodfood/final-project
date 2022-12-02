@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import AccountPage from './components/Account/AccountPage.vue';
-import GroceryItemsPage from './components/GroceryItem/GroceryItemsPage.vue';
+import PantryItemsPage from './components/PantryItem/PantryItemsPage.vue';
 import BasketsPage from './components/Basket/BasketsPage.vue';
 import HistoryPage from './components/History/HistoryPage.vue';
 import RecipesPage from './components/Recipe/RecipesPage.vue'
@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', name: 'Home', component: DummyPage },
-  {path: '/pantry', name: 'My Pantry', component: GroceryItemsPage},
+  { path: '/pantry', name: 'My Pantry', component: PantryItemsPage},
   {path: '/baskets', name: 'My Baskets', component: BasketsPage},
   { path: '/history', name: 'History', component: HistoryPage},
   { path: '/recipes', name: 'Recipes', component: RecipesPage},

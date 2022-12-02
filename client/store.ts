@@ -9,8 +9,7 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
-    // inPantry: true, // Status to filter shown items by (true = in pantry, false = in history)
-    groceryItems: [], // All groceryItems created in the app
+    pantryItems: [], // All pantryItems created in the app
     baskets: [], // All baskets in the app
     recipes: [], // All recipes in the app
     username: null, // Username of the logged in user
@@ -50,28 +49,21 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
-    // updateFilter(state, inPantry) {
-    //   /**
-    //    * Update the stored grocery items filter to the specified one.
-    //    * @param inPantry - Status of the grocery tiems to filter by
-    //    */
-    //   state.inPantry = inPantry;
-    // },
-    updateGroceryItems(state, groceryItems) {
+    updatePantryItems(state, pantryItems) {
       /**
-       * Update the stored grocery items to the provided ones.
-       * @param groceryItems - grocery items to store
+       * Update the stored pantry items to the provided ones.
+       * @param pantryItems - pantry items to store
        */
-      state.groceryItems = groceryItems;
+      state.pantryItems = pantryItems;
     },
-    async refreshGroceryItems(state, inPantry) {
+    async refreshPantryItems(state, inPantry) {
       /**
-       * Request the server for the currently available grocery items.
+       * Request the server for the currently available pantry items.
        * @param inPantry - boolean denoting whether to filter items by currently in pantry
        */
-      const url = `/api/groceryItems?status=${inPantry}`;
+      const url = `/api/pantryItems?status=${inPantry}`;
       const res = await fetch(url).then(async r => r.json());
-      state.groceryItems = res;
+      state.pantryItems = res;
     },
     async refreshBaskets(state) {
       /**

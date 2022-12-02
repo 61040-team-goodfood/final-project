@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as userValidator from '../server/user/middleware';
 import {userRouter} from '../server/user/router';
-import {groceryItemRouter} from '../server/groceryItem/router';
+import {pantryItemRouter} from '../server/pantryItem/router';
 import {recipeRouter} from '../server/recipe/router';
 import MongoStore from 'connect-mongo';
 import { basketRouter } from '../server/basket/router';
@@ -71,7 +71,7 @@ app.use(userValidator.isCurrentSessionUserExists);
 
 // Add routers from routes folder
 app.use('/api/users', userRouter);
-app.use('/api/groceryItems', groceryItemRouter);
+app.use('/api/pantryItems', pantryItemRouter);
 app.use('/api/baskets', basketRouter);
 app.use('/api/recipes', recipeRouter);
 

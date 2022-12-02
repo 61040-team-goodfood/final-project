@@ -4,8 +4,8 @@
 <template>
   <article class="border rounded my-2 p-4">
     <section v-if="editing && isPantry">
-      <EditGroceryItemForm 
-        :groceryItem=this.groceryItem 
+      <EditPantryItemForm 
+        :pantryItem=this.pantryItem 
         @stopEditing="this.stopEditing" 
       />
     </section>
@@ -24,15 +24,15 @@
         Delete
       </button>
       <div>
-        <b>Name:</b> {{ groceryItem.name }} <br>
-        <b>Quantity:</b> {{ groceryItem.quantity }} {{ groceryItem.unit }}
+        <b>Name:</b> {{ pantryItem.name }} <br>
+        <b>Quantity:</b> {{ pantryItem.quantity }} {{ pantryItem.unit }}
       </div>
       <div>
-        <b>In pantry since:</b> {{ groceryItem.dateAdded }}
+        <b>In pantry since:</b> {{ pantryItem.dateAdded }}
       </div>
-      <div v-if="groceryItem.expirationDate">
-        <b>Expires on:</b> {{ groceryItem.expirationDate }} <br>
-        <b>Reminder on:</b> {{ groceryItem.remindDate }}
+      <div v-if="pantryItem.expirationDate">
+        <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
+        <b>Reminder on:</b> {{ pantryItem.remindDate }}
       </div>
       <button 
         v-if="!isPantry"
@@ -50,13 +50,13 @@
     </section>
     <section v-if="addToPantry && !isPantry">
       <AddToPantryForm 
-        :groceryItem=this.groceryItem 
+        :pantryItem=this.pantryItem 
         @stopEditing="closeAddToPantry" 
       />
     </section>
     <section v-if="addToBasket">
       <AddToBasketForm 
-        :groceryItem=this.groceryItem 
+        :pantryItem=this.pantryItem 
         @stopEditing="closeAddToBasket" 
       />
     </section>
@@ -64,16 +64,16 @@
 </template>
 
 <script>
-import EditGroceryItemForm from '@/components/GroceryItem/EditGroceryItemForm.vue';
-import AddToPantryForm from '@/components/GroceryItem/AddToPantryForm.vue';
-import AddToBasketForm from '@/components/GroceryItem/AddToBasketForm.vue';
+import EditPantryItemForm from '@/components/PantryItem/EditPantryItemForm.vue';
+import AddToPantryForm from '@/components/PantryItem/AddToPantryForm.vue';
+import AddToBasketForm from '@/components/PantryItem/AddToBasketForm.vue';
 
 export default {
-  name: 'GroceryItemComponent',
-  components: {EditGroceryItemForm, AddToPantryForm, AddToBasketForm},
+  name: 'PantryItemComponent',
+  components: {EditPantryItemForm, AddToPantryForm, AddToBasketForm},
   props: {
     // Data from the stored item
-    groceryItem: {
+    pantryItem: {
       type: Object,
       required: true
     },
@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      editing: false, // Whether or not this grocery item is in edit mode
+      editing: false, // Whether or not this pantry item is in edit mode
       addToPantry: false,
       addToBasket: false,
       alerts: {} // Displays success/error messages encountered during freet modification
@@ -93,13 +93,13 @@ export default {
   methods: {
     startEditing() {
       /**
-       * Enables edit mode on this freet.
+       * Enables edit mode on this item.
        */
-      this.editing = true; // Keeps track of if a freet is being edited
+      this.editing = true; // Keeps track of if a item is being edited
     },
     stopEditing() {
       /**
-       * Disables edit mode on this freet.
+       * Disables edit mode on this item.
        */
       this.editing = false;
     },
@@ -152,14 +152,14 @@ export default {
       }
 
       try {
-        const r = await fetch(`/api/groceryItems/${this.groceryItem._id}`, options);
+        const r = await fetch(`/api/pantryItems/${this.pantryItem._id}`, options);
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
         }
 
         this.editing = false;
-        this.$store.commit('refreshGroceryItems', this.isPantry);
+        this.$store.commit('refreshPantryItems', this.isPantry);
 
         params.callback();
       } catch (e) {

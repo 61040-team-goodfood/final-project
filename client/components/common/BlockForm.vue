@@ -137,7 +137,7 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      refreshGroceryItems: false,
+      refreshPantryItems: false,
       refreshBaskets: false,
       refreshRecipes: false,
       alerts: {}, // Displays success/error messages encountered during form submission
@@ -308,8 +308,8 @@ export default {
           this.$store.commit('setUsername', res.user ? res.user.username : null);
         }
 
-        if (this.refreshGroceryItems) {
-          this.$store.commit('refreshGroceryItems', this.isPantry);
+        if (this.refreshPantryItems) {
+          this.$store.commit('refreshPantryItems', this.isPantry);
         }
 
         if (this.refreshBaskets) {

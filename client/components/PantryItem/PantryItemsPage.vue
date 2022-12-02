@@ -2,16 +2,16 @@
 
 <template>
   <main>
-    <AddGroceryItemForm />
+    <AddPantryItemForm />
     <hr>
     <h2 class="display-4">My Pantry</h2>
     <section
-      v-if="$store.state.groceryItems.length"
+      v-if="$store.state.pantryItems.length"
     >
-      <GroceryItemComponent
-        v-for="item in $store.state.groceryItems"
+      <PantryItemComponent
+        v-for="item in $store.state.pantryItems"
         :key="item.id"
-        :groceryItem="item"
+        :pantryItem="item"
         :isPantry="true"
       />
     </section>
@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import GroceryItemComponent from '@/components/GroceryItem/GroceryItemComponent.vue';
-import AddGroceryItemForm from '@/components/GroceryItem/AddGroceryItemForm.vue';
+import PantryItemComponent from '@/components/PantryItem/PantryItemComponent.vue';
+import AddPantryItemForm from '@/components/PantryItem/AddPantryItemForm.vue';
 
 export default {
-  name: 'GroceryItemsPage',
-  components: {GroceryItemComponent, AddGroceryItemForm},
+  name: 'PantryItemsPage',
+  components: {PantryItemComponent, AddPantryItemForm},
   mounted() {
-    this.$store.commit('refreshGroceryItems', true);
+    this.$store.commit('refreshPantryItems', true);
   }
 };
 </script>

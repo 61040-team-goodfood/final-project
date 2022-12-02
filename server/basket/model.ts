@@ -1,6 +1,6 @@
 import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
-import { Ingredient } from '../ingredient/model';
+import { FoodItem } from '../foodItem/model';
 import type {User} from '../user/model';
 
 /**
@@ -20,7 +20,7 @@ export type PopulatedBasket = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   owner: User;
   name: string;
-  ingredients: [Ingredient];
+  ingredients: [FoodItem];
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -41,7 +41,7 @@ const BasketSchema = new Schema<Basket>({
   },
   // The items of the basket
   ingredients: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
+    type: [{ type: Schema.Types.ObjectId, ref: 'FoodItem' }],
     required: false
   }
 });

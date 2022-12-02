@@ -28,7 +28,7 @@ const FoodItemSchema = new Schema<FoodItem>({
     type: Number,
     required: true
   },
-  // The unit for the grocery food item
+  // The unit for the pantry food item
   unit: {
     type: String,
     required: true

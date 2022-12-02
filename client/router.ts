@@ -2,7 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import AccountPage from './components/Account/AccountPage.vue';
 import GroceryItemsPage from './components/GroceryItem/GroceryItemsPage.vue';
-import RecipesPage from './components/Recipe/RecipesPage.vue'
+import RecipesPage from './components/Recipe/RecipesPage.vue';
+import RecipePage from './components/Recipe/RecipePage.vue'
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
 import DummyPage from './components/common/DummyPage.vue';
@@ -13,6 +14,7 @@ const routes = [
   { path: '/', name: 'Home', component: DummyPage },
   { path: '/pantry', name: 'My Pantry', component: GroceryItemsPage},
   { path: '/recipes', name: 'Recipes', component: RecipesPage},
+  { path: '/recipes/:recipeId', name: 'Recipe', component: RecipePage },
   { path: '/account', name: 'Account', component: AccountPage },
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '*', name: 'Not Found', component: NotFound }

@@ -12,7 +12,6 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
-      dismissible: false,
       fields: [
         { type: 'password', id: 'password', label: 'Password', value: '' }
       ],

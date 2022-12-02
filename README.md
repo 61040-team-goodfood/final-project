@@ -182,15 +182,26 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `GET /api/recipes` - Get all the recipes
+#### `GET /api/recipes?keyword=KEYWORD&ingredients=INGREDIENTS` - Get all the recipes
 
 **Returns**
 
-- a list of all recipes sorted alphabetically by name
+- a list of all recipes matching filter parameters, sorted alphabetically by name
 
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `GET /api/recipes/:recipeId` - Get recipe by id
+
+**Returns**
+
+- the recipe with specified id 
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the recipeId is not valid
 
 #### `POST /api/recipes` - Create a new recipe
 

@@ -3,123 +3,133 @@
 
 <template>
   <form class="border rounded p-4" @submit.prevent="submit">
-    <h3>{{ title }}</h3>
-    <article v-if="fields.length">
-      <div v-for="field in fields" :key="field.id" class="mb-2">
-        <label :for="field.id"><i>{{ field.label }}:</i></label>
-        <textarea v-if="field.type === 'content'" class="form-control" :name="field.id" :value="field.value"
-          :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
+    <section v-if="collapsible">
+      <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#formBody" aria-expanded="true">
+        <h3>
+          {{ title }}
+          <i class="bi bi-caret-down-fill right"></i>
+        </h3>
+      </button>
+    </section>
+    <h3 v-else>{{ title }}</h3>
+    <section class="collapse show" id="formBody">
+      <article v-if="fields.length">
+        <div v-for="field in fields" :key="field.id" class="mb-2">
+          <label :for="field.id"><i>{{ field.label }}:</i></label>
+          <textarea v-if="field.type === 'content'" class="form-control" :name="field.id" :value="field.value"
+            :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
 
-        <div v-else-if="field.type === 'collection'">
-          <input class="form-control" :name="field.id" :value="field.value" :placeholder="field.placeholder"
-            @input="field.value = $event.target.value" @keydown.enter.prevent="{
-              addItem(field.collection, $event.target.value);
-              field.value = '';
-            }">
-          <span v-for="(item, index) in field.collection" :key="item"
-            class="badge badge-pill badge-secondary px-2 mx-1 py-1">
-            {{ item }}
-            <span class="bi bi-x-circle" @click="removeItem(field.collection, index)" />
-          </span>
-        </div>
-        <div v-else-if="field.type === 'quantity'" class="row">
-          <div class="col-6">
-            <input class="form-control" type="number" :name="field.id" :value="field.value"
-              :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value" required>
+          <div v-else-if="field.type === 'collection'">
+            <input class="form-control" :name="field.id" :value="field.value" :placeholder="field.placeholder"
+              @input="field.value = $event.target.value" @keydown.enter.prevent="{
+                addItem(field.collection, $event.target.value);
+                field.value = '';
+              }">
+            <span v-for="(item, index) in field.collection" :key="item"
+              class="badge badge-pill badge-secondary px-2 mx-1 py-1">
+              {{ item }}
+              <span class="bi bi-x-circle" @click="removeItem(field.collection, index)" />
+            </span>
           </div>
-          <div class="col-6">
-            <select class="form-control" @change="field.unit = $event.target.value" required>
-              <option value="" :selected="field.unit === ''" disabled>Select a unit</option>
-              <option v-for="unit in $store.state.units" :key="unit" :value="unit" :selected="field.unit === unit">
-                {{ unit }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <input v-else-if="field.type === 'numerical'" class="form-control" type="number" :name="field.id"
-          :value="field.value" :placeholder="field.placeholder" min="0" @input="field.value = $event.target.value"
-          required>
-        <div v-else-if="field.type === 'date'" class="row date">
-          <div class="col-10">
-            <input class="form-control" type="date" :name="field.id" :value="field.value" :required="expires"
-              :disabled="!expires" @input="field.value = $event.target.value">
-          </div>
-          <div class="form-check col-2 align-middle">
-            <input class="form-check-input" type="checkbox" value="" :id="field.id" :checked="!expires"
-              @change="expires = !expires">
-            <label class="form-check-label" :for="field.id">
-              None
-            </label>
-          </div>
-        </div>
-        <div v-else-if="field.type === 'reminder'" class="row">
-          <div class="col-9">
-            <input class="form-control" type="number" :name="field.id" :value="field.value"
-              :placeholder="field.placeholder" :disabled="!expires" min="1" @input="field.value = $event.target.value"
-              required>
-          </div>
-          days in advance
-        </div>
-        <div v-else-if="field.type === 'ingredients'">
-          <div class="row">
-            <div class="col-5">
-              <input class="form-control" type="text" :name="field.id" :value="field.name" placeholder="Name"
-                @input="field.name = $event.target.value">
+          <div v-else-if="field.type === 'quantity'" class="row">
+            <div class="col-6">
+              <input class="form-control" type="number" :name="field.id" :value="field.value"
+                :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value" required>
             </div>
-            <div class="col-3">
-              <input class="form-control" type="number" :name="field.id" :value="field.quantity" placeholder="Quantity"
-                min="1" @input="field.quantity = $event.target.value">
-            </div>
-            <div class="col-3">
-              <select class="form-control" @change="field.unit = $event.target.value">
+            <div class="col-6">
+              <select class="form-control" @change="field.unit = $event.target.value" required>
                 <option value="" :selected="field.unit === ''" disabled>Select a unit</option>
                 <option v-for="unit in $store.state.units" :key="unit" :value="unit" :selected="field.unit === unit">
                   {{ unit }}
                 </option>
               </select>
             </div>
-            <div class="col-1">
-              <button class="btn btn-info" @click.prevent="{
-                addIngredient(field.ingredients, field.name, field.quantity, field.unit);
-                field.name = '';
-                field.quantity = '';
-                field.unit = '';
-              };">
-                Add
-              </button>
+          </div>
+          <input v-else-if="field.type === 'numerical'" class="form-control" type="number" :name="field.id"
+            :value="field.value" :placeholder="field.placeholder" min="0" @input="field.value = $event.target.value"
+            required>
+          <div v-else-if="field.type === 'date'" class="row date">
+            <div class="col-10">
+              <input class="form-control" type="date" :name="field.id" :value="field.value" :required="expires"
+                :disabled="!expires" @input="field.value = $event.target.value">
+            </div>
+            <div class="form-check col-2 align-middle">
+              <input class="form-check-input" type="checkbox" value="" :id="field.id" :checked="!expires"
+                @change="expires = !expires">
+              <label class="form-check-label" :for="field.id">
+                None
+              </label>
             </div>
           </div>
-          <ul class="list-group">
-            <li v-for="(item, index) in field.ingredients" :key="item" class="list-group-item">
-              {{ item.name }} × {{ item.quantity }} {{ item.unit }}
-              <span class="bi bi-x-circle float-right" @click="removeItem(field.ingredients, index)" />
-            </li>
-          </ul>
-        </div>
-
-        <div v-else-if="field.type === 'baskets'" class="form-check">
-          <div v-for="basket in $store.state.baskets" :key="basket">
-            <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
-              :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
-            <label class="form-check-label" :for="basket">
-              {{ basket }}
-            </label>
+          <div v-else-if="field.type === 'reminder'" class="row">
+            <div class="col-9">
+              <input class="form-control" type="number" :name="field.id" :value="field.value"
+                :placeholder="field.placeholder" :disabled="!expires" min="1" @input="field.value = $event.target.value"
+                required>
+            </div>
+            days in advance
           </div>
+          <div v-else-if="field.type === 'ingredients'">
+            <div class="row">
+              <div class="col-5">
+                <input class="form-control" type="text" :name="field.id" :value="field.name" placeholder="Name"
+                  @input="field.name = $event.target.value">
+              </div>
+              <div class="col-3">
+                <input class="form-control" type="number" :name="field.id" :value="field.quantity" placeholder="Quantity"
+                  min="1" @input="field.quantity = $event.target.value">
+              </div>
+              <div class="col-3">
+                <select class="form-control" @change="field.unit = $event.target.value">
+                  <option value="" :selected="field.unit === ''" disabled>Select a unit</option>
+                  <option v-for="unit in $store.state.units" :key="unit" :value="unit" :selected="field.unit === unit">
+                    {{ unit }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-1">
+                <button class="btn btn-info" @click.prevent="{
+                  addIngredient(field.ingredients, field.name, field.quantity, field.unit);
+                  field.name = '';
+                  field.quantity = '';
+                  field.unit = '';
+                };">
+                  Add
+                </button>
+              </div>
+            </div>
+            <ul class="list-group">
+              <li v-for="(item, index) in field.ingredients" :key="item" class="list-group-item">
+                {{ item.name }} × {{ item.quantity }} {{ item.unit }}
+                <span class="bi bi-x-circle float-right" @click="removeItem(field.ingredients, index)" />
+              </li>
+            </ul>
+          </div>
+
+          <div v-else-if="field.type === 'baskets'" class="form-check">
+            <div v-for="basket in $store.state.baskets" :key="basket">
+              <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
+                :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
+              <label class="form-check-label" :for="basket">
+                {{ basket }}
+              </label>
+            </div>
+          </div>
+          <input v-else-if="field.type === 'cookTime'" class="form-control" type="number" :name="field.id"
+            :value="field.value" :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value"
+            required>
+          <input v-else class="form-control" :type="field.type === 'password' ? 'password' : 'text'" :name="field.id"
+            :value="field.value" :placeholder="field.placeholder" @input="field.value = $event.target.value" required>
+          <p v-if="field.append">{{ field.append }}</p>
         </div>
-        <input v-else-if="field.type === 'cookTime'" class="form-control" type="number" :name="field.id"
-          :value="field.value" :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value"
-          required>
-        <input v-else class="form-control" :type="field.type === 'password' ? 'password' : 'text'" :name="field.id"
-          :value="field.value" :placeholder="field.placeholder" @input="field.value = $event.target.value" required>
-        <p v-if="field.append">{{ field.append }}</p>
-      </div>
-    </article>
-    <article v-else>
-      <p>{{ content }}</p>
-    </article>
-    <button type="submit" class="btn btn-block btn-primary">
-      {{ title }}
-    </button>
+      </article>
+      <article v-else>
+        <p>{{ content }}</p>
+      </article>
+      <button type="submit" class="btn btn-block btn-primary">
+        {{ title }}
+      </button>
+  </section>
   </form>
 </template>
 
@@ -143,7 +153,6 @@ export default {
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
       expires: true,
-      editing: false,
     };
   },
   created() {
@@ -394,5 +403,13 @@ textarea {
 
 .btn-info {
   width: 100%;
+}
+
+.btn-link {
+  color: inherit;
+}
+
+.right {
+  float: right;
 }
 </style>

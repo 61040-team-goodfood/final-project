@@ -9,6 +9,7 @@ export default {
       url: '/api/groceryItems',
       method: 'POST',
       hasBody: true,
+      collapsible: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '', placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: '', placeholder: 'Enter number...', unit: '' },

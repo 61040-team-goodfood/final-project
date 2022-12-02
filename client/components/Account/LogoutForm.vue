@@ -11,6 +11,7 @@ export default {
       url: '/api/users/session',
       method: 'DELETE',
       setUsername: true,
+      collapsible: false,
       title: 'Sign Out',
       fields: [],
       content: 'Taking a break? See you later.',

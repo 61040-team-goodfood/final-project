@@ -9,6 +9,7 @@ export default {
       url: '/api/recipes',
       method: 'POST',
       hasBody: true,
+      collapsible: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },

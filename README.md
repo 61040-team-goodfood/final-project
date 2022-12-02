@@ -12,6 +12,7 @@ The project is structured as follows:
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
     - `GroceryItem/` contains the homepage and components related to GroceryItem
+    - `History/` contains the history page displaying all previously added items
     - `Login/` contains the login/register page and the related forms
     - `Common/` contains general form components that can be reused across different concepts
   - `public/` contains base HTML files and static assets (like the default Fritter logo)

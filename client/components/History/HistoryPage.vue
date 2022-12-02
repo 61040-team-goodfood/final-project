@@ -2,9 +2,8 @@
 
 <template>
   <main>
-    <AddGroceryItemForm />
     <hr>
-    <h2 class="display-4">My Pantry</h2>
+    <h2 class="display-4">History</h2>
     <section
       v-if="$store.state.groceryItems.length"
     >
@@ -12,7 +11,7 @@
         v-for="item in $store.state.groceryItems"
         :key="item.id"
         :groceryItem="item"
-        :isPantry="true"
+        :isPantry="false"
       />
     </section>
   </main>
@@ -20,13 +19,12 @@
 
 <script>
 import GroceryItemComponent from '@/components/GroceryItem/GroceryItemComponent.vue';
-import AddGroceryItemForm from '@/components/GroceryItem/AddGroceryItemForm.vue';
 
 export default {
   name: 'GroceryItemsPage',
-  components: {GroceryItemComponent, AddGroceryItemForm},
+  components: {GroceryItemComponent},
   mounted() {
-    this.$store.commit('refreshGroceryItems', true);
+    this.$store.commit('refreshGroceryItems', false);
   }
 };
 </script>

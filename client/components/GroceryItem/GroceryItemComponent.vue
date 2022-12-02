@@ -3,7 +3,7 @@
 
 <template>
   <article class="border rounded my-2 p-4">
-    <section v-if="editing">
+    <section v-if="editing && isPantry">
       <EditGroceryItemForm 
         :groceryItem=this.groceryItem 
         @stopEditing="this.stopEditing" 
@@ -11,6 +11,7 @@
     </section>
     <section v-else>
       <button 
+        v-if="isPantry"
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
         @click="startEditing"
       >
@@ -33,27 +34,59 @@
         <b>Expires on:</b> {{ groceryItem.expirationDate }} <br>
         <b>Reminder on:</b> {{ groceryItem.remindDate }}
       </div>
+      <button 
+        v-if="!isPantry"
+        class="btn btn-primary btn-sm mr-2 my-2 bi"
+        @click="openAddToPantry"
+      >
+        Add to Pantry
+      </button>
+      <button 
+        class="btn btn-primary btn-sm mr-2 my-2 bi"
+        @click="openAddToBasket"
+      >
+        Add to Baskets
+      </button>
+    </section>
+    <section v-if="addToPantry && !isPantry">
+      <AddToPantryForm 
+        :groceryItem=this.groceryItem 
+        @stopEditing="closeAddToPantry" 
+      />
+    </section>
+    <section v-if="addToBasket">
+      <AddToBasketForm 
+        :groceryItem=this.groceryItem 
+        @stopEditing="closeAddToBasket" 
+      />
     </section>
   </article>
 </template>
 
 <script>
 import EditGroceryItemForm from '@/components/GroceryItem/EditGroceryItemForm.vue';
+import AddToPantryForm from '@/components/GroceryItem/AddToPantryForm.vue';
+import AddToBasketForm from '@/components/GroceryItem/AddToBasketForm.vue';
 
 export default {
   name: 'GroceryItemComponent',
-  components: {EditGroceryItemForm},
+  components: {EditGroceryItemForm, AddToPantryForm, AddToBasketForm},
   props: {
     // Data from the stored item
     groceryItem: {
       type: Object,
       required: true
+    },
+    isPantry: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      editing: false, // Whether or not this freet is in edit mode
-      // draft: this.freet.content, // Potentially-new content for this freet
+      editing: false, // Whether or not this grocery item is in edit mode
+      addToPantry: false,
+      addToBasket: false,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
@@ -70,16 +103,36 @@ export default {
        */
       this.editing = false;
     },
+    openAddToPantry() {
+      this.addToPantry = true;
+      this.addToBasket = false;
+    },
+    closeAddToPantry() {
+      this.addToPantry = false;
+    },
+    openAddToBasket() {
+      this.addToBasket = true;
+      this.addToPantry = false;
+    },
+    closeAddToBasket() {
+      this.addToBasket = false;
+    },
     deleteItem() {
       /**
        * Deletes this item.
        */
       const params = {
-        method: 'DELETE',
+        method: this.isPantry ? 'PATCH' : 'DELETE',
         callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted item', status: 'success'
-          });
+          if (this.isPantry) {
+            this.$store.commit('alert', {
+              message: 'Successfully removed item from current pantry', status: 'success'
+            });
+          } else {
+            this.$store.commit('alert', {
+              message: 'Successfully removed item from history', status: 'success'
+            });
+          }
         }
       };
       this.request(params);
@@ -94,8 +147,8 @@ export default {
       const options = {
         method: params.method, headers: {'Content-Type': 'application/json'}
       };
-      if (params.body) {
-        options.body = params.body;
+      if (this.isPantry) {
+        options.body = JSON.stringify({inPantry: false});
       }
 
       try {
@@ -106,7 +159,7 @@ export default {
         }
 
         this.editing = false;
-        this.$store.commit('refreshGroceryItems', true);
+        this.$store.commit('refreshGroceryItems', this.isPantry);
 
         params.callback();
       } catch (e) {

@@ -2,7 +2,7 @@
 import BlockForm from '@/components/common/BlockForm.vue';
 
 export default {
-  name: 'EditGroceryItemForm',
+  name: 'AddToBasketForm',
   mixins: [BlockForm],
   props: {
     // Data from the stored item
@@ -13,21 +13,20 @@ export default {
   },
   data() {
     return {
-      url: `/api/groceryItems/${this.groceryItem._id}`,
-      method: 'PATCH',
+      url: '/api/baskets',
+      method: 'POST',
       hasBody: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.groceryItem.name, placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.groceryItem.quantity, placeholder: 'Enter number...', unit: this.groceryItem.unit },
-        { type: 'date', id: 'expiration', label: 'Expiration Date', value: this.groceryItem.expirationDate, expires: this.groceryItem.expirationDate !== '' },
-        { type: 'reminder', id: 'remindDays', label: 'Remind Me', value: this.groceryItem.expirationDate ? Math.ceil((new Date(this.groceryItem.expirationDate) - new Date(this.groceryItem.remindDate))/ (1000 * 60 * 60 * 24)) : 3, placeholder: 'Enter number...' }
+        { type: 'baskets', id: 'baskets', label: 'Baskets' }
       ],
-      title: 'Edit Item',
+      title: 'Add to Basket',
       refreshGroceryItems: true,
-      isPantry: true,
+      isPantry: false,
       expires: true,
       callback: () => {
-        const message = 'Successfully edited grocery item!';
+        const message = 'Successfully added grocery item!';
         this.$store.commit('alert', {
           message: message,
           status: 'success'

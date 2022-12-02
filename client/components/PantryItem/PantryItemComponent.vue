@@ -60,7 +60,7 @@
       <AddToBasketForm 
         class="mt-4"
         :pantryItem=this.pantryItem 
-        :visible="addToBasket" 
+        :visible="addToBasket"
       />
     </section>
     <section>

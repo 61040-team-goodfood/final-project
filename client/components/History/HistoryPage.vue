@@ -2,7 +2,6 @@
 
 <template>
   <main>
-    <hr>
     <h2 class="display-4">History</h2>
     <section
       v-if="$store.state.pantryItems.length"

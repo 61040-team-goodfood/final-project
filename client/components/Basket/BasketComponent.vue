@@ -1,17 +1,22 @@
+<!-- Reusable component representing a single item and its actions -->
+<!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
+
 <template>
   <article class="border rounded my-2 p-4">
-    <section v-if="editing">
-      <EditBasketForm 
-        :basket=this.basket 
-        @stopEditing="this.stopEditing" 
-      />
-    </section>
-    <section v-else>
-      <button 
+    <section>
+      <button
+        v-if="!editing" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="startEditing"
+        @click="editing = true"
       >
         Edit
+      </button>
+      <button 
+        v-else
+        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
+        @click="editing = false"
+      >
+        Stop Editing
       </button>
       <button 
         class="btn btn-danger btn-sm my-2 bi bi-trash"
@@ -29,6 +34,13 @@
           {{ ingredient.name }} x {{ ingredient.quantity }} {{ ingredient.unit }}
         </li>
       </div>
+    </section>
+    <br>
+    <section>
+      <EditGroceryItemForm 
+        :groceryItem=this.groceryItem 
+        :visible=editing
+      />
     </section>
   </article>
 </template>
@@ -48,23 +60,12 @@ export default {
   },
   data() {
     return {
-      editing: false, // Whether or not this basket is in edit mode
-      alerts: {} // Displays success/error messages encountered during basket modification
+      editing: false, // Whether or not this item is in edit mode
+      // draft: this.item.content, // Potentially-new content for this item
+      alerts: {} // Displays success/error messages encountered during item modification
     };
   },
   methods: {
-    startEditing() {
-      /**
-       * Enables edit mode on this basket.
-       */
-      this.editing = true; // Keeps track of if a basket is being edited
-    },
-    stopEditing() {
-      /**
-       * Disables edit mode on this basket.
-       */
-      this.editing = false;
-    },
     deleteItem() {
       /**
        * Deletes this item.

@@ -11,6 +11,7 @@ export default {
       url: '/api/users',
       method: 'PATCH',
       hasBody: true,
+      collapsible: false,
       setUsername: true,
       fields: [
         { type: 'text', id: 'username', label: 'Username', value: '' }

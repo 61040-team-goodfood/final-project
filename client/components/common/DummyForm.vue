@@ -9,6 +9,7 @@ export default {
       url: '/dummy',
       method: 'POST',
       hasBody: true,
+      collapsible: false,
       fields: [
         { type: 'text', id: 'username', label: 'Username', value: '' }, 
         { type: 'password', id: 'password', label: 'Password', value: '' },

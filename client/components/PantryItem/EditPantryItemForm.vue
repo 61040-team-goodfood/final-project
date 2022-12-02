@@ -16,6 +16,7 @@ export default {
       url: `/api/pantryItems/${this.pantryItem._id}`,
       method: 'PATCH',
       hasBody: true,
+      collapsible: false,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.pantryItem.name, placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.pantryItem.quantity, placeholder: 'Enter number...', unit: this.pantryItem.unit },

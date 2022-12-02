@@ -59,7 +59,7 @@ router.post(
 
     res.status(201).json({
       message: 'Your basket was created successfully.',
-      groceryItem: util.constructBasketResponse(basket)
+      basket: util.constructBasketResponse(basket)
     });
   }
 );
@@ -94,9 +94,9 @@ router.delete(
  *
  * @param {string} name - The given name for the item
  * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
- * @return {BasketResponse} - the updated grocery item
+ * @return {BasketResponse} - the updated basket
  * @throws {403} - if the user is not logged in
- * @throws {404} - If the groceryItemId is not valid
+ * @throws {404} - If the basketId is not valid
  * @throws {400} - If the item name is empty or a stream of empty spaces
  */
 router.patch(

@@ -26,7 +26,7 @@
           v-for="ingredient in basket.ingredients"
           :key="ingredient.id"
         >
-          {{ ingredient.name }} {{ ingredient.quantity }} {{ ingredient.unit }}
+          {{ ingredient.name }} x {{ ingredient.quantity }} {{ ingredient.unit }}
         </li>
       </div>
     </section>
@@ -48,21 +48,20 @@ export default {
   },
   data() {
     return {
-      editing: false, // Whether or not this freet is in edit mode
-      // draft: this.freet.content, // Potentially-new content for this freet
-      alerts: {} // Displays success/error messages encountered during freet modification
+      editing: false, // Whether or not this basket is in edit mode
+      alerts: {} // Displays success/error messages encountered during basket modification
     };
   },
   methods: {
     startEditing() {
       /**
-       * Enables edit mode on this freet.
+       * Enables edit mode on this basket.
        */
-      this.editing = true; // Keeps track of if a freet is being edited
+      this.editing = true; // Keeps track of if a basket is being edited
     },
     stopEditing() {
       /**
-       * Disables edit mode on this freet.
+       * Disables edit mode on this basket.
        */
       this.editing = false;
     },

@@ -38,6 +38,16 @@ class BasketCollection {
   }
 
   /**
+   * Find a basket by name
+   *
+   * @param {string} name - The id of the basket to find
+   * @return {Promise<HydratedDocument<Basket>> | Promise<null> } - The item with the given id, if any
+   */
+   static async findOneByName(name: string): Promise<HydratedDocument<Basket>> {
+    return BasketModel.findOne({name: name}).populate('owner').populate('ingredients');
+  }
+
+  /**
    * Get all the baskets of a user by a given owner username
    *
    * @param {string} username - The username of owner of the items

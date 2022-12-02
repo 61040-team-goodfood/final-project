@@ -9,6 +9,10 @@ export default {
     basket: {
       type: Object,
       required: true
+    },
+    visible: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -29,9 +33,6 @@ export default {
           message: message,
           status: 'success'
         });
-        if (!this.alerts.length) {
-          this.$emit('stopEditing');
-        }
       }
     };
   }

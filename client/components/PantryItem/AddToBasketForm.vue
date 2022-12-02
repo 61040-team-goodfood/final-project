@@ -19,7 +19,7 @@ export default {
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.pantryItem.name, placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.pantryItem.quantity, placeholder: 'Enter number...', unit: this.pantryItem.unit },
-        { type: 'baskets', id: 'baskets', label: 'Baskets' }
+        { type: 'baskets', id: 'baskets', label: 'Baskets', newBasket: false, newBasketName: '' }
       ],
       title: 'Add to Basket',
       refreshPantryItems: true,
@@ -32,9 +32,6 @@ export default {
           message: message,
           status: 'success'
         });
-        if (!this.alerts.length) {
-          this.$emit('stopEditing');
-        }
       }
     };
   }

@@ -400,6 +400,8 @@ export default {
             }
           })
         ));
+
+        console.log(options.body);
       }
 
       try {

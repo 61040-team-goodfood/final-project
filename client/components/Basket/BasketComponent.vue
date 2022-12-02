@@ -39,7 +39,7 @@
       <EditBasketForm 
         class="mt-4"
         :basket=this.basket 
-        :visible=editing
+        :visible="editing"
       />
     </section>
   </article>
@@ -61,8 +61,6 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this item is in edit mode
-      // draft: this.item.content, // Potentially-new content for this item
-      alerts: {} // Displays success/error messages encountered during item modification
     };
   },
   methods: {

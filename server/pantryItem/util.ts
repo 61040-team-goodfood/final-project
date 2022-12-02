@@ -1,8 +1,8 @@
 import type {HydratedDocument} from 'mongoose';
 import * as moment from 'moment-timezone';
-import type {GroceryItem, PopulatedGroceryItem} from './model';
+import type {PantryItem, PopulatedPantryItem} from './model';
 
-export type GroceryItemResponse = {
+export type PantryItemResponse = {
   _id: string;
   owner: string;
   name: string;
@@ -23,15 +23,15 @@ export type GroceryItemResponse = {
 const formatDate = (date: Date): string => date ? moment.utc(date).tz('America/New_York').format('YYYY-MM-DD') : '';
 
 /**
- * Transform a raw GroceryItem object from the database into an object
+ * Transform a raw PantryItem object from the database into an object
  * with all the information needed by the frontend
  *
- * @param {HydratedDocument<GroceryItem>} groceryItem - A grocery item
- * @returns {GroceryItemResponse} - The grocery item object formatted for the frontend
+ * @param {HydratedDocument<PantryItem>} pantryItem - A pantry item
+ * @returns {PantryItemResponse} - The pantry item object formatted for the frontend
  */
-const constructGroceryItemResponse = (groceryItem: HydratedDocument<GroceryItem>): GroceryItemResponse => {
-  const itemCopy: PopulatedGroceryItem = {
-    ...groceryItem.toObject({
+const constructPantryItemResponse = (pantryItem: HydratedDocument<PantryItem>): PantryItemResponse => {
+  const itemCopy: PopulatedPantryItem = {
+    ...pantryItem.toObject({
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
@@ -49,5 +49,5 @@ const constructGroceryItemResponse = (groceryItem: HydratedDocument<GroceryItem>
 };
 
 export {
-  constructGroceryItemResponse
+  constructPantryItemResponse
 };

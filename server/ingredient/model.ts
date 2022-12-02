@@ -28,7 +28,7 @@ const IngredientSchema = new Schema<Ingredient>({
     type: Number,
     required: true
   },
-  // The unit for the grocery ingredient
+  // The unit for the pantry ingredient
   unit: {
     type: String,
     required: true

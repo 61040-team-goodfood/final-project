@@ -4,14 +4,14 @@ The project is structured as follows:
 
 - `api/index.ts` sets up the backend database connection and Express server. This should actually be in the `server` folder, but it must be here due to a Vercel limitation.
 - `server/` contains the backend code
-  - `groceryItem/` contains files related to the GroceryItem concept
+  - `pantryItem/` contains files related to the PantryItem concept
   - `user/` contains files related to the User concept
 - `client/` contains the frontend starter code
   - `App.vue` is the root component of your application
   - `main.ts` is the entry point of your application, which initializes Vue
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
-    - `GroceryItem/` contains the homepage and components related to GroceryItem
+    - `PantryItem/` contains the homepage and components related to PantryItem
     - `Login/` contains the login/register page and the related forms
     - `Common/` contains general form components that can be reused across different concepts
   - `public/` contains base HTML files and static assets (like the default Fritter logo)
@@ -26,7 +26,7 @@ The following api routes have already been implemented for you (**Make sure to d
 
 This renders the `index.html` file that will be used to interact with the backend
 
-#### `GET /api/groceryItems` - Get all the grocery items for the user in session
+#### `GET /api/pantryItems` - Get all the pantry items for the user in session
 
 **Returns**
 
@@ -36,7 +36,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `GET /api/groceryItems?status=inPantry` - Get all the grocery items in the pantry for the user in session
+#### `GET /api/pantryItems?status=inPantry` - Get all the pantry items in the pantry for the user in session
 
 **Returns**
 
@@ -46,7 +46,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `POST /api/groceryItems` - Create a new grocery item
+#### `POST /api/pantryItems` - Create a new pantry item
 
 **Body**
 
@@ -60,7 +60,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Returns**
 
 - A success message
-- The created grocery item
+- The created pantry item
 
 **Throws**
 
@@ -68,7 +68,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` If the item name is empty or a stream of empty spaces or if the item unit is not specified
 - `405` If an invalid item quantity (e.g. negative) is given, if an invalid expiration date is given, or if an invalid reminder date is given 
 
-#### `DELETE /api/groceryItems/:groceryItemId` - Delete a grocery item
+#### `DELETE /api/pantryItems/:pantryItemId` - Delete a pantry item
 
 **Returns**
 
@@ -77,9 +77,9 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` If the user is not logged in
-- `404` If the groceryItemId is not valid
+- `404` If the pantryItemId is not valid
 
-#### `PATCH /api/groceryItems/:groceryItemId` - Modify a groceryItem's information
+#### `PATCH /api/pantryItems/:pantryItemId` - Modify a pantryItem's information
 
 **Body**
 
@@ -93,12 +93,12 @@ This renders the `index.html` file that will be used to interact with the backen
 **Returns**
 
 - A success message
-- An object with the updated grocery item
+- An object with the updated pantry item
 
 **Throws**
 
 - `403` If the user is not logged in
-- `404` If the groceryItemId is not valid or if the item unit is specified
+- `404` If the pantryItemId is not valid or if the item unit is specified
 - `405` If an invalid item quantity (e.g. negative) is given, or if an invalid expiration/reminder date is given
 
 #### `GET /api/users/session` - Get the signed in user

@@ -1,16 +1,16 @@
 import type {Request, Response, NextFunction} from 'express';
 import {Types} from 'mongoose';
-import GroceryItemCollection from './collection';
+import PantryItemCollection from './collection';
 
 /**
- * Checks if a grocery item exists
+ * Checks if a pantry item exists
  */
 const isItemExists = async (req: Request, res: Response, next: NextFunction) => {
-  const validFormat = Types.ObjectId.isValid(req.params.groceryItemId);
-  const item = validFormat ? await GroceryItemCollection.findOne(req.params.groceryItemId) : '';
+  const validFormat = Types.ObjectId.isValid(req.params.pantryItemId);
+  const item = validFormat ? await PantryItemCollection.findOne(req.params.pantryItemId) : '';
   if (!item) {
     res.status(404).json({
-      error: `Grocery item with ID ${req.params.groceryItemId} does not exist.`
+      error: `Pantry item with ID ${req.params.pantryItemId} does not exist.`
     });
     return;
   }

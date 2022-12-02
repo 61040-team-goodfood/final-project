@@ -2,11 +2,11 @@
 import BlockForm from '@/components/common/BlockForm.vue';
 
 export default {
-  name: 'AddGroceryItemForm',
+  name: 'AddPantryItemForm',
   mixins: [BlockForm],
   data() {
     return {
-      url: '/api/groceryItems',
+      url: '/api/pantryItems',
       method: 'POST',
       hasBody: true,
       fields: [
@@ -16,10 +16,10 @@ export default {
         { type: 'reminder', id: 'remindDays', label: 'Remind Me', value: 3, placeholder: 'Enter number...' }
       ],
       title: 'Add New Item',
-      refreshGroceryItems: true,
+      refreshPantryItems: true,
       expires: true,
       callback: () => {
-        const message = 'Successfully added a grocery item!';
+        const message = 'Successfully added a pantry item!';
         this.$store.commit('alert', {
           message: message,
           status: 'success'

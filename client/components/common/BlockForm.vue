@@ -339,6 +339,17 @@ export default {
             return;
           }
         }
+
+        if (field.type === 'content' || field.type === 'text') {
+          if (!field.value.trim()) {
+            const emptyFieldMessage = 'Fields cannot be left empty!';
+            this.$store.commit('alert', {
+              message: emptyFieldMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        }
       }
       
       /**

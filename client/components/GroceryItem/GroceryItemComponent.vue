@@ -24,6 +24,19 @@
       >
         Delete
       </button>
+      <button 
+        v-if="!isPantry"
+        class="btn btn-info btn-sm mr-2 my-2 right"
+        @click="openAddToPantry"
+      >
+        Add to Pantry
+      </button>
+      <button 
+        class="btn btn-info btn-sm mr-2 my-2 right"
+        @click="openAddToBasket"
+      >
+        Add to Baskets
+      </button>
       <div>
         <b>Name:</b> {{ groceryItem.name }} <br>
         <b>Quantity:</b> {{ groceryItem.quantity }} {{ groceryItem.unit }}
@@ -35,30 +48,19 @@
         <b>Expires on:</b> {{ groceryItem.expirationDate }} <br>
         <b>Reminder on:</b> {{ groceryItem.remindDate }}
       </div>
-      <button 
-        v-if="!isPantry"
-        class="btn btn-primary btn-sm mr-2 my-2 bi"
-        @click="openAddToPantry"
-      >
-        Add to Pantry
-      </button>
-      <button 
-        class="btn btn-primary btn-sm mr-2 my-2 bi"
-        @click="openAddToBasket"
-      >
-        Add to Baskets
-      </button>
     </section>
     <section v-if="addToPantry && !isPantry">
       <AddToPantryForm 
+        class="mt-4"
         :groceryItem=this.groceryItem 
-        @stopEditing="closeAddToPantry" 
+        :visible="addToPantry" 
       />
     </section>
     <section v-if="addToBasket">
       <AddToBasketForm 
+        class="mt-4"
         :groceryItem=this.groceryItem 
-        @stopEditing="closeAddToBasket" 
+        :visible="addToBasket"
       />
     </section>
     <section>
@@ -105,31 +107,13 @@ export default {
     };
   },
   methods: {
-    startEditing() {
-      /**
-       * Enables edit mode on this freet.
-       */
-      this.editing = true; // Keeps track of if a freet is being edited
-    },
-    stopEditing() {
-      /**
-       * Disables edit mode on this freet.
-       */
-      this.editing = false;
-    },
     openAddToPantry() {
-      this.addToPantry = true;
+      this.addToPantry = !this.addToPantry;
       this.addToBasket = false;
-    },
-    closeAddToPantry() {
-      this.addToPantry = false;
     },
     openAddToBasket() {
-      this.addToBasket = true;
+      this.addToBasket = !this.addToBasket;
       this.addToPantry = false;
-    },
-    closeAddToBasket() {
-      this.addToBasket = false;
     },
     deleteItem() {
       /**
@@ -186,3 +170,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.right {
+  float: right;
+}
+</style>

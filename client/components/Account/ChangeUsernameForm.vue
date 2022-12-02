@@ -12,6 +12,7 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
+      dismissible: false,
       setUsername: true,
       fields: [
         { type: 'text', id: 'username', label: 'Username', value: '' }

@@ -2,10 +2,9 @@
 
 <template>
     <main>
-      <header>
-        <h2>Recipes</h2>
-      </header>
       <AddRecipeForm />
+      <hr>
+      <h2 class="display-4">All Recipes</h2>
       <section
         v-if="$store.state.recipes.length"
       >

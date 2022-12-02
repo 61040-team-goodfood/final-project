@@ -58,6 +58,11 @@ export default {
       required: true
     }
   },
+  watch: {
+    basket: function(newBasket, oldBasket) {
+      this.editing = false;
+    }
+  },
   data() {
     return {
       editing: false, // Whether or not this item is in edit mode

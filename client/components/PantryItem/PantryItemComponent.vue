@@ -7,14 +7,14 @@
       <button
         v-if="!editing && isPantry" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="editing = true"
+        @click="toggleEditing"
       >
         Edit
       </button>
       <button 
         v-if="editing && isPantry"
         class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
-        @click="editing = false"
+        @click="toggleEditing"
       >
         Stop Editing
       </button>
@@ -27,13 +27,13 @@
       <button 
         v-if="!isPantry"
         class="btn btn-info btn-sm mr-2 my-2 right"
-        @click="openAddToPantry"
+        @click="toggleAddToPantry"
       >
         Add to Pantry
       </button>
       <button 
         class="btn btn-info btn-sm mr-2 my-2 right"
-        @click="openAddToBasket"
+        @click="toggleAddToBasket"
       >
         Add to Baskets
       </button>
@@ -67,7 +67,7 @@
       <EditPantryItemForm 
         class="mt-4"
         :pantryItem=this.pantryItem 
-        :visible=editing
+        :visible="editing"
       />
     </section>
   </article>
@@ -92,6 +92,13 @@ export default {
       required: true
     }
   },
+  watch: {
+    pantryItem: function(newItem, oldItem) {
+      this.editing = false;
+      this.addToBasket = false;
+      this.addToPantry = false;
+    }
+  },
   data() {
     return {
       editing: false, // Whether or not this pantry item is in edit mode
@@ -100,12 +107,19 @@ export default {
     };
   },
   methods: {
-    openAddToPantry() {
+    toggleAddToPantry() {
       this.addToPantry = !this.addToPantry;
       this.addToBasket = false;
+      this.editing = false;
     },
-    openAddToBasket() {
+    toggleAddToBasket() {
       this.addToBasket = !this.addToBasket;
+      this.addToPantry = false;
+      this.editing = false;
+    },
+    toggleEditing() {
+      this.editing = !this.editing;
+      this.addToBasket = false;
       this.addToPantry = false;
     },
     deleteItem() {
@@ -149,7 +163,6 @@ export default {
           throw new Error(res.error);
         }
 
-        this.editing = false;
         this.$store.commit('refreshPantryItems', this.isPantry);
 
         params.callback();

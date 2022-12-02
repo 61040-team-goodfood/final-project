@@ -10,7 +10,6 @@ export default {
       method: 'POST',
       hasBody: true,
       collapsible: true,
-      dismissible: false,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },

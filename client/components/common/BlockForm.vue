@@ -2,7 +2,11 @@
 <!-- This is just an example; feel free to define any reusable components you want! -->
 
 <template>
-  <form class="border rounded p-4" @submit.prevent="submit">
+  <form 
+    class="border rounded p-4" 
+    @submit.prevent="submit" 
+    :hidden="!visible"
+  >
     <section v-if="collapsible">
       <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#formBody" aria-expanded="true">
         <h3>
@@ -154,6 +158,7 @@ export default {
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
       expires: true,
+      visible: true,
     };
   },
   created() {

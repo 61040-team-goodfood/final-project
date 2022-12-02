@@ -61,9 +61,9 @@
         @stopEditing="closeAddToBasket" 
       />
     </section>
-    <br>
     <section>
       <EditGroceryItemForm 
+        class="mt-4"
         :groceryItem=this.groceryItem 
         :visible=editing
       />

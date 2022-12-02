@@ -1,16 +1,16 @@
 import type {Request, Response, NextFunction} from 'express';
 import {Types} from 'mongoose';
-import GroceryItemCollection from './collection';
+import PantryItemCollection from './collection';
 
 /**
- * Checks if a grocery item exists
+ * Checks if a pantry item exists
  */
 const isItemExists = async (req: Request, res: Response, next: NextFunction) => {
-  const validFormat = Types.ObjectId.isValid(req.params.groceryItemId);
-  const item = validFormat ? await GroceryItemCollection.findOne(req.params.groceryItemId) : '';
+  const validFormat = Types.ObjectId.isValid(req.params.pantryItemId);
+  const item = validFormat ? await PantryItemCollection.findOne(req.params.pantryItemId) : '';
   if (!item) {
     res.status(404).json({
-      error: `Grocery item with ID ${req.params.groceryItemId} does not exist.`
+      error: `Pantry item with ID ${req.params.pantryItemId} does not exist.`
     });
     return;
   }
@@ -70,11 +70,13 @@ const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
  * Checks if the expiration date is valid,
  * i.e after item creation and after reminder date
  */
-const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) => {
+const isValidExpirationDate = async (req: Request, res: Response, next: NextFunction) => {
   const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
   if (expiration) {
+    const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId) : null;
     const expirationDate = new Date(expiration);
-    const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    const dateAdded = item ? item.dateAdded : new Date();
 
     if (expirationDate < dateAdded) {
       res.status(400).json({
@@ -98,12 +100,16 @@ const isValidExpirationDate = (req: Request, res: Response, next: NextFunction) 
  * Checks if the reminder date is valid,
  * i.e after item creation and before item expiration
  */
-const isValidRemindDate = (req: Request, res: Response, next: NextFunction) => {
+const isValidRemindDate = async (req: Request, res: Response, next: NextFunction) => {
   const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
   if (expiration) {
+    const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId): null;
     const expirationDate = new Date(expiration);
-    const dateAdded = req.body.dateAdded ? req.body.dateAdded : new Date();
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    const dateAdded = item ? item.dateAdded : new Date();
     const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
+    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+    
     if (remindDate < dateAdded) {
       res.status(400).json({
         error: 'Reminder date must be later than the item creation date.'

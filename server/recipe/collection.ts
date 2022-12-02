@@ -83,7 +83,7 @@ class RecipeCollection {
   /**
    * Update a recipe with the new information
    *
-   * @param {Types.ObjectId | string} recipeId - The id of the grocery to be updated
+   * @param {Types.ObjectId | string} recipeId - The id of the recipe to be updated
    * @param {string} name - The name of the recipe
    * @param {Array<Types.ObjectId | string>} ingredients - The ingredients for the recipe
    * @param {string} instructions - The instructions in the recipe

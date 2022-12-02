@@ -137,7 +137,8 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      refreshGroceryItems: false,
+      refreshPantryItems: false,
+      refreshBaskets: false,
       refreshRecipes: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission 
@@ -206,34 +207,37 @@ export default {
     },
     async submit() {
       // Error checking entries before submission.
-      let expireDate = null;
-      for (const field of this.fields) {
-        if (field.type === 'date') {
-          expireDate = new Date(field.value);
+      if (this.expires) {
+        let expireDate = null;
+        for (const field of this.fields) {
+          if (field.type === 'date') {
+            expireDate = new Date(field.value);
 
-          if (expireDate <= new Date()) {
-            const expirationDateErrorMessage = 'Expiration date must be in the future!';
-            this.$store.commit('alert', {
-              message: expirationDateErrorMessage,
-              status: 'danger'
-            });
-            return;
-          }
-        }
+            if (expireDate <= new Date()) {
+              const expirationDateErrorMessage = 'Expiration date must be in the future!';
+              this.$store.commit('alert', {
+                message: expirationDateErrorMessage,
+                status: 'danger'
+              });
+              return;
+            }
+          } 
 
-        if (field.type === 'reminder' && expireDate !== null) {
-          const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
-          if (remindDate <= new Date()) {
-            const reminderDateErrorMessage = 'Reminder date must be in the future!';
-            this.$store.commit('alert', {
-              message: reminderDateErrorMessage,
-              status: 'danger'
-            });
-            return;
+          if (field.type === 'reminder' && expireDate !== null) {
+            const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
+            
+            if (remindDate <= new Date()) {
+              const reminderDateErrorMessage = 'Reminder date must be in the future!';
+              this.$store.commit('alert', {
+                message: reminderDateErrorMessage,
+                status: 'danger'
+              });
+              return;
+            }
           }
         }
       }
-
+      
       /**
         * Submits a form with the specified options from data().
         */
@@ -304,10 +308,14 @@ export default {
           this.$store.commit('setUsername', res.user ? res.user.username : null);
         }
 
-        if (this.refreshGroceryItems) {
-          this.$store.commit('refreshGroceryItems', true);
+        if (this.refreshPantryItems) {
+          this.$store.commit('refreshPantryItems', this.isPantry);
         }
 
+        if (this.refreshBaskets) {
+          this.$store.commit('refreshBaskets');
+        }
+        
         if (this.refreshRecipes) {
           this.$store.commit('refreshRecipes');
         }

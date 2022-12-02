@@ -1,0 +1,38 @@
+<script>
+import BlockForm from '@/components/common/BlockForm.vue';
+
+export default {
+  name: 'EditBasketForm',
+  mixins: [BlockForm],
+  props: {
+    // Data from the stored item
+    basket: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      url: `/api/baskets/${this.basket._id}`,
+      method: 'PATCH',
+      hasBody: true,
+      fields: [
+        { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 
+        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: this.basket.ingredients },
+      ],
+      title: 'Edit Basket',
+      refreshBaskets: true,
+      callback: () => {
+        const message = 'Successfully edited basket!';
+        this.$store.commit('alert', {
+          message: message,
+          status: 'success'
+        });
+        if (!this.alerts.length) {
+          this.$emit('stopEditing');
+        }
+      }
+    };
+  }
+};
+</script>

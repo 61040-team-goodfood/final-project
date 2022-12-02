@@ -11,6 +11,7 @@ import {userRouter} from '../server/user/router';
 import {groceryItemRouter} from '../server/groceryItem/router';
 import {recipeRouter} from '../server/recipe/router';
 import MongoStore from 'connect-mongo';
+import { basketRouter } from '../server/basket/router';
 
 // Load environmental variables
 dotenv.config({});
@@ -71,6 +72,7 @@ app.use(userValidator.isCurrentSessionUserExists);
 // Add routers from routes folder
 app.use('/api/users', userRouter);
 app.use('/api/groceryItems', groceryItemRouter);
+app.use('/api/baskets', basketRouter);
 app.use('/api/recipes', recipeRouter);
 
 // Catch all the other routes and display error message

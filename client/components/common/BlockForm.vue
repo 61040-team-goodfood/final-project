@@ -138,6 +138,7 @@ export default {
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
       refreshGroceryItems: false,
+      refreshBaskets: false,
       refreshRecipes: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission 
@@ -311,6 +312,10 @@ export default {
           this.$store.commit('refreshGroceryItems', this.isPantry);
         }
 
+        if (this.refreshBaskets) {
+          this.$store.commit('refreshBaskets');
+        }
+        
         if (this.refreshRecipes) {
           this.$store.commit('refreshRecipes');
         }

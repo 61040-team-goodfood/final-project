@@ -46,6 +46,15 @@
       <li class="nav-item mb-3" v-if="$store.state.username">
         <router-link 
           class="text-white"
+          to="/baskets"
+        >
+          <i class="bi bi-basket mx-2"></i>
+          <span class="fs-4">Baskets</span>
+        </router-link>
+      </li>
+      <li class="nav-item mb-3" v-if="$store.state.username">
+        <router-link 
+          class="text-white"
           to="/recipes"
         >
           <i class="bi bi-book mx-2"></i>

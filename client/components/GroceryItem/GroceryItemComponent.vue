@@ -68,6 +68,13 @@
         :visible=editing
       />
     </section>
+    <section>
+      <EditGroceryItemForm 
+        class="mt-4"
+        :groceryItem=this.groceryItem 
+        :visible=editing
+      />
+    </section>
   </article>
 </template>
 

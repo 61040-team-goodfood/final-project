@@ -109,7 +109,6 @@
               </li>
             </ul>
           </div>
-
           <div v-else-if="field.type === 'baskets'" >
             <div class="form-check">
               <div v-for="basket in $store.state.baskets" :key="basket">

@@ -2,29 +2,39 @@
 import BlockForm from '@/components/common/BlockForm.vue';
 
 export default {
-  name: 'AddPantryItemForm',
+  name: 'AddToPantryForm',
   mixins: [BlockForm],
+  props: {
+    // Data from the stored item
+    pantryItem: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       url: '/api/pantryItems',
       method: 'POST',
       hasBody: true,
       fields: [
-        { type: 'text', id: 'name', label: 'Name', value: '', placeholder: 'Enter name...' }, 
-        { type: 'quantity', id: 'quantity', label: 'Quantity', value: '', placeholder: 'Enter number...', unit: '' },
+        { type: 'text', id: 'name', label: 'Name', value: this.pantryItem.name, placeholder: 'Enter name...' }, 
+        { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.pantryItem.quantity, placeholder: 'Enter number...', unit: this.pantryItem.unit },
         { type: 'date', id: 'expiration', label: 'Expiration Date', value: '', expires: true },
         { type: 'reminder', id: 'remindDays', label: 'Remind Me', value: 3, placeholder: 'Enter number...' }
       ],
-      title: 'Add New Item',
+      title: 'Add to Pantry',
       refreshPantryItems: true,
-      isPantry: true,
+      isPantry: false,
       expires: true,
       callback: () => {
-        const message = 'Successfully added a pantry item!';
+        const message = 'Successfully added pantry item!';
         this.$store.commit('alert', {
           message: message,
           status: 'success'
         });
+        if (!this.alerts.length) {
+          this.$emit('stopEditing');
+        }
       }
     };
   }

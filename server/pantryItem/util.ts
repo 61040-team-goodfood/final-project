@@ -11,7 +11,7 @@ export type PantryItemResponse = {
   dateAdded: string;
   expirationDate: string;
   remindDate: string;
-  inPantry: boolean;
+  inPantry: string;
 };
 
 /**
@@ -44,7 +44,8 @@ const constructPantryItemResponse = (pantryItem: HydratedDocument<PantryItem>): 
     quantity: itemCopy.quantity.toString(),
     dateAdded: formatDate(itemCopy.dateAdded),
     expirationDate: formatDate(itemCopy.expirationDate),
-    remindDate: formatDate(itemCopy.remindDate)
+    remindDate: formatDate(itemCopy.remindDate),
+    inPantry: itemCopy.inPantry.toString()
   };
 };
 

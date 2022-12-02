@@ -12,6 +12,8 @@ The project is structured as follows:
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
     - `PantryItem/` contains the homepage and components related to PantryItem
+    - `History/` contains the history page displaying all previously added items
+    - `Basket/` contains the baskets page displaying all of the user's baskets
     - `Login/` contains the login/register page and the related forms
     - `Common/` contains general form components that can be reused across different concepts
   - `public/` contains base HTML files and static assets (like the default Fritter logo)
@@ -30,7 +32,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- A list of all the items sorted in descending order by date of reminder
+- A list of all the items sorted in descending order by date added
 
 **Throws**
 
@@ -40,7 +42,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- A list of all the items sorted in descending order by date of reminder
+- A list of all the items sorted in descending order by date added
 
 **Throws**
 
@@ -93,7 +95,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Returns**
 
 - A success message
-- An object with the updated pantry item
+- An object with the updated pantry item (either updates only the status or updates the stored item information)
 
 **Throws**
 
@@ -222,3 +224,61 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if user is not logged in
 - `404` if the recipeId is not valid
+
+#### `GET /api/baskets` - Get all the baskets for the user in session
+
+**Returns**
+
+- A list of all the items sorted alphabetically by name
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/baskets` - Create a new basket
+
+**Body**
+
+- `owner` _{Types.ObjectId | string}_ - The id of the owner of the basket
+- `name` _{string}_ - The given name of the basket
+- `ingredients` _{Array<{name: string, quantity: number, unit: number}>}_ - The items of the basket
+
+**Returns**
+
+- A success message
+- The created basket
+
+**Throws**
+
+- `403` If the user is not logged in
+- `400` If the basket name is empty or a stream of empty spaces or if the item unit is not specified
+- `409` - If the basket name already exists
+
+#### `DELETE /api/baskets/:basketId` - Delete a basket
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` If the user is not logged in
+- `404` If the basketId is not valid
+
+#### `PATCH /api/baskets/:basketId` - Modify a basket's information
+
+**Body**
+
+- `name` _{string}_ - The given name of the item
+- `ingredients` _{Array<{name: string, quantity: number, unit: number}>}_ - The items of the basket
+
+**Returns**
+
+- A success message
+- An object with the updated basket
+
+**Throws**
+
+- `403` If the user is not logged in
+- `404` If the pantryItemId is not valid or if the item unit is specified
+- `409` - If the basket name already exists

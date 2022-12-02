@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     pantryItems: [], // All pantryItems created in the app
+    baskets: [], // All baskets in the app
     recipes: [], // All recipes in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
@@ -29,11 +30,7 @@ const store = new Vuex.Store({
       'kg',
       'lb',
       'oz'
-    ], // Fixed list of units
-    baskets: [
-      'basket1',
-      'basket2'
-    ] // Make API call to populate, fixed list for now
+    ] // Fixed list of units
   },
   mutations: {
     alert(state, payload) {
@@ -61,12 +58,20 @@ const store = new Vuex.Store({
     },
     async refreshPantryItems(state, inPantry) {
       /**
-       * Request the server for the currently available freets.
+       * Request the server for the currently available pantry items.
        * @param inPantry - boolean denoting whether to filter items by currently in pantry
        */
       const url = `/api/pantryItems?status=${inPantry}`;
       const res = await fetch(url).then(async r => r.json());
       state.pantryItems = res;
+    },
+    async refreshBaskets(state) {
+      /**
+       * Request the server for the currently available baskets.
+       */
+      const url = `/api/baskets`;
+      const res = await fetch(url).then(async r => r.json());
+      state.baskets = res;
     },
     async refreshRecipes(state) {
       /**

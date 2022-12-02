@@ -73,7 +73,7 @@ const PantryItemSchema = new Schema<PantryItem>({
     type: Date,
     required: true
   },
-  // The status of the item (currently in or out of pantry)
+  // The status denoting whether this item should be currently displayed in pantry
   inPantry: {
     type: Boolean,
     required: true

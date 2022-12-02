@@ -2,9 +2,8 @@
 
 <template>
   <main>
-    <AddPantryItemForm />
     <hr>
-    <h2 class="display-4">My Pantry</h2>
+    <h2 class="display-4">History</h2>
     <section
       v-if="$store.state.pantryItems.length"
     >
@@ -12,7 +11,7 @@
         v-for="item in $store.state.pantryItems"
         :key="item.id"
         :pantryItem="item"
-        :isPantry="true"
+        :isPantry="false"
       />
     </section>
   </main>
@@ -20,13 +19,12 @@
 
 <script>
 import PantryItemComponent from '@/components/PantryItem/PantryItemComponent.vue';
-import AddPantryItemForm from '@/components/PantryItem/AddPantryItemForm.vue';
 
 export default {
   name: 'PantryItemsPage',
-  components: {PantryItemComponent, AddPantryItemForm},
+  components: {PantryItemComponent},
   mounted() {
-    this.$store.commit('refreshPantryItems', true);
+    this.$store.commit('refreshPantryItems', false);
   }
 };
 </script>

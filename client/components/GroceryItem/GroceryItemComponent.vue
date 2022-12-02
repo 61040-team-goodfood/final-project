@@ -1,21 +1,22 @@
-<!-- Reusable component representing a single freet and its actions -->
+<!-- Reusable component representing a single item and its actions -->
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
   <article class="border rounded my-2 p-4">
-    <section v-if="editing && isPantry">
-      <EditGroceryItemForm 
-        :groceryItem=this.groceryItem 
-        @stopEditing="this.stopEditing" 
-      />
-    </section>
-    <section v-else>
-      <button 
-        v-if="isPantry"
+    <section>
+      <button
+        v-if="!editing && isPantry" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="startEditing"
+        @click="editing = true"
       >
         Edit
+      </button>
+      <button 
+        v-if="editing && isPantry"
+        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
+        @click="editing = false"
+      >
+        Stop Editing
       </button>
       <button 
         class="btn btn-danger btn-sm my-2 bi bi-trash"
@@ -60,6 +61,13 @@
         @stopEditing="closeAddToBasket" 
       />
     </section>
+    <br>
+    <section>
+      <EditGroceryItemForm 
+        :groceryItem=this.groceryItem 
+        :visible=editing
+      />
+    </section>
   </article>
 </template>
 
@@ -87,7 +95,6 @@ export default {
       editing: false, // Whether or not this grocery item is in edit mode
       addToPantry: false,
       addToBasket: false,
-      alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
   methods: {
@@ -163,8 +170,10 @@ export default {
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        this.$store.commit('alerts', {
+          message: e,
+          status: 'danger'
+        });
       }
     }
   }

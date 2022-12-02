@@ -36,9 +36,9 @@
         <b>Reminder on:</b> {{ groceryItem.remindDate }}
       </div>
     </section>
-    <br>
     <section>
       <EditGroceryItemForm 
+        class="mt-4"
         :groceryItem=this.groceryItem 
         :visible=editing
       />

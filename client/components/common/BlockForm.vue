@@ -8,7 +8,7 @@
     :hidden="!visible"
   >
     <section v-if="collapsible">
-      <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#formBody" aria-expanded="true">
+      <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" :data-target="('#' + title)" aria-expanded="true">
         <h3>
           {{ title }}
           <i class="bi bi-caret-down-fill right"></i>
@@ -16,7 +16,7 @@
       </button>
     </section>
     <h3 v-else>{{ title }}</h3>
-    <section class="collapse show" id="formBody">
+    <section class="collapse show" :id="title">
       <article v-if="fields.length">
         <div v-for="field in fields" :key="field.id" class="mb-2">
           <label :for="field.id"><i>{{ field.label }}:</i></label>
@@ -123,14 +123,26 @@
             :value="field.value" :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value"
             required>
           <input v-else class="form-control" :type="field.type === 'password' ? 'password' : 'text'" :name="field.id"
-            :value="field.value" :placeholder="field.placeholder" @input="field.value = $event.target.value" required>
+            :value="field.value" :placeholder="field.placeholder" @input="field.value = $event.target.value" :required="!isFilterForm">
           <p v-if="field.append">{{ field.append }}</p>
         </div>
       </article>
       <article v-else>
         <p>{{ content }}</p>
       </article>
-      <button type="submit" class="btn btn-block btn-primary">
+      <button 
+        v-if="isFilterForm"
+        type="submit" 
+        class="btn btn-block btn-success mt-4"
+      >
+        <i class="bi bi-search"></i>
+        {{ title }}
+      </button>
+      <button 
+        v-else
+        type="submit" 
+        class="btn btn-block btn-primary mt-4"
+      >
         {{ title }}
       </button>
   </section>
@@ -158,6 +170,7 @@ export default {
       checkedBaskets: [],
       expires: true,
       visible: true,
+      isFilterForm: false,
     };
   },
   created() {
@@ -234,6 +247,33 @@ export default {
       collection.splice(index, 1);
     },
     async submit() {
+      // Special submission procedure for filter form.
+      if (this.isFilterForm) {
+        let keyword = '';
+        let ingredients = [];
+
+        for (const field of this.fields) {
+          if (field.id === 'keyword') {
+            keyword = field.value;
+            field.value = '';
+          } 
+
+          if (field.id === 'ingredients') {
+            ingredients = field.collection;
+            field.collection = [];
+          }
+        }
+
+        const filter = {
+          keyword,
+          ingredients
+        };
+
+        this.$store.commit('updateFilter', filter);
+        this.$store.commit('refreshRecipes');
+        return;
+      }
+
       // Error checking entries before submission.
       let expireDate = null;
       for (const field of this.fields) {
@@ -282,6 +322,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin' // Sends express-session credentials with request
       };
+
       if (this.hasBody) {
         options.body = JSON.stringify(Object.fromEntries(
           this.fields.map(field => {

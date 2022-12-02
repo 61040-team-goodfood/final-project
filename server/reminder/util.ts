@@ -1,7 +1,6 @@
 import type {HydratedDocument} from 'mongoose';
 import * as moment from 'moment-timezone';
 import type {Reminder, PopulatedReminder} from './model';
-import { constructPantryItemResponse } from '../pantryItem/util';
 
 export type ReminderResponse = {
   _id: string;
@@ -34,11 +33,16 @@ const constructReminderResponse = (reminder: HydratedDocument<Reminder>): Remind
   };
   const {username} = reminderCopy.user;
   delete reminderCopy.user;
-  const {item} = constructPantryItemResponse(reminderCopy.item);
+  const itemObj = reminderCopy.item;
+  const item = {
+    _id: itemObj._id.toString(), 
+    name: itemObj.name, 
+    quantity: itemObj.quantity.toString(), 
+    unit: itemObj.unit, 
+    dateAdded: formatDate(itemObj.dateAdded), 
+    expirationDate: formatDate(itemObj.expirationDate),
+  };
   delete reminderCopy.item;
-  delete item.owner;
-  delete item.reminder;
-  delete item.inPantry;
   return {
     ...reminderCopy,
     _id: reminderCopy._id.toString(),

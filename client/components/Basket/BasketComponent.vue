@@ -36,9 +36,9 @@
       </div>
     </section>
     <section>
-      <EditGroceryItemForm 
+      <EditBasketForm 
         class="mt-4"
-        :groceryItem=this.groceryItem 
+        :basket=this.basket 
         :visible=editing
       />
     </section>

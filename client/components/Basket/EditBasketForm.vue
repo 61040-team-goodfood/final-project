@@ -16,6 +16,7 @@ export default {
       url: `/api/baskets/${this.basket._id}`,
       method: 'PATCH',
       hasBody: true,
+      collapsible: false,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: this.basket.ingredients },

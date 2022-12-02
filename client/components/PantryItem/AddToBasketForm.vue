@@ -23,6 +23,7 @@ export default {
       ],
       title: 'Add to Basket',
       refreshPantryItems: true,
+      collapsible: false,
       isPantry: false,
       expires: true,
       callback: () => {

@@ -115,7 +115,7 @@
                 <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
                   :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
                 <label class="form-check-label" :for="basket">
-                  {{ basket }}
+                  {{ basket.name }}
                 </label>
               </div>
               <div class="">
@@ -326,27 +326,16 @@ export default {
               return;
             }
           }
-        }
 
-        if (field.type === 'content' || field.type === 'text') {
-          if (!field.value.trim()) {
-            const emptyFieldMessage = 'Fields cannot be left empty!';
-            this.$store.commit('alert', {
-              message: emptyFieldMessage,
-              status: 'danger'
-            });
-            return;
-          }
-        }
-
-        if (field.type === 'content' || field.type === 'text') {
-          if (!field.value.trim()) {
-            const emptyFieldMessage = 'Fields cannot be left empty!';
-            this.$store.commit('alert', {
-              message: emptyFieldMessage,
-              status: 'danger'
-            });
-            return;
+          if (field.type === 'content' || field.type === 'text') {
+            if (!field.value.trim()) {
+              const emptyFieldMessage = 'Fields cannot be left empty!';
+              this.$store.commit('alert', {
+                message: emptyFieldMessage,
+                status: 'danger'
+              });
+              return;
+            }
           }
         }
       }

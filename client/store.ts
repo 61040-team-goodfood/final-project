@@ -62,7 +62,7 @@ const store = new Vuex.Store({
       state.keyword = filter.keyword;
       state.ingredients = [...filter.ingredients];
     },
-    async refreshGroceryItems(state, inPantry) {
+    async refreshPantryItems(state, inPantry) {
       /**
        * Request the server for the currently available pantry items.
        * @param inPantry - boolean denoting whether to filter items by currently in pantry

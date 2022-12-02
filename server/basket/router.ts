@@ -38,7 +38,8 @@ router.get(
  * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
  * @return {BasketResponse} - The created basket
  * @throws {403} - If the user is not logged in
- * @throws {400} - If the item name is empty or a stream of empty spaces
+ * @throws {400} - If the basket name is empty or a stream of empty spaces
+ * @throws {409} - If the basket name already exists
  */
 router.post(
   '/',
@@ -98,6 +99,7 @@ router.delete(
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the basketId is not valid
  * @throws {400} - If the item name is empty or a stream of empty spaces
+ * @throws {409} - If the basket name already exists
  */
 router.patch(
   '/:basketId?',

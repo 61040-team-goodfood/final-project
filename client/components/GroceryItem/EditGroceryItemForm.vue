@@ -9,6 +9,10 @@ export default {
     groceryItem: {
       type: Object,
       required: true
+    },
+    visible: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -17,7 +21,6 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
-      dismissible: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.groceryItem.name, placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.groceryItem.quantity, placeholder: 'Enter number...', unit: this.groceryItem.unit },
@@ -34,9 +37,6 @@ export default {
           message: message,
           status: 'success'
         });
-        if (!this.alerts.length) {
-          this.$emit('stopEditing');
-        }
       }
     };
   }

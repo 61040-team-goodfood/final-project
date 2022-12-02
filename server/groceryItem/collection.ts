@@ -30,7 +30,7 @@ class GroceryItemCollection {
       name,
       quantity,
       unit,
-      dateAdded: date,
+      dateAdded: new Date(date.setDate(date.getUTCDate())),
       expirationDate,
       remindDate,
       inPantry: true
@@ -81,7 +81,15 @@ class GroceryItemCollection {
    */
   static async findAllByStatus(userId: Types.ObjectId | string, inPantry: boolean | string): Promise<Array<HydratedDocument<GroceryItem>>> {
     const owner = await UserCollection.findOneByUserId(userId);
-    return GroceryItemModel.find({owner: owner._id, inPantry: inPantry as boolean}).sort({dateAdded: -1}).populate('owner');
+    const status = inPantry as string;
+    if (status === 'true') {
+      return GroceryItemModel.find({
+        owner: owner._id, 
+        inPantry: true
+      }).sort({dateAdded: -1}).populate('owner');
+    } else {
+      return GroceryItemModel.find({owner: owner._id}).sort({dateAdded: -1}).populate('owner');
+    }
   }
 
   /**
@@ -98,36 +106,32 @@ class GroceryItemCollection {
     const expirationDate = expiration ? new Date(`${expiration}T00:00:00.000-05:00`) : null;
     const remindDate = expirationDate ? new Date(`${expiration}T00:00:00.000-05:00`) : new Date(groceryItem.dateAdded);
 
-    if (expirationDate) {
-      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    }
+    // if (expirationDate) {
+    //   expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+    //   remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+    // }
 
-    // Required values that should not be empty
+    // update stored values
     groceryItem.name = name;
     groceryItem.quantity = quantity;
     groceryItem.unit = unit;
     groceryItem.expirationDate = expirationDate;
     groceryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
-    if (quantity === 0) {
-      groceryItem.inPantry = false;
-    }
-    
     await groceryItem.save();
     return groceryItem.populate('owner');
   }
 
   /**
-   * Update the status of an item
+   * Update a grocery item with the new stats
    *
    * @param {Types.ObjectId | string} groceryItemId - The id of the item to be updated
-   * @param {boolean} inPantry - The status to update to for the item
-   * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated item
+   * @param {boolean | null} inPantry - the status to set for this item
+   * @return {Promise<HydratedDocument<GroceryItem>>} - The newly updated freet
    */
-   static async updateOneStatus(groceryItemId: Types.ObjectId | string, inPantry: boolean): Promise<HydratedDocument<GroceryItem>> {
+  static async updateOneStatus(groceryItemId: Types.ObjectId | string, inPantry: boolean | null): Promise<HydratedDocument<GroceryItem>> {
     const groceryItem = await GroceryItemModel.findOne({_id: groceryItemId});
-    groceryItem.inPantry = inPantry;
+    groceryItem.inPantry = inPantry as boolean;
     await groceryItem.save();
     return groceryItem.populate('owner');
   }

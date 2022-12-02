@@ -207,34 +207,37 @@ export default {
     },
     async submit() {
       // Error checking entries before submission.
-      let expireDate = null;
-      for (const field of this.fields) {
-        if (field.type === 'date') {
-          expireDate = new Date(field.value);
+      if (this.expires) {
+        let expireDate = null;
+        for (const field of this.fields) {
+          if (field.type === 'date') {
+            expireDate = new Date(field.value);
 
-          if (expireDate <= new Date()) {
-            const expirationDateErrorMessage = 'Expiration date must be in the future!';
-            this.$store.commit('alert', {
-              message: expirationDateErrorMessage,
-              status: 'danger'
-            });
-            return;
-          }
-        }
+            if (expireDate <= new Date()) {
+              const expirationDateErrorMessage = 'Expiration date must be in the future!';
+              this.$store.commit('alert', {
+                message: expirationDateErrorMessage,
+                status: 'danger'
+              });
+              return;
+            }
+          } 
 
-        if (field.type === 'reminder' && expireDate !== null) {
-          const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
-          if (remindDate <= new Date()) {
-            const reminderDateErrorMessage = 'Reminder date must be in the future!';
-            this.$store.commit('alert', {
-              message: reminderDateErrorMessage,
-              status: 'danger'
-            });
-            return;
+          if (field.type === 'reminder' && expireDate !== null) {
+            const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
+            
+            if (remindDate <= new Date()) {
+              const reminderDateErrorMessage = 'Reminder date must be in the future!';
+              this.$store.commit('alert', {
+                message: reminderDateErrorMessage,
+                status: 'danger'
+              });
+              return;
+            }
           }
         }
       }
-
+      
       /**
         * Submits a form with the specified options from data().
         */
@@ -306,7 +309,7 @@ export default {
         }
 
         if (this.refreshGroceryItems) {
-          this.$store.commit('refreshGroceryItems', true);
+          this.$store.commit('refreshGroceryItems', this.isPantry);
         }
 
         if (this.refreshBaskets) {

@@ -13,7 +13,7 @@ const router = express.Router();
  * @name GET /api/groceryItems
  *
  * @return {GroceryItemResponse[]} - A list of all the items sorted in descending
- *                                   order by date of reminder
+ *                                   order by date added
  * @throws {403} - If the user is not logged in
  */
 /**
@@ -22,13 +22,13 @@ const router = express.Router();
  * @name GET /api/groceryItems?status=inPantry
  *
  * @return {GroceryItemResponse[]} - A list of all the items sorted in descending
- *                                   order by date of reminder
+ *                                   order by date added
  * @throws {403} - If the user is not logged in
  */
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
-    // Check if author query parameter was supplied
+    // Check if status query parameter was provided
     if (req.query.status === undefined) {
       next();
       return;
@@ -42,6 +42,7 @@ router.get(
     userValidator.isUserLoggedIn
   ],
   async (req: Request, res: Response) => {
+    // retrieve all items that have been created by this user
     const items = await GroceryItemCollection.findAllByUserId(req.session.userId);
     const response = items.map(util.constructGroceryItemResponse);
     res.status(200).json(response);
@@ -133,6 +134,17 @@ router.delete(
  */
 router.patch(
   '/:groceryItemId?',
+  async  (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.inPantry === undefined) {
+      next();
+      return;
+    }
+    let item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
+    res.status(200).json({
+      message: 'Your grocery item status was updated successfully.',
+      groceryItem: util.constructGroceryItemResponse(item)
+    });
+  },
   [
     userValidator.isUserLoggedIn,
     groceryItemValidator.isItemExists,
@@ -144,9 +156,6 @@ router.patch(
   ],
   async (req: Request, res: Response) => {
     let item = await GroceryItemCollection.updateOneInfo(req.params.groceryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
-    if (req.body.inPantry) {
-      item = await GroceryItemCollection.updateOneStatus(req.params.groceryItemId, req.body.inPantry);
-    }
     res.status(200).json({
       message: 'Your grocery item was updated successfully.',
       groceryItem: util.constructGroceryItemResponse(item)

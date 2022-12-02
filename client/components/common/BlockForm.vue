@@ -155,9 +155,17 @@ export default {
   },
   methods: {
     addItem(collection, item) {
-      const regex = /^[a-zA-Z]+$/i;
-      if (!regex.test(item)) {
-        const formattingErrorMessage = 'Item must be nonempty words.';
+      const regex = /^[a-zA-Z ]+$/i;
+
+      if (!item.trim()) {
+        const emptyErrorMessage = 'Item name cannot be left empty.';
+        this.$store.commit('alert', {
+          message: emptyErrorMessage,
+          status: 'danger'
+        });
+      }
+      else if (!regex.test(item)) {
+        const formattingErrorMessage = 'Item must consist of letters and spaces only.';
         this.$store.commit('alert', {
           message: formattingErrorMessage,
           status: 'danger'
@@ -173,16 +181,23 @@ export default {
       }
     },
     addIngredient(ingredients, name, quantity, unit) {
-      const regex = /^[a-zA-Z]+$/i;
+      const regex = /^[a-zA-Z ]+$/i
 
-      if (name === '' || quantity === '' || unit === '') {
+      if (!name.trim()) {
+        const emptyErrorMessage = 'Name cannot be empty.';
+        this.$store.commit('alert', {
+          message: emptyErrorMessage,
+          status: 'danger'
+        });
+      }
+      else if (quantity === '' || unit === '') {
         const emptyFieldMessage = 'Fields cannot be left empty!';
         this.$store.commit('alert', {
           message: emptyFieldMessage,
           status: 'danger'
         });
       } else if (!regex.test(name)) {
-        const formattingErrorMessage = 'Name must be nonempty words.';
+        const formattingErrorMessage = 'Name must consist of letters and spaces only.';
         this.$store.commit('alert', {
           message: formattingErrorMessage,
           status: 'danger'
@@ -227,6 +242,17 @@ export default {
             const reminderDateErrorMessage = 'Reminder date must be in the future!';
             this.$store.commit('alert', {
               message: reminderDateErrorMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        }
+
+        if (field.type === 'content' || field.type === 'text') {
+          if (!field.value.trim()) {
+            const emptyFieldMessage = 'Fields cannot be left empty!';
+            this.$store.commit('alert', {
+              message: emptyFieldMessage,
               status: 'danger'
             });
             return;

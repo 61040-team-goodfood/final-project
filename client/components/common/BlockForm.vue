@@ -110,13 +110,36 @@
             </ul>
           </div>
 
-          <div v-else-if="field.type === 'baskets'" class="form-check">
-            <div v-for="basket in $store.state.baskets" :key="basket">
-              <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
-                :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
-              <label class="form-check-label" :for="basket">
-                {{ basket }}
-              </label>
+          <div v-else-if="field.type === 'baskets'" >
+            <div class="form-check">
+              <div v-for="basket in $store.state.baskets" :key="basket">
+                <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
+                  :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
+                <label class="form-check-label" :for="basket">
+                  {{ basket }}
+                </label>
+              </div>
+              <div class="">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="newBasket"
+                  @input="field.value = $event.target.value"
+                  @click="field.newBasket = !field.newBasket"
+                  :checked="field.newBasket"
+                >
+                <label class="form-check-label form-inline" for="newBasket">
+                  <i>Create a new basket: </i>
+                  <input 
+                    class="form-control form-control-sm mx-3" 
+                    type="text" 
+                    :value="field.newBasketName"
+                    placeholder="New basket name" 
+                    :required="field.newBasket"
+                    @input="field.newBasketName = $event.target.value"
+                  >
+                </label>
+              </div>
             </div>
           </div>
           <input v-else-if="field.type === 'cookTime'" class="form-control" type="number" :name="field.id"
@@ -362,10 +385,15 @@ export default {
               field.value = 3;
               return [id, value];
             } else if (type === 'baskets') {
-              const { id } = field;
+              const { id, newBasket, newBasketName } = field;
               const baskets = this.checkedBaskets;
+              const name = newBasket ? newBasketName : null;
+
               this.checkedBaskets = [];
-              return [id, baskets];
+              field.newBasket = false;
+              field.newBasketName = '';
+
+              return [id, { new: name, baskets: baskets }];
             } else {
               const { id, value } = field;
               field.value = '';

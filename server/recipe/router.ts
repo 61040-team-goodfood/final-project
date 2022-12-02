@@ -18,12 +18,34 @@ const router = express.Router();
  */
 router.get(
   '/',
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const recipes = await RecipeCollection.findAll();
     const response = recipes.map(util.constructRecipeResponse);
     res.status(200).json(response);
   }
 );
+
+/**
+ * Get recipe based on id
+ * 
+ * @name GET /api/recipes/:recipeId
+ * 
+ * @return {RecipeResponse} - The desired recipe
+ * @throws {403} - If the user is not logged in 
+ * @throws {404} - If the recipeId is not valid
+ */
+router.get(
+  '/:recipeId',
+  [
+    userValidator.isUserLoggedIn,
+    recipeValidator.isRecipeExists,
+  ],
+  async (req: Request, res: Response) => {
+    const recipe = await RecipeCollection.findOne(req.params.recipeId);
+    const response = util.constructRecipeResponse(recipe);
+    res.status(200).json(response);
+  }
+)
 
 /**
  * Create a new recipe.

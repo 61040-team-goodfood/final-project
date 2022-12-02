@@ -37,6 +37,7 @@ const constructGroceryItemResponse = (groceryItem: HydratedDocument<GroceryItem>
   };
   const {username} = itemCopy.owner;
   delete itemCopy.owner;
+
   return {
     ...itemCopy,
     _id: itemCopy._id.toString(),

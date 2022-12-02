@@ -12,6 +12,7 @@ export default {
       method: 'DELETE',
       setUsername: true,
       collapsible: false,
+      dismissible: false,
       title: 'Sign Out',
       fields: [],
       content: 'Taking a break? See you later.',

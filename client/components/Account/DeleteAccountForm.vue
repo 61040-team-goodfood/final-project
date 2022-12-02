@@ -12,6 +12,7 @@ export default {
       method: 'DELETE',
       setUsername: true,
       collapsible: false,
+      dismissible: false,
       title: 'Delete Account',
       fields: [],
       content: 'Deleting your account is permanent and irreversible. Proceed only if you understand these consequences.',

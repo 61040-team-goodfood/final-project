@@ -39,7 +39,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted recipe', status: 'success'
+            message: 'Successfully deleted recipe!', 
+            status: 'success'
           });
         }
       };

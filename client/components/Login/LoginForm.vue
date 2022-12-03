@@ -12,6 +12,7 @@ export default {
       method: 'POST',
       hasBody: true,
       setUsername: true,
+      refreshReminders: true,
       collapsible: false,
       fields: [
         { type: 'text', id: 'username', label: 'Username', value: '' },

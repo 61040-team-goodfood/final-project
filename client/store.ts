@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     baskets: [], // All baskets in the app
     recipes: [], // All recipes in the app
     reminders: {}, // All reminders in the app
+    numReminders: 0, // The number of active reminders for the logged in user in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
     keyword: null,
@@ -98,7 +99,8 @@ const store = new Vuex.Store({
 
       const url = '/api/reminders';
       const res = await fetch(url).then(async r => r.json());
-      state.reminders = Object.fromEntries(res.map((reminder) => ([reminder.item._id, reminder])));
+      state.reminders = Object.fromEntries(res.map(reminder => [reminder.item._id, reminder]));
+      state.numReminders = res.reduce((total, reminder) => total + (!reminder.dismissed && new Date(`${reminder.date}T00:00:00.000-05:00`) <= new Date() ? 1 : 0), 0);
     }
   },
   plugins: [createPersistedState()]

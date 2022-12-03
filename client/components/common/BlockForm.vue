@@ -318,14 +318,14 @@ export default {
           if (field.type === 'reminder' && expireDate !== null) {
             const remindDate = new Date(expireDate.setDate(expireDate.getDate() - field.value));
             
-            if (remindDate <= new Date()) {
-              const reminderDateErrorMessage = 'Reminder date must be in the future!';
-              this.$store.commit('alert', {
-                message: reminderDateErrorMessage,
-                status: 'danger'
-              });
-              return;
-            }
+            // if (remindDate <= new Date()) {
+            //   const reminderDateErrorMessage = 'Reminder date must be in the future!';
+            //   this.$store.commit('alert', {
+            //     message: reminderDateErrorMessage,
+            //     status: 'danger'
+            //   });
+            //   return;
+            // }
           }
 
           if (field.type === 'content' || field.type === 'text') {
@@ -424,7 +424,7 @@ export default {
         }
 
         if (this.refreshReminders) {
-          this.$store.commit('refreshReminders');
+          this.$store.commit('refreshReminders')
         }
 
         if (this.refreshBaskets) {

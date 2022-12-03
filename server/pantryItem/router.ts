@@ -144,6 +144,9 @@ router.patch(
       return;
     }
     let item = await PantryItemCollection.updateOneStatus(req.params.pantryItemId, req.body.inPantry);
+    if (!req.body.inPantry) {
+      await ReminderCollection.updateOneStatus(req.params.pantryItemId, true);
+    }
     res.status(200).json({
       message: 'Your pantry item status was updated successfully.',
       pantryItem: util.constructPantryItemResponse(item)

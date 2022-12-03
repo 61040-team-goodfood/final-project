@@ -79,12 +79,12 @@ class ReminderCollection {
   /**
    * Update reminder status
    *
-   * @param {Types.ObjectId | string} reminderId - The id of the reminder to be updated
+   * @param {Types.ObjectId | string} itemId - The id of the item whose reminder needs to be updated
    * @param {boolean} dismissed - The status of the reminder
    * @return {Promise<HydratedDocument<Reminder>>} - The newly updated reminder
    */
-   static async updateOneStatus(reminderId: Types.ObjectId | string, dismissed: boolean): Promise<HydratedDocument<Reminder>> {
-    const reminder = await ReminderModel.findOne({_id: reminderId});
+   static async updateOneStatus(itemId: Types.ObjectId | string, dismissed: boolean): Promise<HydratedDocument<Reminder>> {
+    const reminder = await ReminderModel.findOne({item: itemId});
     
     // Required values that should not be empty
     reminder.dismissed = dismissed;

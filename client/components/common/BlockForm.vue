@@ -8,15 +8,16 @@
     :hidden="!visible"
   >
     <section v-if="collapsible">
-      <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" :data-target="('#' + title)" aria-expanded="true">
+      <button @click="collapsed = !collapsed" class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" :data-target="('#' + title)" aria-expanded="false">
         <h3>
           {{ title }}
-          <i class="bi bi-caret-down-fill right"></i>
+          <i v-if="collapsed" class="bi bi-caret-left-fill right"></i>
+          <i v-else class="bi bi-caret-down-fill right"></i>
         </h3>
       </button>
     </section>
     <h3 v-else>{{ title }}</h3>
-    <section class="collapse show" :id="title">
+    <section v-bind:class="{'collapse show': !collapsible, 'collapse': collapsible}" :id="title">
       <article v-if="fields.length">
         <div v-for="field in fields" :key="field.id" class="mb-2">
           <label :for="field.id"><i>{{ field.label }}:</i></label>
@@ -194,6 +195,7 @@ export default {
       expires: true,
       visible: true,
       isFilterForm: false,
+      collapsed: true,
     };
   },
   created() {

@@ -50,16 +50,6 @@ class RecipeCollection {
   }
 
   /**
-   * Get all the recipes that contains a list of ingredients
-   *
-   * @param {Array<string>} ingredients - The list of ingredient names that the recipe contains.
-   * @return {Promise<HydratedDocument<Recipe>[]>} - An array of all of the recipes with these ingredients sorted by name alphabetically.
-   */
-  static async findAllByIngredients(ingredients: Array<string>): Promise<Array<HydratedDocument<Recipe>>> {
-    return RecipeModel.find({ ingredients: { $all: ingredients.map(name => ({ $elemMatch: { 'name': name } })) } }).sort('name').populate('author').populate('ingredients');
-  }
-
-  /**
    * Get all the recipes with keyword in name
    *
    * @param {string} keyword - The keyword to search for
@@ -67,17 +57,6 @@ class RecipeCollection {
    */
   static async findAllByKeyword(keyword: string): Promise<Array<HydratedDocument<Recipe>>> {
     return RecipeModel.find({ name: { $regex: keyword, $options: "i" } }).sort('name').populate('author').populate('ingredients');
-  }
-
-  /**
-   * Get all the recipes with keyword in name
-   *
-   * @param {string} keyword - The keyword to search for
-   * @param {Array<string>} ingredients - The list of ingredient names that the recipe contains.
-   * @return {Promise<HydratedDocument<Recipe>[]>} - An array of all of the recipes with the keyword and ingredients sorted by name alphabetically.
-   */
-  static async findAllByKeywordAndIngredients(keyword: string, ingredients: Array<string>): Promise<Array<HydratedDocument<Recipe>>> {
-    return RecipeModel.find({ $and: [{ name: { $regex: keyword, $options: "i" } }, { ingredients: { $all: ingredients.map(name => ({ $elemMatch: { 'name': name } })) } }] }).sort('name').populate('author').populate('ingredients');
   }
 
   /**

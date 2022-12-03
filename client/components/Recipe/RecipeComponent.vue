@@ -7,8 +7,12 @@
       <button v-if="$store.state.username === recipe.author" class="btn btn-danger btn-sm my-2 bi bi-trash" @click="deleteRecipe">
         Delete
       </button>
-      <h4>{{recipe.name}}</h4>
-      <p>Cook Time: {{recipe.cookTime}} minutes</p>
+      <router-link :to="'/recipes/' + recipe._id">
+        <h4>{{recipe.name}}</h4>
+      </router-link>
+      <b>Ingredients: </b> {{ recipe.ingredients.map(i => i.name).join(', ') }}
+      <br>
+      <b>Cook Time:</b> {{ recipe.cookTime }} minutes
     </section>
   </article>
 
@@ -35,7 +39,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted recipe', status: 'success'
+            message: 'Successfully deleted recipe!', 
+            status: 'success'
           });
         }
       };
@@ -72,11 +77,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* .recipe {
-  border: 1px solid #111;
-  padding: 20px;
-  position: relative;
-} */
-</style>

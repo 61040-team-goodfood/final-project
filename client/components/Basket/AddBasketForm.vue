@@ -9,6 +9,7 @@ export default {
       url: '/api/baskets',
       method: 'POST',
       hasBody: true,
+      collapsible: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '', placeholder: 'Enter name...' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [] },

@@ -5,25 +5,62 @@ import * as userValidator from '../user/middleware';
 import * as recipeValidator from './middleware';
 import * as util from './util';
 import FoodItemCollection from '../foodItem/collection';
+import type {Recipe, PopulatedRecipe} from './model';
+import { HydratedDocument } from 'mongoose';
 
 const router = express.Router();
 
 /**
  * Get all the recipes
  *
- * @name GET /api/recipes
+ * @name GET /api/recipes?keyword=keyword&ingredients=ingredients
  *
  * @return {RecipeResponse[]} - A list of all the recipes sorted alphabetically by name
  * @throws {403} - If the user is not logged in
  */
 router.get(
   '/',
-  async (req: Request, res: Response, next: NextFunction) => {
-    const recipes = await RecipeCollection.findAll();
+  async (req: Request, res: Response) => {
+    let recipes;
+
+    if (req.query.keyword) {
+      const keyword = req.query.keyword as string;
+      recipes = await RecipeCollection.findAllByKeyword(keyword);
+    } else {
+      recipes = await RecipeCollection.findAll();
+    }
+
+    if (req.query.ingredients) {
+      const ingredients = (req.query.ingredients as string).split(',').map(decodeURI);
+      recipes = filterRecipesByIngredients(recipes, ingredients);
+    }
+
     const response = recipes.map(util.constructRecipeResponse);
     res.status(200).json(response);
   }
 );
+
+/**
+ * Get recipe based on id
+ * 
+ * @name GET /api/recipes/:recipeId
+ * 
+ * @return {RecipeResponse} - The desired recipe
+ * @throws {403} - If the user is not logged in 
+ * @throws {404} - If the recipeId is not valid
+ */
+router.get(
+  '/:recipeId',
+  [
+    userValidator.isUserLoggedIn,
+    recipeValidator.isRecipeExists,
+  ],
+  async (req: Request, res: Response) => {
+    const recipe = await RecipeCollection.findOne(req.params.recipeId);
+    const response = util.constructRecipeResponse(recipe);
+    res.status(200).json(response);
+  }
+)
 
 /**
  * Create a new recipe.
@@ -86,5 +123,23 @@ router.delete(
     });
   }
 );
+
+// Recipes must be filtered by ingredient names after fields have already been populated. 
+const filterRecipesByIngredients = (recipes: Array<HydratedDocument<Recipe>>, ingredients: Array<string>) => {
+  const output = [];
+
+  for (const recipe of recipes) {
+    const recipeCopy: PopulatedRecipe = {
+      ...recipe.toObject({
+        versionKey: false // Cosmetics; prevents returning of __v property
+      })
+    };
+
+    const names = recipeCopy.ingredients.map(i => i.name);
+    if (ingredients.some(i => names.includes(i))) output.push(recipe);
+  }
+
+  return output;
+}
 
 export {router as recipeRouter};

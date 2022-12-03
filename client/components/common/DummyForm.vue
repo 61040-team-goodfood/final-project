@@ -9,6 +9,7 @@ export default {
       url: '/dummy',
       method: 'POST',
       hasBody: true,
+      collapsible: false,
       fields: [
         { type: 'text', id: 'username', label: 'Username', value: '' }, 
         { type: 'password', id: 'password', label: 'Password', value: '' },
@@ -18,7 +19,7 @@ export default {
         { type: 'numerical', id: 'remindMe', label: 'Remind Me', value: '', placeholder: 'Enter number...' },
         { type: 'date', id: 'expirationDate', label: 'Expiration Date', value: '', expires: false },
         { type: 'ingredients', id: 'ingredients', label: 'Ingredients', name: '', quantity: '', unit: '', ingredients: [] },
-        { type: 'baskets', id: 'baskets', label: 'Baskets' }
+        { type: 'baskets', id: 'baskets', label: 'Baskets', newBasket: false, newBasketName: '' }
       ],
       title: 'Example Form',
       callback: () => {

@@ -1,5 +1,3 @@
-<!-- Dummy default page -->
-
 <template>
   <main>
     <section v-if="$store.state.username">
@@ -39,7 +37,7 @@
 import ReminderComponent from '@/components/Reminder/ReminderComponent.vue';
 
 export default {
-  name: 'DummyPage',
+  name: 'HomePage',
   components: { ReminderComponent },
   mounted() {
     if (this.$store.state.username) {this.$store.commit('refreshReminders');}

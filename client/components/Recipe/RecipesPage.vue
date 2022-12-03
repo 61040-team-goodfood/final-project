@@ -4,19 +4,32 @@
     <main>
       <AddRecipeForm />
       <hr>
-      <h2 class="display-4">All Recipes</h2>
+      <h2 class="display-4">Recipes</h2>
       <FilterRecipeForm />
+      <br>
+      <div class="font-italic">
+        <h2 v-if="$store.state.keyword && $store.state.ingredients.length">
+          Displaying recipes with keyword {{ $store.state.keyword }} and ingredient(s) {{ $store.state.ingredients.join(', ') }}
+        </h2>
+        <h2 v-else-if="$store.state.keyword">
+          Displaying recipes with keyword {{ $store.state.keyword }}
+        </h2>
+        <h2 v-else-if="$store.state.ingredients.length">
+          Displaying recipes with ingredient(s) {{ $store.state.ingredients.join(', ') }}
+        </h2>
+        <h2 v-else>Displaying all recipes</h2>
+      </div>
       <section
         v-if="$store.state.recipes.length"
       >
         <RecipeComponent
           v-for="recipe in $store.state.recipes"
-          :key="recipe.id"
+          :key="recipe._id"
           :recipe="recipe"
         />
       </section>
       <section v-else>
-        <h2>No recipes found.</h2>
+        <p>No recipes found.</p>
       </section>
     </main>
   </template>

@@ -42,9 +42,10 @@
         <b>Quantity:</b> {{ pantryItem.quantity }} {{ pantryItem.unit }}
       </div>
       <div>
-        <b>In pantry since:</b> {{ pantryItem.dateAdded }}
+        <b v-if="isPantry">In pantry since:</b>
+        <b v-else>Date added to pantry:</b> {{ pantryItem.dateAdded }}
       </div>
-      <div v-if="pantryItem.expirationDate">
+      <div v-if="pantryItem.expirationDate && isPantry">
         <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
         <b>Reminder on:</b> {{ reminder.date }}
       </div>

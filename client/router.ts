@@ -8,12 +8,12 @@ import RecipesPage from './components/Recipe/RecipesPage.vue';
 import RecipePage from './components/Recipe/RecipePage.vue'
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
-import DummyPage from './components/common/DummyPage.vue';
+import HomePage from './components/common/HomePage.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', name: 'Home', component: DummyPage },
+  { path: '/', name: 'Home', component: HomePage },
   { path: '/pantry', name: 'My Pantry', component: PantryItemsPage},
   {path: '/baskets', name: 'My Baskets', component: BasketsPage},
   { path: '/history', name: 'History', component: HistoryPage},

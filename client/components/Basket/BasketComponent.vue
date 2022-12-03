@@ -27,12 +27,14 @@
       <div>
         <b>Name:</b> {{ basket.name }} <br>
         <b>Items:</b> 
-        <li 
-          v-for="ingredient in basket.ingredients"
-          :key="ingredient.id"
-        >
-          {{ ingredient.name }} x {{ ingredient.quantity }} {{ ingredient.unit }}
-        </li>
+          <ul class="my-2">
+            <li 
+              v-for="ingredient in basket.ingredients"
+              :key="ingredient.id"
+            >
+            {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
+          </li>
+        </ul>
       </div>
     </section>
     <section>

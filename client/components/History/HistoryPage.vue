@@ -10,6 +10,7 @@
         v-for="item in $store.state.pantryItems"
         :key="item._id"
         :pantryItem="item"
+        :reminder="$store.state.reminders[item._id]"
         :isPantry="false"
       />
     </section>

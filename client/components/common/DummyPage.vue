@@ -6,7 +6,16 @@
       <header>
         <h2 class="display-4">Welcome @{{ $store.state.username }}!</h2>
       </header>
-      <!-- <DummyForm /> -->
+      <header>
+        <h3>Reminders</h3>
+      </header>
+      <section 
+        v-if="$store.state.numReminders">
+        <ReminderComponent 
+          v-for="reminder in Object.values($store.state.reminders).filter(reminder => !reminder.dismissed && new Date(`${reminder.date}T00:00:00.000-05:00`) <= new Date())" 
+          :key="reminder._id"
+          :reminder="reminder" />
+      </section>
     </section>
     <section v-else>
       <header>
@@ -27,10 +36,13 @@
 </template>
 
 <script>
-import DummyForm from '@/components/common/DummyForm.vue';
+import ReminderComponent from '@/components/Reminder/ReminderComponent.vue';
 
 export default {
   name: 'DummyPage',
-  components: {DummyForm},
+  components: { ReminderComponent },
+  mounted() {
+    if (this.$store.state.username) {this.$store.commit('refreshReminders');}
+  }
 };
 </script>

@@ -18,7 +18,6 @@ export default {
       ],
       title: 'Add New Item',
       refreshPantryItems: true,
-      refreshReminders: true,
       isPantry: true,
       expires: true,
       callback: () => {

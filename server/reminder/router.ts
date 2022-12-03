@@ -34,7 +34,7 @@ router.get(
  * @name PATCH /api/reminders/:pantryItemId
  *
  * @param {Types.ObjectId | string} pantryItemId - The id of the item associated with the reminder
- * @param {boolean} inPantry - The status to update for this reminder
+ * @param {boolean} dismissed - The status to update for this reminder
  * @return {util.ReminderResponse} - the updated reminder
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the itemId is not valid

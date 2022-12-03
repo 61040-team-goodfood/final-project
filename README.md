@@ -4,18 +4,25 @@ The project is structured as follows:
 
 - `api/index.ts` sets up the backend database connection and Express server. This should actually be in the `server` folder, but it must be here due to a Vercel limitation.
 - `server/` contains the backend code
+  - `basket/` contains files related to the Basket concept
+  - `foodItem/` contains files related to the FoodItem concept
   - `pantryItem/` contains files related to the PantryItem concept
+  - `recipe/` contains files related to the Recipe concept
+  - `reminder/` contains files related to the Reminder concept
   - `user/` contains files related to the User concept
 - `client/` contains the frontend starter code
   - `App.vue` is the root component of your application
   - `main.ts` is the entry point of your application, which initializes Vue
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
-    - `PantryItem/` contains the homepage and components related to PantryItem
+    - `PantryItem/` contains the page and components related to PantryItem
     - `History/` contains the history page displaying all previously added items
-    - `Basket/` contains the baskets page displaying all of the user's baskets
+    - `Basket/` contains the baskets page displaying 
+    all of the user's baskets
+    - `Recipe/` contains the the pages and components related to Recipe
+    - `Reminder/` contains the component related to Reminder
     - `Login/` contains the login/register page and the related forms
-    - `Common/` contains general form components that can be reused across different concepts
+    - `common/` contains general form components that can be reused across different concepts
   - `public/` contains base HTML files and static assets (like the default Fritter logo)
   - `router.ts` contains the Vue router
   - `store.ts` contains the Vuex store, which stores application state and persistent data
@@ -293,3 +300,29 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` If the user is not logged in
 - `404` If the pantryItemId is not valid or if the item unit is specified
 - `409` - If the basket name already exists
+
+#### `GET /api/reminders` - Get all reminders for the user in session
+
+**Returns**
+
+- A list of all the reminders for the user in session
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `PATCH /api/reminders/:pantryItemId` - Modify the status of the reminder associated with the pantry item
+
+**Body**
+
+- `dismissed` _{boolean}_ - The status to update for this reminder
+
+**Returns**
+
+- A success message
+- An object with the updated reminder
+
+**Throws**
+
+- `403` If the user is not logged in
+- `404` If the pantryItemId is not valid

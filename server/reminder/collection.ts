@@ -72,6 +72,8 @@ class ReminderCollection {
     
     // Required values that should not be empty
     reminder.date = date;
+    
+    reminder.dismissed = false; // if the date is updated, the reminder is no longer dismissed (if it was dismissed before)
     await reminder.save();
     return reminder.populate(['user', 'item']);
   }

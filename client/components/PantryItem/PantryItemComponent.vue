@@ -1,27 +1,41 @@
-<!-- Reusable component representing a single freet and its actions -->
+<!-- Reusable component representing a single item and its actions -->
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
   <article class="border rounded my-2 p-4">
-    <section v-if="editing && isPantry">
-      <EditPantryItemForm 
-        :pantryItem=this.pantryItem 
-        @stopEditing="this.stopEditing" 
-      />
-    </section>
-    <section v-else>
-      <button 
-        v-if="isPantry"
+    <section>
+      <button
+        v-if="!editing && isPantry" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="startEditing"
+        @click="toggleEditing"
       >
         Edit
+      </button>
+      <button 
+        v-if="editing && isPantry"
+        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
+        @click="toggleEditing"
+      >
+        Stop Editing
       </button>
       <button 
         class="btn btn-danger btn-sm my-2 bi bi-trash"
         @click="deleteItem"
       >
         Delete
+      </button>
+      <button 
+        v-if="!isPantry"
+        class="btn btn-info btn-sm mr-2 my-2 right"
+        @click="toggleAddToPantry"
+      >
+        Add to Pantry
+      </button>
+      <button 
+        class="btn btn-info btn-sm mr-2 my-2 right"
+        @click="toggleAddToBasket"
+      >
+        Add to Baskets
       </button>
       <div>
         <b>Name:</b> {{ pantryItem.name }} <br>
@@ -34,30 +48,26 @@
         <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
         <b>Reminder on:</b> {{ pantryItem.remindDate }}
       </div>
-      <button 
-        v-if="!isPantry"
-        class="btn btn-primary btn-sm mr-2 my-2 bi"
-        @click="openAddToPantry"
-      >
-        Add to Pantry
-      </button>
-      <button 
-        class="btn btn-primary btn-sm mr-2 my-2 bi"
-        @click="openAddToBasket"
-      >
-        Add to Baskets
-      </button>
     </section>
     <section v-if="addToPantry && !isPantry">
       <AddToPantryForm 
-        :pantryItem=this.pantryItem 
-        @stopEditing="closeAddToPantry" 
+        class="mt-4"
+        :pantryItem=this.pantryItem   
+        :visible="addToPantry"
       />
     </section>
     <section v-if="addToBasket">
       <AddToBasketForm 
+        class="mt-4"
         :pantryItem=this.pantryItem 
-        @stopEditing="closeAddToBasket" 
+        :visible="addToBasket"
+      />
+    </section>
+    <section>
+      <EditPantryItemForm 
+        class="mt-4"
+        :pantryItem=this.pantryItem 
+        :visible="editing"
       />
     </section>
   </article>
@@ -82,40 +92,35 @@ export default {
       required: true
     }
   },
+  watch: {
+    pantryItem: function(newItem, oldItem) {
+      this.editing = false;
+      this.addToBasket = false;
+      this.addToPantry = false;
+    }
+  },
   data() {
     return {
       editing: false, // Whether or not this pantry item is in edit mode
       addToPantry: false,
       addToBasket: false,
-      alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
   methods: {
-    startEditing() {
-      /**
-       * Enables edit mode on this item.
-       */
-      this.editing = true; // Keeps track of if a item is being edited
-    },
-    stopEditing() {
-      /**
-       * Disables edit mode on this item.
-       */
+    toggleAddToPantry() {
+      this.addToPantry = !this.addToPantry;
+      this.addToBasket = false;
       this.editing = false;
     },
-    openAddToPantry() {
-      this.addToPantry = true;
-      this.addToBasket = false;
-    },
-    closeAddToPantry() {
+    toggleAddToBasket() {
+      this.addToBasket = !this.addToBasket;
       this.addToPantry = false;
+      this.editing = false;
     },
-    openAddToBasket() {
-      this.addToBasket = true;
-      this.addToPantry = false;
-    },
-    closeAddToBasket() {
+    toggleEditing() {
+      this.editing = !this.editing;
       this.addToBasket = false;
+      this.addToPantry = false;
     },
     deleteItem() {
       /**
@@ -158,15 +163,22 @@ export default {
           throw new Error(res.error);
         }
 
-        this.editing = false;
         this.$store.commit('refreshPantryItems', this.isPantry);
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        this.$store.commit('alerts', {
+          message: e,
+          status: 'danger'
+        });
       }
     }
   }
 };
 </script>
+
+<style scoped>
+.right {
+  float: right;
+}
+</style>

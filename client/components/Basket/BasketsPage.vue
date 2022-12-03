@@ -10,7 +10,7 @@
     >
       <BasketComponent
         v-for="item in $store.state.baskets"
-        :key="item.id"
+        :key="item._id"
         :basket="item"
       />
     </section>

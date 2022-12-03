@@ -32,6 +32,7 @@ export default {
         { type: 'baskets', id: 'baskets', label: 'Baskets', newBasket: false, newBasketName: '' }
       ],
       refreshPantryItems: true,
+      refreshReminders: true,
       collapsible: false,
       isPantry: false,
       expires: true,

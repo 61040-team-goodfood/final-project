@@ -53,12 +53,11 @@ class ReminderCollection {
   /**
    * Get all the reminders associated with a given user
    *
-   * @param {string} username - The username of the user
+   * @param {Types.ObjectId | string} userId - The id of the user
    * @return {Promise<HydratedDocument<Reminder>[]>} - An array of all of the reminders for this user
    */
-  static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Reminder>>> {
-    const user = await UserCollection.findOneByUsername(username);
-    return ReminderModel.find({user: user._id}).populate(['user', 'item']);
+  static async findAllByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Reminder>>> {
+    return ReminderModel.find({user: userId}).populate(['user', 'item']);
   }
 
   /**

@@ -10,9 +10,10 @@
     >
       <PantryItemComponent
         v-for="item in $store.state.pantryItems"
-        :key="item.id"
+        :key="item._id"
         :pantryItem="item"
         :isPantry="true"
+        :reminder="$store.state.reminders[item._id]"
       />
     </section>
   </main>
@@ -27,6 +28,7 @@ export default {
   components: {PantryItemComponent, AddPantryItemForm},
   mounted() {
     this.$store.commit('refreshPantryItems', true);
+    this.$store.commit('refreshReminders');
   }
 };
 </script>

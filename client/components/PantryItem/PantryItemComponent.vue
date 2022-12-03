@@ -54,6 +54,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem   
         :visible="addToPantry"
+        :reminder=this.reminder
       />
     </section>
     <section v-if="addToBasket">
@@ -61,6 +62,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem 
         :visible="addToBasket"
+        :reminder=this.reminder
       />
     </section>
     <section>
@@ -68,6 +70,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem 
         :visible="editing"
+        :reminder=this.reminder
       />
     </section>
   </article>
@@ -87,10 +90,10 @@ export default {
       type: Object,
       required: true
     },
-    reminder {
+    reminder: {
       type: Object,
       required: true
-    }
+    },
     isPantry: {
       type: Boolean,
       required: true
@@ -168,6 +171,7 @@ export default {
         }
 
         this.$store.commit('refreshPantryItems', this.isPantry);
+        this.$store.commit('refreshReminders');
 
         params.callback();
       } catch (e) {

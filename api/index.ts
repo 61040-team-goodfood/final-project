@@ -1,5 +1,5 @@
 // This file must be in the /api folder for Vercel to detect it as a serverless function
-import type {Request, Response} from 'express';
+import {application, Request, Response} from 'express';
 import express from 'express';
 import session from 'express-session';
 import logger from 'morgan';
@@ -12,6 +12,7 @@ import {pantryItemRouter} from '../server/pantryItem/router';
 import {recipeRouter} from '../server/recipe/router';
 import MongoStore from 'connect-mongo';
 import { basketRouter } from '../server/basket/router';
+import {reminderRouter} from '../server/reminder/router';
 
 // Load environmental variables
 dotenv.config({});
@@ -74,6 +75,7 @@ app.use('/api/users', userRouter);
 app.use('/api/pantryItems', pantryItemRouter);
 app.use('/api/baskets', basketRouter);
 app.use('/api/recipes', recipeRouter);
+app.use('/api/reminders', reminderRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

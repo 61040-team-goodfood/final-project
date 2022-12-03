@@ -62,14 +62,14 @@ class ReminderCollection {
   }
 
   /**
-   * Update a reminder with a new date
+   * Update a reminder associated with the given item with a new date
    *
-   * @param {Types.ObjectId | string} reminderId - The id of the reminder to be updated
+   * @param {Types.ObjectId | string} itemId - The id of the item whose reminder needs to be updated
    * @param {Date} date - The date of the reminder
    * @return {Promise<HydratedDocument<Reminder>>} - The newly updated reminder
    */
-  static async updateOneDate(reminderId: Types.ObjectId | string, date: Date): Promise<HydratedDocument<Reminder>> {
-    const reminder = await ReminderModel.findOne({_id: reminderId});
+  static async updateOneDate(itemId: Types.ObjectId | string, date: Date): Promise<HydratedDocument<Reminder>> {
+    const reminder = await ReminderModel.findOne({item: itemId});
     
     // Required values that should not be empty
     reminder.date = date;
@@ -92,6 +92,7 @@ class ReminderCollection {
     await reminder.save();
     return reminder.populate(['user', 'item']);
   }
+
   /**
    * Delete a reminder with given reminderId.
    *
@@ -102,6 +103,19 @@ class ReminderCollection {
     const reminder = await ReminderModel.deleteOne({_id: reminderId});
     return reminder !== null;
   }
+
+
+  /**
+   * Delete a reminder with given item id.
+   *
+   * @param {Types.ObjectId | string} itemId - The id of item whose associated reminder to delete
+   * @return {Promise<Boolean>} - true if the reminder has been deleted, false otherwise
+   */
+   static async deleteOneByItem(itemId: Types.ObjectId | string): Promise<boolean> {
+    const reminder = await ReminderModel.deleteOne({item: itemId});
+    return reminder !== null;
+  }
+  
 
   /**
    * Delete all the items by the given user id

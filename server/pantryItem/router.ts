@@ -4,6 +4,7 @@ import PantryItemCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as pantryItemValidator from './middleware';
 import * as util from './util';
+import ReminderCollection from '../reminder/collection';
 
 const router = express.Router();
 
@@ -80,11 +81,13 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const item = await PantryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
-
+    const item = await PantryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
+    const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+    const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
+    await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
     res.status(201).json({
       message: 'Your pantry item was created successfully.',
-      pantryItem: util.constructPantryItemResponse(item)
+      pantryItem: util.constructPantryItemResponse(item),
     });
   }
 );
@@ -105,6 +108,7 @@ router.delete(
     pantryItemValidator.isItemExists
   ],
   async (req: Request, res: Response) => {
+    await ReminderCollection.deleteOneByItem(req.params.pantryItemId);
     await PantryItemCollection.deleteOne(req.params.pantryItemId);
     res.status(200).json({
       message: 'Your pantry item was deleted successfully.'
@@ -155,7 +159,10 @@ router.patch(
     pantryItemValidator.isValidRemindDate
   ],
   async (req: Request, res: Response) => {
-    let item = await PantryItemCollection.updateOneInfo(req.params.pantryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration, req.body.remindDays);
+    let item = await PantryItemCollection.updateOneInfo(req.params.pantryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
+    const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+    const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
+    await ReminderCollection.updateOneDate(req.params.pantryItemId, remindDate);
     res.status(200).json({
       message: 'Your pantry item was updated successfully.',
       pantryItem: util.constructPantryItemResponse(item)

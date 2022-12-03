@@ -32,7 +32,7 @@
       </div>
       <div v-if="pantryItem.expirationDate">
         <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
-        <b>Reminder on:</b> {{ pantryItem.remindDate }}
+        <b>Reminder on:</b> {{ reminder.date }}
       </div>
       <button 
         v-if="!isPantry"
@@ -77,6 +77,10 @@ export default {
       type: Object,
       required: true
     },
+    reminder {
+      type: Object,
+      required: true
+    }
     isPantry: {
       type: Boolean,
       required: true

@@ -16,15 +16,12 @@ class PantryItemCollection {
    * @param {number} quantity - The nonnegative amount of the item
    * @param {string} unit - The type of unit for the item
    * @param {string} expiration - The expiration date for the item as a string, if one is given
-   * @param {number} remindDays - The number of days preceding expiration date to send a reminder, if given
    * @return {Promise<HydratedDocument<PantryItem>>} - The newly created pantry item
    */
-  static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number | null): Promise<HydratedDocument<PantryItem>> {
+  static async addOne(owner: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null): Promise<HydratedDocument<PantryItem>> {
     const date = new Date();
       
     const expirationDate = expiration ? new Date(`${expiration}T00:00:00.000-05:00`) : null;
-    const remindDate_ = expirationDate ? new Date(`${expiration}T00:00:00.000-05:00`) : new Date();
-    const remindDate = expirationDate ? new Date(remindDate_.setDate(remindDate_.getDate() - remindDays)) : new Date(remindDate_.setMonth(remindDate_.getMonth() + 1));
     const pantryItem = new PantryItemModel({
       owner,
       name,
@@ -32,7 +29,6 @@ class PantryItemCollection {
       unit,
       dateAdded: date,
       expirationDate,
-      remindDate,
       inPantry: true
     });
 
@@ -90,25 +86,17 @@ class PantryItemCollection {
    * @param {Types.ObjectId | string} pantryItemId - The id of the item to be updated
    * @param {number} quantity - The nonnegative amount of the item, if provided
    * @param {string} expiration - The expiration date for the item as a string, if given
-   * @param {number} remindDays - The number of days preceding the expriation date to send a reminder, if given
    * @return {Promise<HydratedDocument<PantryItem>>} - The newly updated freet
    */
-  static async updateOneInfo(pantryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null, remindDays: number): Promise<HydratedDocument<PantryItem>> {
+  static async updateOneInfo(pantryItemId: Types.ObjectId | string, name: string, quantity: number, unit: string, expiration: string | null): Promise<HydratedDocument<PantryItem>> {
     const pantryItem = await PantryItemModel.findOne({_id: pantryItemId});
     const expirationDate = expiration ? new Date(`${expiration}T00:00:00.000-05:00`) : null;
-    const remindDate = expirationDate ? new Date(`${expiration}T00:00:00.000-05:00`) : new Date(pantryItem.dateAdded);
-
-    if (expirationDate) {
-      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    }
 
     // Required values that should not be empty
     pantryItem.name = name;
     pantryItem.quantity = quantity;
     pantryItem.unit = unit;
     pantryItem.expirationDate = expirationDate;
-    pantryItem.remindDate = expirationDate ? new Date(remindDate.setDate(remindDate.getDate() - remindDays)) : new Date(remindDate.setMonth(remindDate.getMonth() + 1));
     
     if (quantity === 0) {
       pantryItem.inPantry = false;

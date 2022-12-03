@@ -46,7 +46,7 @@
       </div>
       <div v-if="pantryItem.expirationDate">
         <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
-        <b>Reminder on:</b> {{ pantryItem.remindDate }}
+        <b>Reminder on:</b> {{ reminder.date }}
       </div>
     </section>
     <section v-if="addToPantry && !isPantry">
@@ -54,6 +54,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem   
         :visible="addToPantry"
+        :reminder=this.reminder
       />
     </section>
     <section v-if="addToBasket">
@@ -61,6 +62,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem 
         :visible="addToBasket"
+        :reminder=this.reminder
       />
     </section>
     <section>
@@ -68,6 +70,7 @@
         class="mt-4"
         :pantryItem=this.pantryItem 
         :visible="editing"
+        :reminder=this.reminder
       />
     </section>
   </article>
@@ -84,6 +87,10 @@ export default {
   props: {
     // Data from the stored item
     pantryItem: {
+      type: Object,
+      required: true
+    },
+    reminder: {
       type: Object,
       required: true
     },
@@ -164,6 +171,7 @@ export default {
         }
 
         this.$store.commit('refreshPantryItems', this.isPantry);
+        this.$store.commit('refreshReminders');
 
         params.callback();
       } catch (e) {

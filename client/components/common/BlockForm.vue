@@ -189,6 +189,7 @@ export default {
       refreshPantryItems: false,
       refreshBaskets: false,
       refreshRecipes: false,
+      refreshReminders: false,
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission 
       checkedBaskets: [],
@@ -403,7 +404,6 @@ export default {
           })
         ));
 
-        console.log(options.body);
       }
 
       try {
@@ -422,6 +422,10 @@ export default {
 
         if (this.refreshPantryItems) {
           this.$store.commit('refreshPantryItems', this.isPantry);
+        }
+
+        if (this.refreshReminders) {
+          this.$store.commit('refreshReminders')
         }
 
         if (this.refreshBaskets) {

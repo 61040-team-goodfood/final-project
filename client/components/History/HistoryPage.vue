@@ -8,8 +8,9 @@
     >
       <PantryItemComponent
         v-for="item in $store.state.pantryItems"
-        :key="item.id"
+        :key="item._id"
         :pantryItem="item"
+        :reminder="$store.state.reminders[item._id]"
         :isPantry="false"
       />
     </section>
@@ -24,6 +25,7 @@ export default {
   components: {PantryItemComponent},
   mounted() {
     this.$store.commit('refreshPantryItems', false);
+    this.$store.commit('refreshReminders');
   }
 };
 </script>

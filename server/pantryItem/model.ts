@@ -16,7 +16,6 @@ export type PantryItem = {
   unit: string;
   dateAdded: Date;
   expirationDate: Date | null;
-  remindDate: Date;
   inPantry: boolean;
 };
 
@@ -28,7 +27,6 @@ export type PopulatedPantryItem = {
   unit: string;
   dateAdded: Date;
   expirationDate: Date | null;
-  remindDate: Date;
   inPantry: boolean;
 };
 
@@ -67,11 +65,6 @@ const PantryItemSchema = new Schema<PantryItem>({
   expirationDate: {
     type: Date,
     required: false
-  },
-  // The set reminder date for this item
-  remindDate: {
-    type: Date,
-    required: true
   },
   // The status denoting whether this item should be currently displayed in pantry
   inPantry: {

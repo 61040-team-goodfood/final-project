@@ -22,7 +22,7 @@
           to="/"
         >
           <i class="bi bi-house mx-2"></i>
-          <span class="fs-4">Home</span>
+          <span class="fs-4">Home <span v-if="($store.state.numReminders > 0)" class="badge badge-danger">{{$store.state.numReminders}}</span></span>
         </router-link>
       </li>
       <li class="nav-item mb-3" v-if="$store.state.username">

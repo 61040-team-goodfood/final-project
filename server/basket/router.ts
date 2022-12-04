@@ -127,7 +127,6 @@ router.delete(
   '/',
   [
     userValidator.isUserLoggedIn,
-    // basketValidator.isValidName
   ],
   async (req: Request, res: Response) => {
     console.log(req.body);

@@ -125,18 +125,17 @@
                   type="checkbox" 
                   id="newBasket"
                   @input="field.value = $event.target.value"
-                  @click="field.newBasket = !field.newBasket"
-                  :checked="field.newBasket"
+                  @click="addNewBasket = !addNewBasket"
+                  :checked="addNewBasket"
                 >
                 <label class="form-check-label form-inline" for="newBasket">
                   <i>Create a new basket: </i>
                   <input 
                     class="form-control form-control-sm mx-3" 
                     type="text" 
-                    :value="field.newBasketName"
                     placeholder="New basket name" 
-                    :required="field.newBasket"
-                    @input="field.newBasketName = $event.target.value"
+                    :required="addNewBasket"
+                    @input="newBasketName = $event.target.value"
                   >
                 </label>
               </div>
@@ -197,6 +196,9 @@ export default {
       visible: true,
       isFilterForm: false,
       collapsed: true,
+      addToBasket: false,
+      addNewBasket: false,
+      newBasketName: ''
     };
   },
   created() {
@@ -342,6 +344,32 @@ export default {
           }
         }
       }
+
+      // checks to see if any baskets are chosen when adding to basket
+      if (this.addToBasket) {
+        if (this.checkedBaskets.length === 0 && !this.addNewBasket) {
+          const emptyFieldMessage = 'Please choose a basket!';
+            this.$store.commit('alert', {
+              message: emptyFieldMessage,
+              status: 'danger'
+            });
+            return;
+        }
+      }
+
+      // checks to for duplicate basket names
+      if (this.addNewBasket) {
+        for (const basket of this.$store.state.baskets) {
+          if (this.newBasketName && this.newBasketName === basket.name) {
+            const duplicateNameMessage = 'A basket with this name already exists!';
+            this.$store.commit('alert', {
+              message: duplicateNameMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        }
+      }
       
       /**
         * Submits a form with the specified options from data().
@@ -387,13 +415,13 @@ export default {
               field.value = 3;
               return [id, value];
             } else if (type === 'baskets') {
-              const { id, newBasket, newBasketName } = field;
+              const { id } = field;
               const baskets = this.checkedBaskets;
-              const name = newBasket ? newBasketName : null;
+              const name = this.addNewBasket ? this.newBasketName : null;
 
               this.checkedBaskets = [];
-              field.newBasket = false;
-              field.newBasketName = '';
+              // field.newBasket = false;
+              // field.newBasketName = '';
 
               return [id, { new: name, baskets: baskets }];
             } else {
@@ -407,6 +435,7 @@ export default {
       }
 
       try {
+        console.log(options.body);
         const r = await fetch(this.url, options);
         if (!r.ok) {
           // If response is not okay, we throw an error and enter the catch block

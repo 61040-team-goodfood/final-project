@@ -89,12 +89,60 @@ router.delete(
 );
 
 /**
+ * Modify multiple baskets' information
+ *
+ * @name PATCH /api/baskets
+ *
+ * @param {string} name - The given name for the item
+ * @param {{value: number, unit: string}} quantity - The number of items and its unit
+ * @param {{new: string, baskets: Array<Object>}} baskets - The baskets
+ * @return {BasketResponse[]} - the updated baskets
+ * @throws {403} - if the user is not logged in
+ * @throws {400} - If the basket name is empty or a stream of empty spaces
+ * @throws {409} - If the basket name already exists
+ */
+ router.patch(
+  '/',
+  [
+    userValidator.isUserLoggedIn,
+    // basketValidator.isValidName
+  ],
+  async (req: Request, res: Response) => {
+    console.log(req.body);
+    const newBasket = req.body.baskets.new;
+    const basketsToUpdate = req.body.baskets.baskets;
+    const baskets = [];
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const items = [{name: req.body.name, quantity: req.body.quantity.value, unit: req.body.quantity.unit}]
+    const foodItem = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+      const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
+      return ingredient._id.toString();
+    }));
+    console.log(foodItem);
+    // const foodItem = await FoodItemCollection.addOne(req.body.name, req.body.quantity.value, req.body.quantity.unit);
+    if (newBasket) {
+      baskets.push(await BasketCollection.addOne(userId, req.body.baskets.new, foodItem))
+    }
+    if (basketsToUpdate.length !== 0) {
+      for (const basket of basketsToUpdate) {
+        baskets.push(await BasketCollection.addToBasket(basket._id, foodItem));
+      }
+    }
+
+    res.status(200).json({
+      message: 'Your basket was updated successfully.',
+      baskets: baskets.map(util.constructBasketResponse)
+    });
+  }
+);
+
+/**
  * Modify a basket's information
  *
  * @name PATCH /api/baskets/:basketId
  *
  * @param {string} name - The given name for the item
- * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
+ * @param {Array<{name: string, quantity: number, unit: string}>} ingredients - The items of the basket
  * @return {BasketResponse} - the updated basket
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the basketId is not valid

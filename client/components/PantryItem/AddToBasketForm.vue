@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       url: '/api/baskets',
-      method: 'POST',
+      method: 'PATCH',
       hasBody: true,
       title: 'Add to Basket',
       fields: [
@@ -36,8 +36,9 @@ export default {
       collapsible: false,
       isPantry: false,
       expires: true,
+      addToBasket: true,
       callback: () => {
-        const message = 'Successfully added pantry item!';
+        const message = 'Successfully added pantry item to basket(s)!';
         this.$store.commit('alert', {
           message: message,
           status: 'success'

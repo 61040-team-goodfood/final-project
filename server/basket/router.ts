@@ -120,8 +120,6 @@ router.delete(
  * @param {{new: string, baskets: Array<Object>}} baskets - The baskets
  * @return {BasketResponse[]} - the updated baskets
  * @throws {403} - if the user is not logged in
- * @throws {400} - If the basket name is empty or a stream of empty spaces
- * @throws {409} - If the basket name already exists
  */
  router.patch(
   '/',

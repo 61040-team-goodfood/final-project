@@ -76,7 +76,7 @@
           </div>
           <div v-else-if="field.type === 'ingredients'">
             <div class="row">
-              <div class="col-5">
+              <div class="col-4">
                 <input class="form-control" type="text" :name="field.id" :value="field.name" placeholder="Name"
                   @input="field.name = $event.target.value">
               </div>
@@ -92,7 +92,7 @@
                   </option>
                 </select>
               </div>
-              <div class="col-1">
+              <div class="col-2">
                 <button class="btn btn-info" @click.prevent="{
                   addIngredient(field.ingredients, field.name, field.quantity, field.unit);
                   field.name = '';

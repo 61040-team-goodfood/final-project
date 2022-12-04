@@ -31,62 +31,6 @@
       />
     </section>
   </article>
-  <!-- <article class="border rounded my-2 p-4">
-    <section>
-      <button
-        v-if="!editing" 
-        class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="toggleEditing"
-      >
-        Edit
-      </button>
-      <button 
-        v-else
-        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
-        @click="toggleEditing"
-      >
-        Stop Editing
-      </button>
-      <button 
-        class="btn btn-danger btn-sm my-2 bi bi-trash"
-        @click="deleteItem"
-      >
-        Delete
-      </button>
-      <button 
-        class="btn btn-info btn-sm mr-2 my-2 right"
-        @click="toggleAddToPantry"
-      >
-        Add to Pantry
-      </button>
-      <div>
-        <b>Name:</b> {{ basket.name }} <br>
-        <b>Items:</b> 
-          <ul class="my-2">
-            <li 
-              v-for="ingredient in basket.ingredients"
-              :key="ingredient.id"
-            >
-            {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
-          </li>
-        </ul>
-      </div>
-    </section>
-    <section v-if="addToPantry">
-      <AddFromBasketToPantryForm 
-        class="mt-4"
-        :basket=this.basket   
-        :visible="addToPantry"
-      />
-    </section>
-    <section>
-      <EditBasketForm 
-        class="mt-4"
-        :basket=this.basket 
-        :visible="editing"
-      />
-    </section>
-  </article> -->
 </template>
 
 <script>

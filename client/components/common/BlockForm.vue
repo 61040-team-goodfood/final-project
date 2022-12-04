@@ -461,7 +461,6 @@ export default {
               return [id, { new: name, baskets: baskets }];
             } else if (type === 'foodItems') {
               const { id, foodItems } = field;
-              console.log(foodItems);
               const checkedFoodItems = [];
               for (const foodItem of foodItems) {
                 if (this.checkedFoodItems.includes(foodItem.item)) {

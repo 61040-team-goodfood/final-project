@@ -49,6 +49,7 @@ export default {
           message: message,
           status: 'success'
         });
+        this.$emit('refreshBasketPage');
       }
     };
   }

@@ -83,7 +83,6 @@ class BasketCollection {
 
     // Required values that should not be empty
     basket.name = name;
-    // console.log(ingredients, typeof ingredients);
     basket.ingredients = ingredients as [Types.ObjectId];
     
     await basket.save();

@@ -42,6 +42,7 @@
                     class="mt-4"
                     :basket=basket
                     :visible="editing"
+                    @refreshBasketPage="fetchData"
                 />
             </section>
             <button 

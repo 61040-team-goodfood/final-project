@@ -129,24 +129,22 @@ router.delete(
     userValidator.isUserLoggedIn,
   ],
   async (req: Request, res: Response) => {
-    console.log(req.body);
     const newBasket = req.body.baskets.new;
     const basketsToUpdate = req.body.baskets.baskets;
     const baskets = [];
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const items = [{name: req.body.name, quantity: req.body.quantity.value, unit: req.body.quantity.unit}]
+    const items = [{name: req.body.name, quantity: parseInt(req.body.quantity.value), unit: req.body.quantity.unit}]
     const foodItem = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
       const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
       return ingredient._id.toString();
     }));
-    console.log(foodItem);
     // const foodItem = await FoodItemCollection.addOne(req.body.name, req.body.quantity.value, req.body.quantity.unit);
     if (newBasket) {
       baskets.push(await BasketCollection.addOne(userId, req.body.baskets.new, foodItem))
     }
     if (basketsToUpdate.length !== 0) {
       for (const basket of basketsToUpdate) {
-        baskets.push(await BasketCollection.addToBasket(basket._id, foodItem));
+        baskets.push(await BasketCollection.addToBasket(basket._id, foodItem[0], items[0]));
       }
     }
 

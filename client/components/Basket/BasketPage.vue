@@ -34,7 +34,6 @@
                 <EditBasketForm 
                     class="mt-4"
                     :basket=basket
-                    :visible="editing"
                 />
             </section>
             <section v-else class="border rounded my-3 px-4 py-2">
@@ -56,7 +55,7 @@
             <section v-if="addToPantry">
                 <AddFromBasketToPantryForm 
                     class="mt-4"
-                    :basket=this.basket   
+                    :basket=basket   
                 />
             </section>
         </main>   

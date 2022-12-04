@@ -7,14 +7,14 @@
       <button
         v-if="!editing" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="editing = true"
+        @click="toggleEditing"
       >
         Edit
       </button>
       <button 
         v-else
         class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
-        @click="editing = false"
+        @click="toggleEditing"
       >
         Stop Editing
       </button>
@@ -23,6 +23,12 @@
         @click="deleteItem"
       >
         Delete
+      </button>
+      <button 
+        class="btn btn-info btn-sm mr-2 my-2 right"
+        @click="toggleAddToPantry"
+      >
+        Add to Pantry
       </button>
       <div>
         <b>Name:</b> {{ basket.name }} <br>
@@ -37,6 +43,13 @@
         </ul>
       </div>
     </section>
+    <section v-if="addToPantry">
+      <AddFromBasketToPantryForm 
+        class="mt-4"
+        :basket=this.basket   
+        :visible="addToPantry"
+      />
+    </section>
     <section>
       <EditBasketForm 
         class="mt-4"
@@ -49,10 +62,11 @@
 
 <script>
 import EditBasketForm from '@/components/Basket/EditBasketForm.vue';
+import AddFromBasketToPantryForm from '@/components/Basket/AddFromBasketToPantryForm.vue';
 
 export default {
   name: 'BasketComponent',
-  components: {EditBasketForm},
+  components: {EditBasketForm, AddFromBasketToPantryForm},
   props: {
     // Data from the stored item
     basket: {
@@ -68,9 +82,18 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this item is in edit mode
+      addToPantry: false,
     };
   },
   methods: {
+    toggleAddToPantry() {
+      this.addToPantry = !this.addToPantry;
+      this.editing = false;
+    },
+    toggleEditing() {
+      this.editing = !this.editing;
+      this.addToPantry = false;
+    },
     deleteItem() {
       /**
        * Deletes this item.

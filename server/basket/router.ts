@@ -130,7 +130,7 @@ router.delete(
     }
 
     res.status(200).json({
-      message: 'Your basket was updated successfully.',
+      message: 'Your baskets have been updated successfully.',
       baskets: baskets.map(util.constructBasketResponse)
     });
   }

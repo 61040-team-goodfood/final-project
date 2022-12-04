@@ -10,10 +10,6 @@ export default {
       type: Object,
       required: true
     },
-    visible: {
-      type: Boolean,
-      required: true
-    }
   },
   watch: {
     basket: function(newBasket, oldBasket) {

@@ -4,6 +4,35 @@
 <template>
   <article class="border rounded my-2 p-4">
     <section>
+      <button 
+        class="btn btn-danger btn-sm my-2 bi bi-trash"
+        @click="deleteItem"
+      >
+        Delete
+      </button>
+      <div class="row">
+        <div class="col-9">
+          <router-link :to="'/baskets/' + basket._id">
+            <h4>{{basket.name}}</h4>
+          </router-link>
+        </div>
+        <button class="btn btn-info btn-sm mr-2 my-2 right"
+                @click="toggleAddToPantry">
+          Add to pantry
+        </button>
+      </div>
+      <b>Items: </b> {{ basket.ingredients.map(i => i.name).join(', ') }}
+    </section>
+    <section v-if="addToPantry">
+      <AddFromBasketToPantryForm 
+        class="mt-4"
+        :basket=this.basket   
+        :visible="addToPantry"
+      />
+    </section>
+  </article>
+  <!-- <article class="border rounded my-2 p-4">
+    <section>
       <button
         v-if="!editing" 
         class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
@@ -57,7 +86,7 @@
         :visible="editing"
       />
     </section>
-  </article>
+  </article> -->
 </template>
 
 <script>
@@ -135,7 +164,7 @@ export default {
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        this.$store.commit('alert', { message: e, status: 'danger'});
       }
     }
   }

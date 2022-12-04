@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import AccountPage from './components/Account/AccountPage.vue';
 import PantryItemsPage from './components/PantryItem/PantryItemsPage.vue';
 import BasketsPage from './components/Basket/BasketsPage.vue';
+import BasketPage from './components/Basket/BasketPage.vue';
 import HistoryPage from './components/History/HistoryPage.vue';
 import RecipesPage from './components/Recipe/RecipesPage.vue';
 import RecipePage from './components/Recipe/RecipePage.vue'
@@ -16,6 +17,7 @@ const routes = [
   { path: '/', name: 'Home', component: HomePage },
   { path: '/pantry', name: 'My Pantry', component: PantryItemsPage},
   {path: '/baskets', name: 'My Baskets', component: BasketsPage},
+  { path: '/baskets/:basketId', name: 'Basket', component: BasketPage },
   { path: '/history', name: 'History', component: HistoryPage},
   { path: '/recipes', name: 'Recipes', component: RecipesPage},
   { path: '/recipes/:recipeId', name: 'Recipe', component: RecipePage },

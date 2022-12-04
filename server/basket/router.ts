@@ -29,6 +29,28 @@ router.get(
 );
 
 /**
+ * Get a basket
+ * 
+ * @name GET /api/baskets/:basketId
+ * 
+ * @return {BasketResponse} - The basket
+ * @throws {403} - If the user is not logged in 
+ * @throws {404} - If the basketId is not valid
+ */
+ router.get(
+  '/:basketId?',
+  [
+    userValidator.isUserLoggedIn,
+    basketValidator.isItemExists,
+  ],
+  async (req: Request, res: Response) => {
+    const basket = await BasketCollection.findOne(req.params.basketId);
+    const response = util.constructBasketResponse(basket);
+    res.status(200).json(response);
+  }
+)
+
+/**
  * Create a new basket.
  *
  * @name POST /api/baskets

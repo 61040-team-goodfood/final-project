@@ -29,15 +29,7 @@
                     </button>
                 </section>
             </header>
-
-            <section v-if="editing">
-                <EditBasketForm 
-                    class="mt-4"
-                    :basket=basket
-                    :visible="editing"
-                />
-            </section>
-            <section v-else class="border rounded my-3 px-4 py-2">
+            <section class="border rounded my-3 px-4 py-2">
                 <h4 class="my-2">Basket Items</h4>
                 <ul>
                     <li
@@ -46,12 +38,18 @@
                         {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
                     </li>
                 </ul>
+                <EditBasketForm 
+                    v-if="editing"
+                    class="mt-4"
+                    :basket=basket
+                    :visible="editing"
+                />
             </section>
             <button 
-                class="btn btn-info my-2"
+                class="btn btn-block btn-info my-2"
                 @click="toggleAddToPantry"
             >
-                    Add to pantry
+                    Add to Pantry
             </button>
             <section v-if="addToPantry">
                 <AddFromBasketToPantryForm 
@@ -105,7 +103,6 @@ export default {
             };
 
             try {
-                console.log(this.$route.params.basketId);
                 const url = `/api/baskets/${this.$route.params.basketId}`;
                 const r = await fetch(url, options);
                 const res = await r.json();

@@ -131,6 +131,9 @@ export default {
       this.addToBasket = false;
       this.addToPantry = false;
     },
+    stopEditing() {
+      // TODO
+    },
     deleteItem() {
       /**
        * Deletes this item.

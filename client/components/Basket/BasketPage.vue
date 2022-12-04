@@ -39,7 +39,6 @@
                     </li>
                 </ul>
                 <EditBasketForm 
-                    v-if="editing"
                     class="mt-4"
                     :basket=basket
                     :visible="editing"

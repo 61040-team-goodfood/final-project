@@ -44,6 +44,9 @@ export default {
     toggleEditing() {
       this.editing = !this.editing;
     },
+    stopEditing() {
+      // TODO
+    },
     async request(params) {
       /**
        * Submits a request to the item's endpoint

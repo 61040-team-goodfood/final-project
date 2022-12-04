@@ -5,30 +5,39 @@
         </div>  
         <main v-else>
             <header>
-                <span class="display-4 col-8">{{ basket.name }}</span>
-                <button
-                    v-if="!editing" 
-                    class="btn btn-primary my-2 bi bi-pencil"
-                    @click="toggleEditing"
-                >
-                    Edit
-                </button>
-                <button 
-                    v-else
-                    class="btn btn-secondary my-2 bi bi-x"
-                    @click="toggleEditing"
-                >
-                    Stop Editing
-                </button>
-                <button
-                    class="btn btn-danger my-2 bi bi-trash" 
-                    @click="deleteBasket"
-                >
-                    Delete
-                </button>
+                <span class="display-4">{{ basket.name }}</span>
+                <section>
+                    <button
+                        class="btn btn-danger my-2 bi bi-trash right" 
+                        @click="deleteBasket"
+                    >
+                        Delete
+                    </button>
+                    <button
+                        v-if="!editing" 
+                        class="btn btn-primary mr-2 my-2 bi bi-pencil right"
+                        @click="toggleEditing"
+                    >
+                        Edit
+                    </button>
+                    <button 
+                        v-else
+                        class="btn btn-secondary mr-2 my-2 bi bi-x right"
+                        @click="toggleEditing"
+                    >
+                        Stop Editing
+                    </button>
+                </section>
             </header>
 
-            <div class="border rounded my-3 px-4 py-2">
+            <section v-if="editing">
+                <EditBasketForm 
+                    class="mt-4"
+                    :basket=basket
+                    :visible="editing"
+                />
+            </section>
+            <section v-else class="border rounded my-3 px-4 py-2">
                 <h4 class="my-2">Basket Items</h4>
                 <ul>
                     <li
@@ -37,22 +46,18 @@
                         {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
                     </li>
                 </ul>
-            </div>
-            <button class="btn btn-info my-2 right"
-                @click="toggleAddToPantry">
-            Add to pantry
+            </section>
+            <button 
+                class="btn btn-info my-2"
+                @click="toggleAddToPantry"
+            >
+                    Add to pantry
             </button>
             <section v-if="addToPantry">
                 <AddFromBasketToPantryForm 
                     class="mt-4"
                     :basket=this.basket   
                 />
-            </section>
-            <section v-if="editing">
-            <EditBasketForm 
-                class="mt-4"
-                :basket=basket
-            />
             </section>
         </main>   
     </div>
@@ -111,6 +116,7 @@ export default {
 
                 this.basket = res; 
                 this.fetching = false;
+                this.editing = false;
 
             } catch (e) { 
                 this.$store.commit('alert', {
@@ -165,5 +171,9 @@ header {
 
 button {
   height: max-content;
+}
+
+.right {
+  float: right;
 }
 </style>

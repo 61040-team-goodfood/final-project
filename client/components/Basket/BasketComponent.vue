@@ -4,31 +4,14 @@
 <template>
   <article class="border rounded my-2 p-4">
     <section>
-      <button 
-        class="btn btn-danger btn-sm my-2 bi bi-trash"
-        @click="deleteItem"
-      >
-        Delete
-      </button>
       <div class="row">
         <div class="col-9">
           <router-link :to="'/baskets/' + basket._id">
             <h4>{{basket.name}}</h4>
           </router-link>
         </div>
-        <button class="btn btn-info btn-sm mr-2 my-2 right"
-                @click="toggleAddToPantry">
-          Add to pantry
-        </button>
       </div>
       <b>Items: </b> {{ basket.ingredients.map(i => i.name).join(', ') }}
-    </section>
-    <section v-if="addToPantry">
-      <AddFromBasketToPantryForm 
-        class="mt-4"
-        :basket=this.basket   
-        :visible="addToPantry"
-      />
     </section>
   </article>
 </template>
@@ -55,31 +38,11 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this item is in edit mode
-      addToPantry: false,
     };
   },
   methods: {
-    toggleAddToPantry() {
-      this.addToPantry = !this.addToPantry;
-      this.editing = false;
-    },
     toggleEditing() {
       this.editing = !this.editing;
-      this.addToPantry = false;
-    },
-    deleteItem() {
-      /**
-       * Deletes this item.
-       */
-      const params = {
-        method: 'DELETE',
-        callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted item', status: 'success'
-          });
-        }
-      };
-      this.request(params);
     },
     async request(params) {
       /**

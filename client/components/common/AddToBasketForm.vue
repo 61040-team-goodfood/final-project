@@ -9,6 +9,10 @@ export default {
     pantryItem: {
       type: Object,
       required: true
+    },
+    isPantry: {
+      type: Boolean,
+      required: true
     }
   },
   watch: {
@@ -34,7 +38,7 @@ export default {
       refreshPantryItems: true,
       refreshReminders: true,
       collapsible: false,
-      isPantry: true,
+      isPantry: this.isPantry,
       expires: true,
       addToBasket: true,
       callback: () => {

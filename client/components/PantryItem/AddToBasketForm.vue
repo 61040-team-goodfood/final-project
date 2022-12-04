@@ -34,7 +34,7 @@ export default {
       refreshPantryItems: true,
       refreshReminders: true,
       collapsible: false,
-      isPantry: false,
+      isPantry: true,
       expires: true,
       addToBasket: true,
       callback: () => {

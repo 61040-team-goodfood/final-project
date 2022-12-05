@@ -19,8 +19,16 @@ export default {
     basket: function(newBasket, oldBasket) {
       this.fields = [
         { type: 'text', id: 'name', label: 'Name', value: newBasket.name, placeholder: 'Enter name...' }, 
-        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: newBasket.ingredients },
+        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [...newBasket.ingredients] },
       ];
+    }, 
+    visible: function(newValue, oldValue) {
+      if (newValue === false) {
+        this.fields = [
+          { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 
+          { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [...this.basket.ingredients] },
+        ];
+      }
     }
   },
   data() {
@@ -32,7 +40,7 @@ export default {
       title: 'Edit Basket',
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 
-        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: this.basket.ingredients },
+        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [...this.basket.ingredients] },
       ],
       refreshBaskets: true,
       callback: () => {
@@ -41,6 +49,7 @@ export default {
           message: message,
           status: 'success'
         });
+        this.$emit('refreshBasketPage');
       }
     };
   }

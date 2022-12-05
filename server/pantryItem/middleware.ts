@@ -23,12 +23,14 @@ const isItemExists = async (req: Request, res: Response, next: NextFunction) => 
  * i.e not a stream of empty spaces
  */
 const isValidName = (req: Request, res: Response, next: NextFunction) => {
-  const {name} = req.body as {name: string};
-  if (!name.trim()) {
-    res.status(400).json({
-      error: 'Name must be at least one character long.'
-    });
-    return;
+  if (!req.body.foodItems) {
+    const {name} = req.body as {name: string};
+    if (!name.trim()) {
+      res.status(400).json({
+        error: 'Name must be at least one character long.'
+      });
+      return;
+    }
   }
 
   next();
@@ -39,12 +41,14 @@ const isValidName = (req: Request, res: Response, next: NextFunction) => {
  * i.e not negative
  */
 const isValidQuantity = (req: Request, res: Response, next: NextFunction) => {
-  const {value} = req.body.quantity as {value: number};
-  if (value < 0) {
-    res.status(405).json({
-      error: 'Quantity cannot be negative.'
-    });
-    return;
+  if (!req.body.foodItems) {
+    const {value} = req.body.quantity as {value: number};
+    if (value < 0) {
+      res.status(405).json({
+        error: 'Quantity cannot be negative.'
+      });
+      return;
+    }
   }
 
   next();
@@ -55,12 +59,14 @@ const isValidQuantity = (req: Request, res: Response, next: NextFunction) => {
  * i.e not empty
  */
 const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
-  const {unit} = req.body.quantity as {unit: string};
-  if (!unit.trim()) {
-    res.status(400).json({
-      error: 'Unit must be specified.'
-    });
-    return;
+  if (!req.body.foodItems) {
+    const {unit} = req.body.quantity as {unit: string};
+    if (!unit.trim()) {
+      res.status(400).json({
+        error: 'Unit must be specified.'
+      });
+      return;
+    }
   }
 
   next();
@@ -71,25 +77,27 @@ const isValidUnit = (req: Request, res: Response, next: NextFunction) => {
  * i.e after item creation and after reminder date
  */
 const isValidExpirationDate = async (req: Request, res: Response, next: NextFunction) => {
-  const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
-  if (expiration) {
-    const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId) : null;
-    const expirationDate = new Date(expiration);
-    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-    const dateAdded = item ? item.dateAdded : new Date();
+  if (!req.body.foodItems) {
+    const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
+    if (expiration) {
+      const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId) : null;
+      const expirationDate = new Date(expiration);
+      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+      const dateAdded = item ? item.dateAdded : new Date();
 
-    if (expirationDate < dateAdded) {
-      res.status(400).json({
-        error: 'Expiration date must be later than the item creation date.'
-      });
-      return;
-    }
+      if (expirationDate < dateAdded) {
+        res.status(400).json({
+          error: 'Expiration date must be later than the item creation date.'
+        });
+        return;
+      }
 
-    if (remindDays < 0) {
-      res.status(400).json({
-        error: 'Expiration date must be later than the reminder date.'
-      });
-      return;
+      if (remindDays < 0) {
+        res.status(400).json({
+          error: 'Expiration date must be later than the reminder date.'
+        });
+        return;
+      }
     }
   }
 
@@ -101,20 +109,22 @@ const isValidExpirationDate = async (req: Request, res: Response, next: NextFunc
  * i.e after item creation and before item expiration
  */
 const isValidRemindDate = async (req: Request, res: Response, next: NextFunction) => {
-  const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
-  if (expiration) {
-    const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId): null;
-    const expirationDate = new Date(expiration);
-    expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
-    const dateAdded = item ? item.dateAdded : new Date();
-    const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
-    remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
-    
-    if (remindDate < dateAdded) {
-      res.status(400).json({
-        error: 'Reminder date must be later than the item creation date.'
-      });
-      return;
+  if (!req.body.foodItems) {
+    const {expiration, remindDays} = req.body as {expiration: string; remindDays: number};
+    if (expiration) {
+      const item = req.params.pantryItemId ? await PantryItemCollection.findOne(req.params.pantryItemId): null;
+      const expirationDate = new Date(expiration);
+      expirationDate.setMinutes(expirationDate.getMinutes() + expirationDate.getTimezoneOffset());
+      const dateAdded = item ? item.dateAdded : new Date();
+      const remindDate = new Date(expirationDate.setDate(expirationDate.getDate() - remindDays));
+      remindDate.setMinutes(remindDate.getMinutes() + remindDate.getTimezoneOffset());
+      
+      if (remindDate < dateAdded) {
+        res.status(400).json({
+          error: 'Reminder date must be later than the item creation date.'
+        });
+        return;
+      }
     }
   }
 

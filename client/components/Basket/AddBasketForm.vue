@@ -16,6 +16,7 @@ export default {
       ],
       title: 'Add New Basket',
       refreshBaskets: true,
+      addNewBasket: true,
       callback: () => {
         const message = 'Successfully added a basket!';
         this.$store.commit('alert', {

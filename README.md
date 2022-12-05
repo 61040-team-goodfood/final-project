@@ -55,7 +55,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `POST /api/pantryItems` - Create a new pantry item
+#### `POST /api/pantryItems` - Create new pantry items
 
 **Body**
 
@@ -65,11 +65,12 @@ This renders the `index.html` file that will be used to interact with the backen
 - `unit` _{string}_ - The type of unit for the item
 - `expiration` _{string | null}_ - The expiration date as a string for the item, if one is given
 - `remindDays` _{number}_ - The date to send a reminder for this item, if one is given
+- `foodItems`_{Array<{Types.ObjectId | string}>}_ - The food items to be added to pantry
 
 **Returns**
 
 - A success message
-- The created pantry item
+- The created pantry items
 
 **Throws**
 
@@ -253,6 +254,17 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
+#### `GET /api/baskets/:basketId` - Get basket by id
+
+**Returns**
+
+- the basket with specified id 
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the basketId is not valid
+
 #### `POST /api/baskets` - Create a new basket
 
 **Body**
@@ -283,12 +295,29 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` If the user is not logged in
 - `404` If the basketId is not valid
 
+#### `PATCH /api/baskets/` - Modify multiple baskets' information
+
+**Body**
+
+- `name` _{string}_ - The given name of the item
+- `quantity` _{value: number, unit: string}_ - The number of items and its unit
+- `baskets` _{new: string, baskets: Array<{Object}>}_ The baskets
+
+**Returns**
+
+- A success message
+- An object with the updated baskets
+
+**Throws**
+
+- `403` If the user is not logged in
+
 #### `PATCH /api/baskets/:basketId` - Modify a basket's information
 
 **Body**
 
 - `name` _{string}_ - The given name of the item
-- `ingredients` _{Array<{name: string, quantity: number, unit: number}>}_ - The items of the basket
+- `ingredients` _{Array<{name: string, quantity: number, unit: string}>}_ - The items of the basket
 
 **Returns**
 

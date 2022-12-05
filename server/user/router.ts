@@ -4,6 +4,7 @@ import UserCollection from './collection';
 import PantryItemCollection from '../pantryItem/collection';
 import * as userValidator from './middleware';
 import * as util from './util';
+import BasketCollection from '../basket/collection';
 
 const router = express.Router();
 
@@ -162,6 +163,7 @@ router.delete(
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
     await PantryItemCollection.deleteMany(userId);
+    await BasketCollection.deleteMany(userId);
     req.session.userId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'

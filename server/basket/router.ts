@@ -29,6 +29,28 @@ router.get(
 );
 
 /**
+ * Get a basket
+ * 
+ * @name GET /api/baskets/:basketId
+ * 
+ * @return {BasketResponse} - The basket
+ * @throws {403} - If the user is not logged in 
+ * @throws {404} - If the basketId is not valid
+ */
+ router.get(
+  '/:basketId?',
+  [
+    userValidator.isUserLoggedIn,
+    basketValidator.isItemExists,
+  ],
+  async (req: Request, res: Response) => {
+    const basket = await BasketCollection.findOne(req.params.basketId);
+    const response = util.constructBasketResponse(basket);
+    res.status(200).json(response);
+  }
+)
+
+/**
  * Create a new basket.
  *
  * @name POST /api/baskets
@@ -89,12 +111,55 @@ router.delete(
 );
 
 /**
+ * Modify multiple baskets' information
+ *
+ * @name PATCH /api/baskets
+ *
+ * @param {string} name - The given name for the item
+ * @param {{value: number, unit: string}} quantity - The number of items and its unit
+ * @param {{new: string, baskets: Array<Object>}} baskets - The baskets
+ * @return {BasketResponse[]} - the updated baskets
+ * @throws {403} - if the user is not logged in
+ */
+ router.patch(
+  '/',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const newBasket = req.body.baskets.new;
+    const basketsToUpdate = req.body.baskets.baskets;
+    const baskets = [];
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const items = [{name: req.body.name, quantity: parseInt(req.body.quantity.value), unit: req.body.quantity.unit}]
+    const foodItem = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+      const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
+      return ingredient._id.toString();
+    }));
+    // const foodItem = await FoodItemCollection.addOne(req.body.name, req.body.quantity.value, req.body.quantity.unit);
+    if (newBasket) {
+      baskets.push(await BasketCollection.addOne(userId, req.body.baskets.new, foodItem))
+    }
+    if (basketsToUpdate.length !== 0) {
+      for (const basket of basketsToUpdate) {
+        baskets.push(await BasketCollection.addToBasket(basket._id, foodItem[0], items[0]));
+      }
+    }
+
+    res.status(200).json({
+      message: 'Your baskets have been updated successfully.',
+      baskets: baskets.map(util.constructBasketResponse)
+    });
+  }
+);
+
+/**
  * Modify a basket's information
  *
  * @name PATCH /api/baskets/:basketId
  *
  * @param {string} name - The given name for the item
- * @param {Array<{name: string, quantity: number, unit: number}>} ingredients - The items of the basket
+ * @param {Array<{name: string, quantity: number, unit: string}>} ingredients - The items of the basket
  * @return {BasketResponse} - the updated basket
  * @throws {403} - if the user is not logged in
  * @throws {404} - If the basketId is not valid

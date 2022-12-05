@@ -1,7 +1,8 @@
-import type {HydratedDocument, Types} from 'mongoose';
+import type {HydratedDocument, TypeExpressionOperator, Types} from 'mongoose';
 import type {Basket} from './model';
 import BasketModel from './model';
 import UserCollection from '../user/collection';
+import FoodItemCollection from '../foodItem/collection';
 
 /**
  * This files contains a class that has the functionality to explore baskets
@@ -83,6 +84,31 @@ class BasketCollection {
     // Required values that should not be empty
     basket.name = name;
     basket.ingredients = ingredients as [Types.ObjectId];
+    
+    await basket.save();
+    return (await basket.populate('owner')).populate('ingredients');
+  }
+
+  /**
+   * Add food item to a basket
+   *
+   * @param {Types.ObjectId | string} basketId - The id of the item to be updated
+   * @param {Types.ObjectId | string} item - The item to add to the basket
+   * @param {name: string, quantity: number, unit: string} - The information of the item to be added
+   * @return {Promise<HydratedDocument<Basket>>} - The newly updated basket
+   */
+   static async addToBasket(basketId: Types.ObjectId | string, item: Types.ObjectId | string, itemInfo: {name: string, quantity: number, unit: string}): Promise<HydratedDocument<Basket>> {
+    const basket = await BasketModel.findOne({_id: basketId});
+
+    for (const existingIngredient of basket.ingredients) {
+      const existingIngredient_ = await FoodItemCollection.findOne(existingIngredient._id);
+      if (existingIngredient_.name === itemInfo.name && existingIngredient_.unit === itemInfo.unit) {
+        await FoodItemCollection.updateOne(existingIngredient_._id, itemInfo.name, existingIngredient_.quantity + itemInfo.quantity, itemInfo.unit);
+        await basket.save();
+        return (await basket.populate('owner')).populate('ingredients');
+      }
+    }
+    basket.ingredients.push(item as Types.ObjectId);
     
     await basket.save();
     return (await basket.populate('owner')).populate('ingredients');

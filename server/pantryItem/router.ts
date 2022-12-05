@@ -61,7 +61,8 @@ router.get(
  * @param {string} unit - The type of unit for the item
  * @param {string | null} expiration - The expiration date as a string for the item, if one is given
  * @param {number} remindDays - The date to send a reminder for this item, if one is given
- * @return {PantryItemResponse} - The created pantry item
+ * @param {Array<Types.ObjectId | string>} foodItems - The food added to be added to pantry
+ * @return {PantryItemResponse | PantryItemResponse[]} - The created pantry item(s)
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the item name is empty or a stream of empty spaces
  * @throws {405} - If an invalid item quantity (e.g. negative) is given 
@@ -81,14 +82,29 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const item = await PantryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
-    const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
-    const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
-    await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
-    res.status(201).json({
-      message: 'Your pantry item was created successfully.',
-      pantryItem: util.constructPantryItemResponse(item),
-    });
+    if (req.body.foodItems) {
+      const pantryItems = [];
+      for (const foodItem of req.body.foodItems) {
+        const item = await PantryItemCollection.addOne(userId, foodItem.name, foodItem.quantity, foodItem.unit, null);
+        const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+        const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
+        await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
+        pantryItems.push(item)
+      }
+      res.status(201).json({
+        message: 'Your pantry items were created successfully.',
+        pantryItems: pantryItems.map(util.constructPantryItemResponse)
+      });
+    } else {
+      const item = await PantryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
+      const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+      const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
+      await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
+      res.status(201).json({
+        message: 'Your pantry item was created successfully.',
+        pantryItem: util.constructPantryItemResponse(item),
+      });
+    }
   }
 );
 

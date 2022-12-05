@@ -125,20 +125,41 @@
                   type="checkbox" 
                   id="newBasket"
                   @input="field.value = $event.target.value"
-                  @click="field.newBasket = !field.newBasket"
-                  :checked="field.newBasket"
+                  @click="addNewBasket = !addNewBasket"
+                  :checked="addNewBasket"
                 >
                 <label class="form-check-label form-inline" for="newBasket">
                   <i>Create a new basket: </i>
                   <input 
                     class="form-control form-control-sm mx-3" 
                     type="text" 
-                    :value="field.newBasketName"
                     placeholder="New basket name" 
-                    :required="field.newBasket"
-                    @input="field.newBasketName = $event.target.value"
+                    :required="addNewBasket"
+                    @input="newBasketName = $event.target.value"
                   >
                 </label>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="field.type === 'foodItems'" >
+            <div class="form-check">
+              <div v-for="item in field.foodItems" :key="item" class="row">
+                <div class="col-3">
+                  <input class="form-check-input" type="checkbox" :value="item.item" :id="item.item" v-model="checkedFoodItems"
+                  :checked="checkedFoodItems.includes(item.item)" @input="field.value = $event.target.value">
+                  <label class="form-check-label">
+                    {{ item.item.name }}:
+                  </label>
+                </div>
+                <div class="col-7">
+                  <input class="form-control" type="number" :value="item.quantity"
+                    :placeholder="field.placeholder" min="1" @input="item.quantity = $event.target.value" required>
+                </div>
+                <div class="col-2">
+                  <label class="form-check-label">
+                  {{ item.item.unit }}
+                </label>
+                </div>
               </div>
             </div>
           </div>
@@ -197,6 +218,11 @@ export default {
       visible: true,
       isFilterForm: false,
       collapsed: true,
+      addToBasket: false,
+      addNewBasket: false,
+      newBasketName: '',
+      checkedFoodItems: [],
+      addFromBasket: false,
     };
   },
   created() {
@@ -342,6 +368,43 @@ export default {
           }
         }
       }
+
+      // checks to see if any baskets are chosen when adding to basket
+      if (this.addToBasket) {
+        if (this.checkedBaskets.length === 0 && !this.addNewBasket) {
+          const emptyFieldMessage = 'Please choose a basket!';
+            this.$store.commit('alert', {
+              message: emptyFieldMessage,
+              status: 'danger'
+            });
+            return;
+        }
+      }
+
+      // checks to for duplicate basket names
+      if (this.addNewBasket) {
+        for (const basket of this.$store.state.baskets) {
+          if (this.newBasketName && this.newBasketName === basket.name) {
+            const duplicateNameMessage = 'A basket with this name already exists!';
+            this.$store.commit('alert', {
+              message: duplicateNameMessage,
+              status: 'danger'
+            });
+            return;
+          }
+        }
+      }
+
+      if (this.addFromBasket) {
+        if (this.checkedFoodItems.length === 0) {
+          const emptyFieldMessage = 'Please choose an item!';
+            this.$store.commit('alert', {
+              message: emptyFieldMessage,
+              status: 'danger'
+          });
+          return;
+        }
+      }
       
       /**
         * Submits a form with the specified options from data().
@@ -387,15 +450,24 @@ export default {
               field.value = 3;
               return [id, value];
             } else if (type === 'baskets') {
-              const { id, newBasket, newBasketName } = field;
+              const { id } = field;
               const baskets = this.checkedBaskets;
-              const name = newBasket ? newBasketName : null;
+              const name = this.addNewBasket ? this.newBasketName : null;
 
               this.checkedBaskets = [];
-              field.newBasket = false;
-              field.newBasketName = '';
+              // field.newBasket = false;
+              // field.newBasketName = '';
 
               return [id, { new: name, baskets: baskets }];
+            } else if (type === 'foodItems') {
+              const { id, foodItems } = field;
+              const checkedFoodItems = [];
+              for (const foodItem of foodItems) {
+                if (this.checkedFoodItems.includes(foodItem.item)) {
+                  checkedFoodItems.push({name: foodItem.item.name, quantity: foodItem.quantity, unit: foodItem.item.unit})
+                }
+              }
+              return [id, checkedFoodItems];
             } else {
               const { id, value } = field;
               field.value = '';

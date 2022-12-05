@@ -64,6 +64,7 @@
         :pantryItem=this.pantryItem 
         :visible="addToBasket"
         :reminder=this.reminder
+        :isPantry=this.isPantry
       />
     </section>
     <section>
@@ -80,7 +81,7 @@
 <script>
 import EditPantryItemForm from '@/components/PantryItem/EditPantryItemForm.vue';
 import AddToPantryForm from '@/components/PantryItem/AddToPantryForm.vue';
-import AddToBasketForm from '@/components/PantryItem/AddToBasketForm.vue';
+import AddToBasketForm from '@/components/common/AddToBasketForm.vue';
 
 export default {
   name: 'PantryItemComponent',

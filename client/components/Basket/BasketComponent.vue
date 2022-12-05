@@ -4,55 +4,25 @@
 <template>
   <article class="border rounded my-2 p-4">
     <section>
-      <button
-        v-if="!editing" 
-        class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="editing = true"
-      >
-        Edit
-      </button>
-      <button 
-        v-else
-        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
-        @click="editing = false"
-      >
-        Stop Editing
-      </button>
-      <button 
-        class="btn btn-danger btn-sm my-2 bi bi-trash"
-        @click="deleteItem"
-      >
-        Delete
-      </button>
-      <div>
-        <b>Name:</b> {{ basket.name }} <br>
-        <b>Items:</b> 
-          <ul class="my-2">
-            <li 
-              v-for="ingredient in basket.ingredients"
-              :key="ingredient.id"
-            >
-            {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
-          </li>
-        </ul>
+      <div class="row">
+        <div class="col-9">
+          <router-link :to="'/baskets/' + basket._id">
+            <h4>{{basket.name}}</h4>
+          </router-link>
+        </div>
       </div>
-    </section>
-    <section>
-      <EditBasketForm 
-        class="mt-4"
-        :basket=this.basket 
-        :visible="editing"
-      />
+      <b>Items: </b> {{ basket.ingredients.map(i => i.name).join(', ') }}
     </section>
   </article>
 </template>
 
 <script>
 import EditBasketForm from '@/components/Basket/EditBasketForm.vue';
+import AddFromBasketToPantryForm from '@/components/Basket/AddFromBasketToPantryForm.vue';
 
 export default {
   name: 'BasketComponent',
-  components: {EditBasketForm},
+  components: {EditBasketForm, AddFromBasketToPantryForm},
   props: {
     // Data from the stored item
     basket: {
@@ -71,19 +41,8 @@ export default {
     };
   },
   methods: {
-    deleteItem() {
-      /**
-       * Deletes this item.
-       */
-      const params = {
-        method: 'DELETE',
-        callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted item', status: 'success'
-          });
-        }
-      };
-      this.request(params);
+    toggleEditing() {
+      this.editing = !this.editing;
     },
     async request(params) {
       /**
@@ -112,7 +71,7 @@ export default {
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        this.$store.commit('alert', { message: e, status: 'danger'});
       }
     }
   }

@@ -54,7 +54,8 @@
             <section v-if="addToPantry">
                 <AddFromBasketToPantryForm 
                     class="mt-4"
-                    :basket=basket   
+                    :basket=basket 
+                    @refreshBasketPage="toggleAddToPantry"  
                 />
             </section>
         </main>   

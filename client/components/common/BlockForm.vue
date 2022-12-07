@@ -464,7 +464,7 @@ export default {
               const checkedFoodItems = [];
               for (const foodItem of foodItems) {
                 if (this.checkedFoodItems.includes(foodItem.item)) {
-                  checkedFoodItems.push({name: foodItem.item.name, quantity: foodItem.quantity, unit: foodItem.item.unit})
+                  checkedFoodItems.push({name: foodItem.item.name, quantity: parseInt(foodItem.quantity), unit: foodItem.item.unit})
                 }
               }
               return [id, checkedFoodItems];

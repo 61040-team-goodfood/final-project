@@ -94,7 +94,7 @@ class BasketCollection {
    *
    * @param {Types.ObjectId | string} basketId - The id of the item to be updated
    * @param {Types.ObjectId | string} item - The item to add to the basket
-   * @param {name: string, quantity: number, unit: string} - The information of the item to be added
+   * @param {name: string, quantity: number, unit: string} itemInfo - The information of the item to be added
    * @return {Promise<HydratedDocument<Basket>>} - The newly updated basket
    */
    static async addToBasket(basketId: Types.ObjectId | string, item: Types.ObjectId | string, itemInfo: {name: string, quantity: number, unit: string}): Promise<HydratedDocument<Basket>> {

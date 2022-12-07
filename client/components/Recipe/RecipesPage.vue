@@ -43,7 +43,15 @@
     name: 'RecipesPage',
     components: {RecipeComponent, AddRecipeForm, FilterRecipeForm},
     mounted() {
-      this.$store.commit('updateFilter', { keyword: null, ingredients: [] });
+      const filter = {
+        keyword: null,
+        ingredients: []
+      }
+
+      if (this.$route.query.keyword) filter.keyword = this.$route.query.keyword;
+      if (this.$route.query.ingredients) filter.ingredients = this.$route.query.ingredients;
+
+      this.$store.commit('updateFilter', filter);
       this.$store.commit('refreshRecipes');
     }
   };

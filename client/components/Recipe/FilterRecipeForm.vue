@@ -13,7 +13,7 @@ export default {
       isFilterForm: true,
       fields: [
         { type: 'text', id: 'keyword', label: 'Keyword', value: '', placeholder: 'Enter keyword...' }, 
-        { type: 'collection', id: 'ingredients', label: 'Ingredients', value: '', placeholder: 'Type ingredient and press enter...', collection: [] },
+        { type: 'collection', id: 'ingredients', label: 'Ingredients', value: '', placeholder: 'Type ingredient and hit enter...', collection: [] },
       ],
       title: 'Filter Recipes',
       refreshRecipes: true,

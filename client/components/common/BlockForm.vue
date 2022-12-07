@@ -25,11 +25,22 @@
             :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
 
           <div v-else-if="field.type === 'collection'">
-            <input class="form-control" :name="field.id" :value="field.value" :placeholder="field.placeholder"
-              @input="field.value = $event.target.value" @keydown.enter.prevent="{
-                addItem(field.collection, $event.target.value);
-                field.value = '';
-              }">
+            <div class="input-group">
+              <input class="form-control" :name="field.id" :value="field.value" :placeholder="field.placeholder"
+                @input="field.value = $event.target.value" @keydown.enter.prevent="{
+                  addItem(field.collection, $event.target.value);
+                  field.value = '';
+                }">
+              <div class="input-group-append">
+                <button
+                  type="button"
+                  class="btn btn-info px-4"
+                  @click.prevent="addItem(field.collection, field.value)"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
             <span v-for="(item, index) in field.collection" :key="item"
               class="badge badge-pill badge-secondary px-2 mx-1 py-1">
               {{ item }}
@@ -76,15 +87,15 @@
           </div>
           <div v-else-if="field.type === 'ingredients'">
             <div class="row">
-              <div class="col">
+              <div class="col-4 pr-0">
                 <input class="form-control" type="text" :name="field.id" :value="field.name" placeholder="Name"
                   @input="field.name = $event.target.value">
               </div>
-              <div class="col-3">
+              <div class="col-3 pr-0">
                 <input class="form-control" type="number" :name="field.id" :value="field.quantity" placeholder="Quantity"
                   min="1" @input="field.quantity = $event.target.value">
               </div>
-              <div class="col-3">
+              <div class="col-3 pr-0">
                 <select class="form-control" @change="field.unit = $event.target.value">
                   <option value="" :selected="field.unit === ''" disabled>Select a unit</option>
                   <option v-for="unit in $store.state.units" :key="unit" :value="unit" :selected="field.unit === unit">
@@ -92,8 +103,8 @@
                   </option>
                 </select>
               </div>
-              <div class="col-md-auto">
-                <button class="btn btn-info" @click.prevent="{
+              <div class="col-2">
+                <button class="btn btn-info px-4" @click.prevent="{
                   addIngredient(field.ingredients, field.name, field.quantity, field.unit);
                   field.name = '';
                   field.quantity = '';

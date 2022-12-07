@@ -118,7 +118,7 @@ router.delete(
  * @param {string} name - The given name for the item
  * @param {{value: number, unit: string}} quantity - The number of items and its unit
  * @param {{new: string, baskets: Array<Object>}} baskets - The baskets
- * @param {Array<{name: string, quantity: number, unit: string}>} foodItems - The food added to be added to pantry
+ * @param {Array<{name: string, quantity: number, unit: string}>} foodItems - The food items to be added to pantry
  * @return {BasketResponse[]} - the updated baskets
  * @throws {403} - if the user is not logged in
  */

@@ -302,6 +302,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `name` _{string}_ - The given name of the item
 - `quantity` _{value: number, unit: string}_ - The number of items and its unit
 - `baskets` _{new: string, baskets: Array<{Object}>}_ The baskets
+- `foodItems` _{Array<{name: string, quantity: number, unit: string}>}_ The food items to be added to pantry
 
 **Returns**
 

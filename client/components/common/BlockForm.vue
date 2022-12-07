@@ -111,7 +111,7 @@
             </ul>
           </div>
           <div v-else-if="field.type === 'baskets'" >
-            <div class="form-check">
+            <div class="form-check mx-3">
               <div v-for="basket in $store.state.baskets" :key="basket">
                 <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
                   :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
@@ -143,15 +143,15 @@
           </div>
           <div v-else-if="field.type === 'foodItems'" >
             <div class="form-check">
-              <div v-for="item in field.foodItems" :key="item" class="row">
-                <div class="col-3">
+              <div v-for="item in field.foodItems" :key="item" class="row mb-1">
+                <div class="col-3 mx-3">
                   <input class="form-check-input" type="checkbox" :value="item.item" :id="item.item" v-model="checkedFoodItems"
                   :checked="checkedFoodItems.includes(item.item)" @input="field.value = $event.target.value">
                   <label class="form-check-label">
                     {{ item.item.name }}:
                   </label>
                 </div>
-                <div class="col-7">
+                <div class="col-6">
                   <input class="form-control" type="number" :value="item.quantity"
                     :placeholder="field.placeholder" min="1" @input="item.quantity = $event.target.value" required>
                 </div>

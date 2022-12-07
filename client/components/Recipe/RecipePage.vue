@@ -34,14 +34,14 @@
                         {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
                     </li>
                 </ul>
-            </div>
-            <section v-if="addToBasket">
+                <section v-if="addToBasket">
                 <AddFromRecipeToBasketForm
                     class="mt-4"
                     :recipe=recipe
                     @refreshRecipePage="addToBasket = !addToBasket"
                 />
             </section>
+            </div>
             <div class="border rounded my-3 px-4 py-2">
                 <h4 class="my-2">Instructions</h4>
                 {{ recipe.instructions }}
@@ -149,5 +149,9 @@ header {
 
 button {
   height: max-content;
+}
+
+.right {
+  float: right;
 }
 </style>

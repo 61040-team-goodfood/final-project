@@ -10,6 +10,7 @@ import RecipePage from './components/Recipe/RecipePage.vue'
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
 import HomePage from './components/common/HomePage.vue';
+import HelpPage from './components/common/HelpPage.vue';
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,7 @@ const routes = [
   { path: '/recipes/:recipeId', name: 'Recipe', component: RecipePage },
   { path: '/account', name: 'Account', component: AccountPage },
   { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/help', name: 'Help', component: HelpPage },
   { path: '*', name: 'Not Found', component: NotFound }
 ];
 

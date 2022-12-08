@@ -11,7 +11,6 @@ const store = new Vuex.Store({
   state: {
     pantryItems: [], // All pantryItems created in the app
     baskets: [], // All baskets in the app
-    recipes: [], // All recipes in the app
     reminders: {}, // All reminders in the app
     numReminders: 0, // The number of active reminders for the logged in user in the app
     username: null, // Username of the logged in user
@@ -64,12 +63,12 @@ const store = new Vuex.Store({
       state.keyword = filter.keyword;
       state.ingredients = [...filter.ingredients];
     },
-    async refreshPantryItems(state, inPantry) {
+    async refreshPantryItems(state) {
       /**
        * Request the server for the currently available pantry items.
        * @param inPantry - boolean denoting whether to filter items by currently in pantry
        */
-      const url = `/api/pantryItems?status=${inPantry}`;
+      const url = `/api/pantryItems`;
       const res = await fetch(url).then(async r => r.json());
       state.pantryItems = res;
     },
@@ -80,17 +79,6 @@ const store = new Vuex.Store({
       const url = `/api/baskets`;
       const res = await fetch(url).then(async r => r.json());
       state.baskets = res;
-    },
-    async refreshRecipes(state) {
-      /**
-       * Request the server for the currently available recipes.
-       */
-
-      const keyword = state.keyword ? state.keyword : '';
-      const ingredients = state.ingredients ? state.ingredients.join(',') : '';
-      const url = `/api/recipes?keyword=${keyword}&ingredients=${ingredients}`;
-      const res = await fetch(url).then(async r => r.json());
-      state.recipes = res;
     },
     async refreshReminders(state) {
       /**

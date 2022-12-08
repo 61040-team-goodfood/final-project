@@ -16,7 +16,6 @@ export default {
         { type: 'collection', id: 'ingredients', label: 'Ingredients', value: '', placeholder: 'Type ingredient and hit enter...', collection: [] },
       ],
       title: 'Filter Recipes',
-      refreshRecipes: true,
     };
   }
 };

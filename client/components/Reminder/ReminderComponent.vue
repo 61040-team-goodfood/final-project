@@ -5,10 +5,22 @@
   <article class="border rounded my-2 p-4">
     <section>
       <button 
-        class="btn btn-danger btn-sm my-2 bi bi-x-octagon" 
+        class="btn btn-danger btn-sm my-2 bi bi-x-circle" 
         @click="dismissReminder">
         Dismiss
       </button>
+      <router-link
+        type="button"
+        class="btn btn-info btn-sm right"
+        :to="{
+          path: 'recipes',
+          query: {
+            ingredients: [reminder.item.name]
+          }
+        }"
+      >
+        See Recipes
+      </router-link>
       <div>
         <b>Name:</b> {{ reminder.item.name }} <br>
         <b>Quantity:</b> {{ reminder.item.quantity }} {{ reminder.item.unit }}
@@ -18,7 +30,6 @@
       </div>
       <div v-if="reminder.item.expirationDate">
         <b>Expires on:</b> {{ reminder.item.expirationDate }} <br>
-        <b>Reminder on:</b> {{ reminder.date }}
       </div>
     </section>
   </article>

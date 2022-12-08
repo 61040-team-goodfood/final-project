@@ -5,7 +5,8 @@
         <h2 class="display-4">Welcome @{{ $store.state.username }}!</h2>
       </header>
       <header>
-        <h3>Reminders</h3>
+        <h3 v-if="$store.state.numReminders">Reminders</h3>
+        <h3 v-else><i>You currently have no reminders.</i></h3>
       </header>
       <section 
         v-if="$store.state.numReminders">

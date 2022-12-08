@@ -132,7 +132,7 @@ router.delete(
     const basketsToUpdate = req.body.baskets.baskets;
     const baskets = [];
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const items = req.body.foodItems ? req.body.foodItems : [{name: req.body.name, quantity: parseInt(req.body.quantity.value), unit: req.body.quantity.unit}]
+    const items = req.body.foodItems ? req.body.foodItems : [{name: req.body.name, quantity: parseFloat(req.body.quantity.value), unit: req.body.quantity.unit}]
     if (newBasket) {
       const foodItems = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
         const ingredient = await FoodItemCollection.addOne(name, quantity, unit);

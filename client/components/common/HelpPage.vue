@@ -20,7 +20,7 @@
           <p>Both items in the pantry and in the deleted items page also has an option to add to baskets:</p>
           <img src="@/public/addToBaskets.png" style="max-width: 80%"/>
           <p>Baskets are a way of keeping track of different sets of items you want to buy. On the baskets page, you can see the list of baskets as well as the items in each:</p>
-          <img src="@/public/addToBaskets.png" style="max-width: 80%"/>
+          <img src="@/public/basketsPage.png" style="max-width: 80%"/>
           <p>When creating baskets, you first need to name it and optionally, populate it with items, one at a time:</p>
           <img src="@/public/createBasket.png" style="max-width: 80%"/>
           <p>Once on an individual baskets page, you can modify/delete the basket. When you've bought items in a basket, you can also express add it to the pantry:</p>

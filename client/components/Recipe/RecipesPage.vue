@@ -9,7 +9,7 @@
     <br>
     <div class="font-italic">
       <h2 v-if="$store.state.keyword && $store.state.ingredients.length">
-        Displaying recipes with keyword {{ $store.state.keyword }} and ingredient(s) {{ ingredients.join(',') }}
+        Displaying recipes with keyword {{ $store.state.keyword }} and ingredient(s) {{ $store.state.ingredients.join(',') }}
       </h2>
       <h2 v-else-if="$store.state.keyword">
         Displaying recipes with keyword {{ $store.state.keyword }}

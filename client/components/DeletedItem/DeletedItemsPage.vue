@@ -2,7 +2,8 @@
 
 <template>
   <main>
-    <h2 class="display-4">History</h2>
+    <h1>Deleted Items</h1>
+    <p>View all your deleted pantry items here.</p>
     <section
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false').length"
     >

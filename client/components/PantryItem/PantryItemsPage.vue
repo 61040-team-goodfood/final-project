@@ -4,7 +4,8 @@
   <main>
     <AddPantryItemForm />
     <hr>
-    <h2 class="display-4">My Pantry</h2>
+    <h1>My Pantry</h1>
+    <p>Keep track and manage the items in your pantry here.</p>
     <section
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').length"
     >

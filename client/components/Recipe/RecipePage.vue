@@ -5,7 +5,7 @@
         </div>  
         <main v-else>
             <header>
-                <span class="display-4">{{ recipe.name }}</span>
+                <h1>{{ recipe.name }}</h1>
                 <button
                     v-if="$store.state.username === recipe.author" 
                     class="btn btn-danger my-2 bi bi-trash" 
@@ -18,7 +18,15 @@
             <p class="text-secondary"><i>Cook Time:</i> {{ recipe.cookTime }} minutes</p>
 
             <div class="border rounded my-3 px-4 py-2">
-                <h4 class="my-2">Ingredients</h4>
+                <div class="row">
+                    <h4 class="my-2 col-10">Ingredients</h4>
+                    <button 
+                        class="btn btn-info btn-sm mr-2 my-2 right"
+                        @click="addToBasket = !addToBasket"
+                    >
+                        Add to Baskets
+                    </button>
+                </div>
                 <ul>
                     <li
                         v-for="ingredient in recipe.ingredients"
@@ -26,6 +34,13 @@
                         {{ ingredient.name }} × {{ ingredient.quantity }} {{ ingredient.unit }}
                     </li>
                 </ul>
+                <section v-if="addToBasket">
+                <AddFromRecipeToBasketForm
+                    class="mt-4"
+                    :recipe=recipe
+                    @refreshRecipePage="addToBasket = !addToBasket"
+                />
+            </section>
             </div>
             <div class="border rounded my-3 px-4 py-2">
                 <h4 class="my-2">Instructions</h4>
@@ -36,12 +51,16 @@
 </template>
 
 <script>
+import AddFromRecipeToBasketForm from '@/components/Recipe/AddFromRecipeToBasketForm.vue';
+
 export default {
     name: 'RecipePage',
+    components: {AddFromRecipeToBasketForm},
     data() {
         return {
             fetching: true,
             recipe: null,
+            addToBasket: false,
         }
     },
     watch: {
@@ -53,6 +72,9 @@ export default {
         await this.fetchData();
     },
     methods: {
+        // toggleAddToBasket() {
+        //   this.addToBasket = !this.addToBasket;
+        // },
         async fetchData() {
             this.fetching = true;
 
@@ -127,5 +149,9 @@ header {
 
 button {
   height: max-content;
+}
+
+.right {
+  float: right;
 }
 </style>

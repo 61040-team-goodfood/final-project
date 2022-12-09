@@ -37,10 +37,10 @@
       <li class="nav-item mb-3" v-if="$store.state.username">
         <router-link 
           class="text-white"
-          to="/history"
+          to="/deleteditems"
         >
           <i class="bi bi-clock mx-2"></i>
-          <span class="fs-4">History</span>
+          <span class="fs-4">Deleted Items</span>
         </router-link>
       </li>
       <li class="nav-item mb-3" v-if="$store.state.username">
@@ -59,6 +59,15 @@
         >
           <i class="bi bi-book mx-2"></i>
           <span class="fs-4">Recipes</span>
+        </router-link>
+      </li>
+      <li class="nav-item mb-3">
+        <router-link 
+          class="text-white"
+          to="/help"
+        >
+        <i class="bi bi-info-circle mx-2"></i>
+          <span class="fs-4">Help</span>
         </router-link>
       </li>
       <li class="nav-item mb-3" v-if="$store.state.username">

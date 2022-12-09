@@ -5,7 +5,7 @@
         </div>  
         <main v-else>
             <header>
-                <span class="display-4">{{ basket.name }}</span>
+                <h1>{{ basket.name }}</h1>
                 <section>
                     <button
                         class="btn btn-danger my-2 bi bi-trash right" 

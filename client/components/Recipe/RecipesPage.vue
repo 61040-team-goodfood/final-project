@@ -4,12 +4,13 @@
   <main>
     <AddRecipeForm />
     <hr>
-    <h2 class="display-4">Recipes</h2>
+    <h1>Recipes</h1>
+      <p>Contribute to and explore recipes uploaded by users here.</p>
     <FilterRecipeForm />
     <br>
     <div class="font-italic">
       <h2 v-if="$store.state.keyword && $store.state.ingredients.length">
-        Displaying recipes with keyword {{ $store.state.keyword }} and ingredient(s) {{ $store.state.ingredients.join(',') }}
+        Displaying recipes with keyword {{ $store.state.keyword }} and ingredient(s) {{ $store.state.ingredients.join(', ') }}
       </h2>
       <h2 v-else-if="$store.state.keyword">
         Displaying recipes with keyword {{ $store.state.keyword }}
@@ -54,7 +55,7 @@ export default {
     }
 
     if (this.$route.query.keyword) filter.keyword = this.$route.query.keyword;
-    if (this.$route.query.ingredients) filter.ingredients = this.$route.query.ingredients;
+    if (this.$route.query.ingredients) filter.ingredients = [this.$route.query.ingredients];
 
     this.$store.commit('updateFilter', filter);
     await this.fetchRecipes();

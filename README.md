@@ -16,7 +16,7 @@ The project is structured as follows:
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
     - `PantryItem/` contains the page and components related to PantryItem
-    - `History/` contains the history page displaying all previously added items
+    - `DeletedItem/` contains the deleted items page displaying all items deleted from pantry
     - `Basket/` contains the baskets page displaying 
     all of the user's baskets
     - `Recipe/` contains the the pages and components related to Recipe
@@ -302,6 +302,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `name` _{string}_ - The given name of the item
 - `quantity` _{value: number, unit: string}_ - The number of items and its unit
 - `baskets` _{new: string, baskets: Array<{Object}>}_ The baskets
+- `foodItems` _{Array<{name: string, quantity: number, unit: string}>}_ The food items to be added to pantry
 
 **Returns**
 

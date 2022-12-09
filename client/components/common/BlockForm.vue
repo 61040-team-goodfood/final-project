@@ -11,6 +11,7 @@
       <button @click="collapsed = !collapsed" class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" :data-target="('#' + title)" aria-expanded="false">
         <h3>
           {{ title }}
+          <i v-if="tooltip" class="bi bi-info-circle" data-toggle="tooltip" data-placement="right" :title="tooltip"></i>
           <i v-if="collapsed" class="bi bi-caret-left-fill right"></i>
           <i v-else class="bi bi-caret-down-fill right"></i>
         </h3>
@@ -20,7 +21,11 @@
     <section v-bind:class="{'collapse show': !collapsible, 'collapse': collapsible}" :id="title">
       <article v-if="fields.length">
         <div v-for="field in fields" :key="field.id" class="mb-2">
-          <label :for="field.id"><i>{{ field.label }}:</i></label>
+          <span v-if="field.tooltip">
+            <label :for="field.id"><i>{{ field.label }}:</i></label>
+            <i class="bi bi-info-circle mx-2" data-toggle="tooltip" :title="field.tooltip"></i>
+          </span>
+          <label v-else :for="field.id"><i>{{ field.label }}:</i></label>
           <textarea v-if="field.type === 'content'" class="form-control" :name="field.id" :value="field.value"
             :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
 
@@ -50,7 +55,7 @@
           <div v-else-if="field.type === 'quantity'" class="row">
             <div class="col-6">
               <input class="form-control" type="number" :name="field.id" :value="field.value"
-                :placeholder="field.placeholder" min="1" @input="field.value = $event.target.value" required>
+                :placeholder="field.placeholder" min="0.01" step="0.01" @input="field.value = $event.target.value" required>
             </div>
             <div class="col-6">
               <select class="form-control" @change="field.unit = $event.target.value" required>
@@ -93,7 +98,7 @@
               </div>
               <div class="col-3 pr-0">
                 <input class="form-control" type="number" :name="field.id" :value="field.quantity" placeholder="Quantity"
-                  min="1" @input="field.quantity = $event.target.value">
+                  min="0.01" step="0.01" @input="field.quantity = $event.target.value">
               </div>
               <div class="col-3 pr-0">
                 <select class="form-control" @change="field.unit = $event.target.value">
@@ -122,7 +127,7 @@
             </ul>
           </div>
           <div v-else-if="field.type === 'baskets'" >
-            <div class="form-check">
+            <div class="form-check mx-3">
               <div v-for="basket in $store.state.baskets" :key="basket">
                 <input class="form-check-input" type="checkbox" :value="basket" :id="basket" v-model="checkedBaskets"
                   :checked="checkedBaskets.includes(basket)" @input="field.value = $event.target.value">
@@ -154,17 +159,17 @@
           </div>
           <div v-else-if="field.type === 'foodItems'" >
             <div class="form-check">
-              <div v-for="item in field.foodItems" :key="item" class="row">
-                <div class="col-3">
+              <div v-for="item in field.foodItems" :key="item" class="row mb-1">
+                <div class="col-3 mx-3">
                   <input class="form-check-input" type="checkbox" :value="item.item" :id="item.item" v-model="checkedFoodItems"
                   :checked="checkedFoodItems.includes(item.item)" @input="field.value = $event.target.value">
                   <label class="form-check-label">
                     {{ item.item.name }}:
                   </label>
                 </div>
-                <div class="col-7">
+                <div class="col-6">
                   <input class="form-control" type="number" :value="item.quantity"
-                    :placeholder="field.placeholder" min="1" @input="item.quantity = $event.target.value" required>
+                    :placeholder="field.placeholder" min="0.01" step="0.01" @input="item.quantity = $event.target.value" required>
                 </div>
                 <div class="col-2">
                   <label class="form-check-label">
@@ -475,7 +480,7 @@ export default {
               const checkedFoodItems = [];
               for (const foodItem of foodItems) {
                 if (this.checkedFoodItems.includes(foodItem.item)) {
-                  checkedFoodItems.push({name: foodItem.item.name, quantity: foodItem.quantity, unit: foodItem.item.unit})
+                  checkedFoodItems.push({name: foodItem.item.name, quantity: parseFloat(foodItem.quantity), unit: foodItem.item.unit})
                 }
               }
               return [id, checkedFoodItems];

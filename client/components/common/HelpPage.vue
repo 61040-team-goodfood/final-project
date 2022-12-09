@@ -10,9 +10,9 @@
           <p>We provide users with a convenient, expedited way to keep track of all their groceries. On the Pantry page, you can add items to your pantry:</p>
           <img src="@/public/addPantryItem.png" style="max-width: 80%"/>
           <p>When adding items to the pantry, you only need to specify the item name, quantity and unit. If you choose to add an expiration date, you will be allowed to decide when to be reminded about the item. The default date is three days before the expiration date. Else, if no expiration date is provided, we will remind you about the item a month later. The reminders will appear on the Home page once logged in along with a badge indicating how many reminders you have. You will have the option to dismiss the reminder or view recipes that can help you use up the item:</p>
-          <img src="@/public/pantryPage.png" style="max-width: 80%"/>
-          <p>After adding the items, you will see them listed in the Pantry page, where you can edit or delete the items as they are being used: </p>
           <img src="@/public/reminders.png" style="max-width: 80%"/>
+          <p>After adding the items, you will see them listed in the Pantry page, where you can edit or delete the items as they are being used: </p>
+          <img src="@/public/pantryPage.png" style="max-width: 80%"/>
           <p>Once the items are deleted from the pantry, they will appear on the Deleted Items page:</p>
           <img src="@/public/deletedItems.png" style="max-width: 80%"/>
           <p>This page provides an easy way to add items back into the pantry:</p>

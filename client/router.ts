@@ -9,7 +9,7 @@ import RecipesPage from './components/Recipe/RecipesPage.vue';
 import RecipePage from './components/Recipe/RecipePage.vue'
 import LoginPage from './components/Login/LoginPage.vue';
 import HomePage from './components/common/HomePage.vue';
-import AboutPage from './components/common/AboutPage.vue';
+import HelpPage from './components/common/HelpPage.vue';
 import NotFound from './NotFound.vue';
 
 Vue.use(VueRouter);
@@ -23,8 +23,8 @@ const routes = [
   { path: '/recipes', name: 'Recipes', component: RecipesPage},
   { path: '/recipes/:recipeId', name: 'Recipe', component: RecipePage },
   { path: '/account', name: 'Account', component: AccountPage },
-  { path: '/about', name: 'About', component: AboutPage },
   { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/help', name: 'Help', component: HelpPage },
   { path: '*', name: 'Not Found', component: NotFound }
 ];
 

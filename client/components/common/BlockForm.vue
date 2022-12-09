@@ -11,6 +11,7 @@
       <button @click="collapsed = !collapsed" class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" :data-target="('#' + title)" aria-expanded="false">
         <h3>
           {{ title }}
+          <i v-if="tooltip" class="bi bi-info-circle" data-toggle="tooltip" data-placement="right" :title="tooltip"></i>
           <i v-if="collapsed" class="bi bi-caret-left-fill right"></i>
           <i v-else class="bi bi-caret-down-fill right"></i>
         </h3>
@@ -20,7 +21,11 @@
     <section v-bind:class="{'collapse show': !collapsible, 'collapse': collapsible}" :id="title">
       <article v-if="fields.length">
         <div v-for="field in fields" :key="field.id" class="mb-2">
-          <label :for="field.id"><i>{{ field.label }}:</i></label>
+          <span v-if="field.tooltip">
+            <label :for="field.id"><i>{{ field.label }}:</i></label>
+            <i class="bi bi-info-circle mx-2" data-toggle="tooltip" :title="field.tooltip"></i>
+          </span>
+          <label v-else :for="field.id"><i>{{ field.label }}:</i></label>
           <textarea v-if="field.type === 'content'" class="form-control" :name="field.id" :value="field.value"
             :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
 

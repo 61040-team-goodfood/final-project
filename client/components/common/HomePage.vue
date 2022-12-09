@@ -2,7 +2,7 @@
   <main>
     <section v-if="$store.state.username">
       <header>
-        <h2 class="display-4">Welcome @{{ $store.state.username }}!</h2>
+        <h1>Welcome @{{ $store.state.username }}!</h1>
       </header>
       <header>
         <h3 v-if="$store.state.numReminders">Reminders</h3>

@@ -16,7 +16,7 @@ The project is structured as follows:
   - `components/` contains the components of the frontend
     - `Account/` contains the account settings page and the related forms
     - `PantryItem/` contains the page and components related to PantryItem
-    - `History/` contains the history page displaying all previously added items
+    - `DeletedItem/` contains the deleted items page displaying all items deleted from pantry
     - `Basket/` contains the baskets page displaying 
     all of the user's baskets
     - `Recipe/` contains the the pages and components related to Recipe

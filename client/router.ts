@@ -4,12 +4,13 @@ import AccountPage from './components/Account/AccountPage.vue';
 import PantryItemsPage from './components/PantryItem/PantryItemsPage.vue';
 import BasketsPage from './components/Basket/BasketsPage.vue';
 import BasketPage from './components/Basket/BasketPage.vue';
-import HistoryPage from './components/History/HistoryPage.vue';
+import DeletedItemsPage from './components/DeletedItem/DeletedItemsPage.vue';
 import RecipesPage from './components/Recipe/RecipesPage.vue';
 import RecipePage from './components/Recipe/RecipePage.vue'
 import LoginPage from './components/Login/LoginPage.vue';
-import NotFound from './NotFound.vue';
 import HomePage from './components/common/HomePage.vue';
+import AboutPage from './components/common/AboutPage.vue';
+import NotFound from './NotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -18,10 +19,11 @@ const routes = [
   { path: '/pantry', name: 'My Pantry', component: PantryItemsPage},
   {path: '/baskets', name: 'My Baskets', component: BasketsPage},
   { path: '/baskets/:basketId', name: 'Basket', component: BasketPage },
-  { path: '/history', name: 'History', component: HistoryPage},
+  { path: '/deleteditems', name: 'Deleted Items', component: DeletedItemsPage},
   { path: '/recipes', name: 'Recipes', component: RecipesPage},
   { path: '/recipes/:recipeId', name: 'Recipe', component: RecipePage },
   { path: '/account', name: 'Account', component: AccountPage },
+  { path: '/about', name: 'About', component: AboutPage },
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '*', name: 'Not Found', component: NotFound }
 ];

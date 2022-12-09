@@ -5,7 +5,7 @@
   <main>
     <section>
       <header>
-        <h2>Account Settings</h2>
+        <h1>Account Settings</h1>
       </header>
       <div class="row">
         <div class="col-6">
@@ -19,7 +19,7 @@
     <br /><br />
     <section>
       <header>
-        <h2>Account Management</h2>
+        <h1>Account Management</h1>
       </header>
       <div class="row">
         <div class="col-6">

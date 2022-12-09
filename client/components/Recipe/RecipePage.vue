@@ -5,7 +5,7 @@
         </div>  
         <main v-else>
             <header>
-                <span class="display-4">{{ recipe.name }}</span>
+                <h1>{{ recipe.name }}</h1>
                 <button
                     v-if="$store.state.username === recipe.author" 
                     class="btn btn-danger my-2 bi bi-trash" 

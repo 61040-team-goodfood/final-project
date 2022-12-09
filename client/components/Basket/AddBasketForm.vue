@@ -12,7 +12,7 @@ export default {
       collapsible: true,
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: '', placeholder: 'Enter name...' }, 
-        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [] },
+        { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [], tooltip: 'Hit enter or press the add button to add individual items to the basket' },
       ],
       title: 'Add New Basket',
       refreshBaskets: true,

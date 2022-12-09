@@ -4,7 +4,8 @@
     <main>
       <AddRecipeForm />
       <hr>
-      <h2 class="display-4">Recipes</h2>
+      <h1>Recipes</h1>
+      <p>Contribute to and explore recipes uploaded by users here.</p>
       <FilterRecipeForm />
       <br>
       <div class="font-italic">

@@ -5,13 +5,13 @@
   <main>
     <section>
       <header>
-        <h2>New to GoodFood?</h2>
+        <h1>New to GoodFood?</h1>
       </header>
       <RegisterForm />
     </section>
     <section>
       <header>
-        <h2>Have an account?</h2>
+        <h1>Have an account?</h1>
       </header>
       <LoginForm />
     </section>

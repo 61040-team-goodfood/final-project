@@ -144,7 +144,7 @@ export default {
             });
           } else {
             this.$store.commit('alert', {
-              message: 'Successfully removed item from history', status: 'success'
+              message: 'Successfully removed item from deleted items', status: 'success'
             });
           }
         }

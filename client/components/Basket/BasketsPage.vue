@@ -4,7 +4,8 @@
   <main>
     <AddBasketForm />
     <hr>
-    <h2 class="display-4">My Baskets</h2>
+    <h1>My Baskets</h1>
+    <p>Keep track of all the different buckets of items you want to buy here.</p>
     <section
       v-if="$store.state.baskets.length"
     >

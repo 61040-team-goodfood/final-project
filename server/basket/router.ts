@@ -118,6 +118,7 @@ router.delete(
  * @param {string} name - The given name for the item
  * @param {{value: number, unit: string}} quantity - The number of items and its unit
  * @param {{new: string, baskets: Array<Object>}} baskets - The baskets
+ * @param {Array<{name: string, quantity: number, unit: string}>} foodItems - The food items to be added to pantry
  * @return {BasketResponse[]} - the updated baskets
  * @throws {403} - if the user is not logged in
  */
@@ -131,18 +132,20 @@ router.delete(
     const basketsToUpdate = req.body.baskets.baskets;
     const baskets = [];
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const items = [{name: req.body.name, quantity: parseInt(req.body.quantity.value), unit: req.body.quantity.unit}]
-    const foodItem = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
-      const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
-      return ingredient._id.toString();
-    }));
-    // const foodItem = await FoodItemCollection.addOne(req.body.name, req.body.quantity.value, req.body.quantity.unit);
+    const items = req.body.foodItems ? req.body.foodItems : [{name: req.body.name, quantity: parseFloat(req.body.quantity.value), unit: req.body.quantity.unit}]
     if (newBasket) {
-      baskets.push(await BasketCollection.addOne(userId, req.body.baskets.new, foodItem))
+      const foodItems = await Promise.all(items.map(async ({name, quantity, unit}: {name: string, quantity: number, unit: string}) => {
+        const ingredient = await FoodItemCollection.addOne(name, quantity, unit);
+        return ingredient._id.toString();
+      }));
+      baskets.push(await BasketCollection.addOne(userId, req.body.baskets.new, foodItems))
     }
     if (basketsToUpdate.length !== 0) {
-      for (const basket of basketsToUpdate) {
-        baskets.push(await BasketCollection.addToBasket(basket._id, foodItem[0], items[0]));
+      for (const item of items) {
+        for (const basket of basketsToUpdate) {
+          const foodItem = await FoodItemCollection.addOne(item.name, item.quantity, item.unit);
+          baskets.push(await BasketCollection.addToBasket(basket._id, foodItem._id.toString(), item));
+        }
       }
     }
 

@@ -55,7 +55,7 @@ export default {
     }
 
     if (this.$route.query.keyword) filter.keyword = this.$route.query.keyword;
-    if (this.$route.query.ingredients) filter.ingredients = [this.$route.query.ingredients];
+    if (this.$route.query.ingredients) filter.ingredients = this.$route.query.ingredients;
 
     this.$store.commit('updateFilter', filter);
     await this.fetchRecipes();

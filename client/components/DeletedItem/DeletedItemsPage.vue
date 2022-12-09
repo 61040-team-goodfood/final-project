@@ -3,7 +3,7 @@
 <template>
   <main>
     <h1>Deleted Items</h1>
-    <p>View all your previously deleted pantry items here.</p>
+    <p>View all your deleted pantry items here.</p>
     <section
       v-if="$store.state.pantryItems.length"
     >

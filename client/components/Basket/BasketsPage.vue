@@ -5,7 +5,7 @@
     <AddBasketForm />
     <hr>
     <h1>My Baskets</h1>
-    <p>Keep track of all the different buckets of items you want to buy here.</p>
+    <p>Keep track of different groups of food items here.</p>
     <section
       v-if="$store.state.baskets.length"
     >

@@ -29,7 +29,7 @@
           <img src="@/public/recipesPage.png" style="max-width: 80%"/>
           <p>You can upload your own recipes:</p>
           <img src="@/public/addRecipe.png" style="max-width: 80%"/>
-          <p>Or filter through already uploaded recipes for ones that contain both the inputed keyword and ingredients: </p>
+          <p>Or filter through already uploaded recipes for ones that contain both the inputted keyword and ingredients: </p>
           <img src="@/public/filterRecipe.png" style="max-width: 80%"/>
           <p></p>
         </article>

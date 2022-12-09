@@ -66,7 +66,7 @@
           class="text-white"
           to="/help"
         >
-        <i class="bi bi-info-square mx-2"></i>
+        <i class="bi bi-info-circle mx-2"></i>
           <span class="fs-4">Help</span>
         </router-link>
       </li>

@@ -64,10 +64,10 @@
       <li class="nav-item mb-3">
         <router-link 
           class="text-white"
-          to="/about"
+          to="/help"
         >
         <i class="bi bi-info-square mx-2"></i>
-          <span class="fs-4">About</span>
+          <span class="fs-4">Help</span>
         </router-link>
       </li>
       <li class="nav-item mb-3" v-if="$store.state.username">
@@ -77,15 +77,6 @@
         >
           <i class="bi bi-speedometer2 mx-2"></i>
           <span class="fs-4">Account</span>
-        </router-link>
-      </li>
-      <li class="nav-item mb-3" v-if="$store.state.username">
-        <router-link 
-          class="text-white"
-          to="/help"
-        >
-          <i class="bi bi-question-circle mx-2"></i>
-          <span class="fs-4">Help</span>
         </router-link>
       </li>
     </ul>

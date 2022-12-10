@@ -28,7 +28,8 @@
           <label v-else :for="field.id"><i>{{ field.label }}:</i></label>
           <textarea v-if="field.type === 'content'" class="form-control" :name="field.id" :value="field.value"
             :placeholder="field.placeholder" @input="field.value = $event.target.value" required />
-
+          <input v-else-if="field.type === 'text' && addNewBasket && !addToBasket" class="form-control" :type="field.type" :name="field.id"
+            :value="field.value" :placeholder="field.placeholder" @input="field.value = $event.target.value; newBasketName = $event.target.value" required/>
           <div v-else-if="field.type === 'collection'">
             <div class="input-group">
               <input class="form-control" :name="field.id" :value="field.value" :placeholder="field.placeholder"

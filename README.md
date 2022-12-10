@@ -282,7 +282,6 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` If the user is not logged in
 - `400` If the basket name is empty or a stream of empty spaces or if the item unit is not specified
-- `409` - If the basket name already exists
 
 #### `DELETE /api/baskets/:basketId` - Delete a basket
 
@@ -329,7 +328,6 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` If the user is not logged in
 - `404` If the pantryItemId is not valid or if the item unit is specified
-- `409` - If the basket name already exists
 
 #### `GET /api/reminders` - Get all reminders for the user in session
 

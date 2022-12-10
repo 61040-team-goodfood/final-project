@@ -31,26 +31,6 @@ const isValidName = async (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  const existingBasket = await BasketCollection.findOneByName(req.body.name);
-  
-  if (existingBasket) {
-    if (req.params.basketId) {
-      const validFormat = Types.ObjectId.isValid(req.params.basketId);
-      const item = validFormat ? await BasketCollection.findOne(req.params.basketId) : null;
-      if (name !== item.name) {
-        res.status(409).json({
-          error: 'Name already exists.'
-        });
-        return;
-      }
-    } else {
-      res.status(409).json({
-        error: 'Name already exists.'
-      });
-      return;
-    }
-  }
-
   next();
 };
 

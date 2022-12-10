@@ -20,12 +20,12 @@
       </h2>
       <h2 v-else>Displaying all recipes</h2>
     </div>
-    <div v-if="fetching">
+    <div v-if="$store.state.fetchingRecipes">
       <strong>Loading...</strong>
     </div>
     <div v-else>
-      <section v-if="recipes.length">
-        <RecipeComponent v-for="recipe in recipes" :key="recipe._id" :recipe="recipe" />
+      <section v-if="$store.state.recipes.length">
+        <RecipeComponent v-for="recipe in $store.state.recipes" :key="recipe._id" :recipe="recipe" />
       </section>
       <section v-else>
         <p>No recipes found.</p>
@@ -42,12 +42,6 @@ import FilterRecipeForm from '@/components/Recipe/FilterRecipeForm.vue';
 export default {
   name: 'RecipesPage',
   components: { RecipeComponent, AddRecipeForm, FilterRecipeForm },
-  data() {
-    return {
-      fetching: true,
-      recipes: [],
-    };
-  },
   async mounted() {
     const filter = {
       keyword: null,
@@ -59,27 +53,8 @@ export default {
     this.$router.replace({ 'query': null });
 
     this.$store.commit('updateFilter', filter);
-    await this.fetchRecipes();
+    await this.$store.commit('fetchRecipes', true);
   },
-  watch: {
-    async '$store.state.ingredients'() {
-      await this.fetchRecipes();
-    },
-    async '$store.state.keyword'() {
-      await this.fetchRecipes();
-    },
-  },
-  methods: {
-    async fetchRecipes() {
-      this.fetching = true;
-      const keyword = this.$store.state.keyword ? this.$store.state.keyword : '';
-      const ingredients = this.$store.state.ingredients ? this.$store.state.ingredients.join(',') : '';
-      const url = `/api/recipes?keyword=${keyword}&ingredients=${ingredients}`;
-      const res = await fetch(url).then(async r => r.json());
-      this.recipes = res;
-      this.fetching = false;
-    }
-  }
 };
 </script>
   

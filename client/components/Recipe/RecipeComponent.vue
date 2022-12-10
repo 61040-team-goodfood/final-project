@@ -67,7 +67,7 @@ export default {
           throw new Error(res.error);
         }
 
-        this.$store.commit('refreshRecipes');
+        this.$store.commit('fetchRecipes', false);
 
         params.callback();
       } catch (e) {

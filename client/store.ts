@@ -11,12 +11,14 @@ const store = new Vuex.Store({
   state: {
     pantryItems: [], // All pantryItems created in the app
     baskets: [], // All baskets in the app
+    recipes: [], // All recipes in the app
     reminders: {}, // All reminders in the app
     numReminders: 0, // The number of active reminders for the logged in user in the app
     username: null, // Username of the logged in user
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
     keyword: null,
     ingredients: [],
+    fetchingRecipes: false,
     units: [
       'count',
       'mL',
@@ -79,6 +81,19 @@ const store = new Vuex.Store({
       const url = `/api/baskets`;
       const res = await fetch(url).then(async r => r.json());
       state.baskets = res;
+    },
+    async fetchRecipes(state, showLoading) {
+      /**
+       * Request the server for the currently available recipes
+       * @param showLoading - boolean denoting whether to toggle loading page when loading recipes
+       */
+      if (showLoading) { state.fetchingRecipes = true; }
+      const keyword = state.keyword ? state.keyword : '';
+      const ingredients = state.ingredients ? state.ingredients.join(',') : '';
+      const url = `/api/recipes?keyword=${keyword}&ingredients=${ingredients}`;
+      const res = await fetch(url).then(async r => r.json());
+      state.recipes = res;
+      if (showLoading) { state.fetchingRecipes = false; }
     },
     async refreshReminders(state) {
       /**

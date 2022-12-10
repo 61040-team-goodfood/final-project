@@ -522,7 +522,7 @@ export default {
         }
         
         if (this.refreshRecipes) {
-          await this.$store.commit('fetchRecipes', this.showLoading ? this.showLoading : false);
+          await this.$store.commit('fetchRecipes', false);
         }
 
         if (this.callback) {

@@ -2,20 +2,57 @@
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
-  <article class="border rounded my-2 p-4">
-    <section>
-      <button v-if="$store.state.username === recipe.author" class="btn btn-danger btn-sm my-2 bi bi-trash" @click="deleteRecipe">
-        Delete
-      </button>
-      <router-link :to="'/recipes/' + recipe._id">
-        <h4>{{recipe.name}}</h4>
-      </router-link>
-      <b>Ingredients: </b> {{ recipe.ingredients.map(i => i.name).join(', ') }}
-      <br>
-      <b>Cook Time:</b> {{ recipe.cookTime }} minutes
-    </section>
-  </article>
-
+  <div>
+    <div class="modal fade" :id="recipe._id + 'confirmationModal'" tabindex="-1" role="dialog" :aria-labelledby="recipe._id + 'confirmationModalLabel'" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this recipe?
+          </div>
+          <div class="modal-footer">
+            <button 
+              type="button" 
+              class="btn btn-danger" 
+              data-dismiss="modal"
+              @click="deleteRecipe"
+            >
+              Confirm
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <article class="border rounded my-2 p-4">
+      <section>
+        <button 
+          v-if="$store.state.username === recipe.author" 
+          class="btn btn-danger btn-sm my-2 bi bi-trash" 
+          data-toggle="modal" 
+          :data-target="'#' + recipe._id + 'confirmationModal'"
+        >
+          Delete
+        </button>
+        <router-link :to="'/recipes/' + recipe._id">
+          <h4>{{recipe.name}}</h4>
+        </router-link>
+        <b>Ingredients: </b> {{ recipe.ingredients.map(i => i.name).join(', ') }}
+        <br>
+        <b>Cook Time:</b> {{ recipe.cookTime }} minutes
+      </section>
+    </article>
+  </div>
 </template>
 
 <script>

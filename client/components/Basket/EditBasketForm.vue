@@ -37,7 +37,9 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
+      dismissible: true,
       title: 'Edit Basket',
+      submitText: 'Done Editing',
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 
         { type: 'ingredients', id: 'ingredients', label: 'Items', name: '', quantity: '', unit: '', ingredients: [...this.basket.ingredients] },

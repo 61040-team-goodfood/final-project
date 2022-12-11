@@ -1,5 +1,36 @@
 <template>
     <div>
+        <div class="modal fade" :id="basket._id + 'confirmationModal'" tabindex="-1" role="dialog" :aria-labelledby="basket._id + 'confirmationModalLabel'" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this basket?
+                </div>
+                <div class="modal-footer">
+                    <button 
+                    type="button" 
+                    class="btn btn-danger" 
+                    data-dismiss="modal"
+                    @click="deleteBasket"
+                    >
+                    Confirm
+                    </button>
+                    <button 
+                    type="button" 
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                    >
+                    Cancel
+                    </button>
+                </div>
+                </div>
+            </div>
+            </div>
         <div v-if="fetching">
             <strong>Loading...</strong>
         </div>  
@@ -9,7 +40,8 @@
                 <section>
                     <button
                         class="btn btn-danger my-2 bi bi-trash right" 
-                        @click="deleteBasket"
+                        data-toggle="modal" 
+                        :data-target="'#' + basket._id + 'confirmationModal'"
                     >
                         Delete
                     </button>
@@ -43,6 +75,7 @@
                     :basket=basket
                     :visible="editing"
                     @refreshBasketPage="fetchData"
+                    @stopEditing="toggleEditing"
                 />
             </section>
             <button 

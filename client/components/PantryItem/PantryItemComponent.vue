@@ -2,80 +2,115 @@
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
-  <article class="border rounded my-2 p-4">
-    <section>
-      <button
-        v-if="!editing && isPantry" 
-        class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
-        @click="toggleEditing"
-      >
-        Edit
-      </button>
-      <button 
-        v-if="editing && isPantry"
-        class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
-        @click="toggleEditing"
-      >
-        Stop Editing
-      </button>
-      <button 
-        class="btn btn-danger btn-sm my-2 bi bi-trash"
-        @click="deleteItem"
-      >
-        Delete
-      </button>
-      <button 
-        v-if="!isPantry"
-        class="btn btn-info btn-sm mr-2 my-2 right"
-        @click="toggleAddToPantry"
-      >
-        Add to Pantry
-      </button>
-      <button 
-        class="btn btn-info btn-sm mr-2 my-2 right"
-        @click="toggleAddToBasket"
-      >
-        Add to Baskets
-      </button>
-      <div>
-        <b>Name:</b> {{ pantryItem.name }} <br>
-        <b>Quantity:</b> {{ pantryItem.quantity }} {{ pantryItem.unit }}
+  <div>
+    <div class="modal fade" :id="pantryItem._id + 'confirmationModal'" tabindex="-1" role="dialog" :aria-labelledby="pantryItem._id + 'confirmationModalLabel'" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this pantry item?
+          </div>
+          <div class="modal-footer">
+            <button 
+              type="button" 
+              class="btn btn-danger" 
+              data-dismiss="modal"
+              @click="deleteItem"
+            >
+              Confirm
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
-      <div>
-        <b v-if="isPantry">In pantry since:</b>
-        <b v-else>Date added to pantry:</b> {{ pantryItem.dateAdded }}
-      </div>
-      <div v-if="pantryItem.expirationDate && isPantry">
-        <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
-        <b>Reminder on:</b> {{ reminder.date }}
-      </div>
-    </section>
-    <section v-if="addToPantry && !isPantry">
-      <AddToPantryForm 
-        class="mt-4"
-        :pantryItem=this.pantryItem   
-        :visible="addToPantry"
-        :reminder=this.reminder
-      />
-    </section>
-    <section v-if="addToBasket">
-      <AddToBasketForm 
-        class="mt-4"
-        :pantryItem=this.pantryItem 
-        :visible="addToBasket"
-        :reminder=this.reminder
-        :isPantry=this.isPantry
-      />
-    </section>
-    <section>
-      <EditPantryItemForm 
-        class="mt-4"
-        :pantryItem=this.pantryItem 
-        :visible="editing"
-        :reminder=this.reminder
-      />
-    </section>
-  </article>
+    </div>
+    <article class="border rounded my-2 p-4">
+      <section>
+        <button
+          v-if="!editing && isPantry" 
+          class="btn btn-primary btn-sm mr-2 my-2 bi bi-pencil"
+          @click="toggleEditing"
+        >
+          Edit
+        </button>
+        <button 
+          v-if="editing && isPantry"
+          class="btn btn-secondary btn-sm mr-2 my-2 bi bi-x"
+          @click="toggleEditing"
+        >
+          Stop Editing
+        </button>
+        <button 
+          class="btn btn-danger btn-sm my-2 bi bi-trash"
+          data-toggle="modal" 
+          :data-target="'#' + pantryItem._id + 'confirmationModal'"
+        >
+          Delete
+        </button>
+        <button 
+          v-if="!isPantry"
+          class="btn btn-info btn-sm mr-2 my-2 right"
+          @click="toggleAddToPantry"
+        >
+          Add to Pantry
+        </button>
+        <button 
+          class="btn btn-info btn-sm mr-2 my-2 right"
+          @click="toggleAddToBasket"
+        >
+          Add to Baskets
+        </button>
+        <div>
+          <b>Name:</b> {{ pantryItem.name }} <br>
+          <b>Quantity:</b> {{ pantryItem.quantity }} {{ pantryItem.unit }}
+        </div>
+        <div>
+          <b v-if="isPantry">In pantry since:</b>
+          <b v-else>Date added to pantry:</b> {{ pantryItem.dateAdded }}
+        </div>
+        <div v-if="pantryItem.expirationDate && isPantry">
+          <b>Expires on:</b> {{ pantryItem.expirationDate }} <br>
+          <b>Reminder on:</b> {{ reminder.date }}
+        </div>
+      </section>
+      <section v-if="addToPantry && !isPantry">
+        <AddToPantryForm 
+          class="mt-4"
+          :pantryItem=this.pantryItem   
+          :visible="addToPantry"
+          :reminder=this.reminder
+        />
+      </section>
+      <section v-if="addToBasket">
+        <AddToBasketForm 
+          class="mt-4"
+          :pantryItem=this.pantryItem 
+          :visible="addToBasket"
+          :reminder=this.reminder
+          :isPantry=this.isPantry
+        />
+      </section>
+      <section>
+        <EditPantryItemForm 
+          class="mt-4"
+          :pantryItem=this.pantryItem 
+          :visible="editing"
+          :reminder=this.reminder
+          @stopEditing="toggleEditing"
+        />
+      </section>
+    </article>
+  </div>
 </template>
 
 <script>

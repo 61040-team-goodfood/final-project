@@ -33,17 +33,20 @@ const isValidRecipe = (req: Request, res: Response, next: NextFunction) => {
   if (!instructions.trim()) {
     res.status(400).json({
         error: 'Instructions must be at least one character long.'
-    })
+    });
+    return;
   }
   if (cookTime <= 0) {
     res.status(405).json({
         error: 'Cook time must be at least 1 minute.'
-    })
+    });
+    return;
   }
   if (ingredients.length === 0) {
     res.status(400).json({
         error: 'There must be at least one ingredient.'
-    })
+    });
+    return;
   }
 
   next();

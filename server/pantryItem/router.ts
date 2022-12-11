@@ -86,7 +86,7 @@ router.post(
       const pantryItems = [];
       for (const foodItem of req.body.foodItems) {
         const item = await PantryItemCollection.addOne(userId, foodItem.name, foodItem.quantity, foodItem.unit, null);
-        const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+        const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date(item.dateAdded);
         const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
         await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
         pantryItems.push(item)
@@ -97,7 +97,7 @@ router.post(
       });
     } else {
       const item = await PantryItemCollection.addOne(userId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
-      const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+      const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date(item.dateAdded);
       const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
       await ReminderCollection.addOne(userId, item._id.toString(), remindDate);
       res.status(201).json({
@@ -179,7 +179,7 @@ router.patch(
   ],
   async (req: Request, res: Response) => {
     let item = await PantryItemCollection.updateOneInfo(req.params.pantryItemId, req.body.name, req.body.quantity.value, req.body.quantity.unit, req.body.expiration);
-    const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date();
+    const targetDate = item.expirationDate ? new Date(item.expirationDate) : new Date(item.dateAdded);
     const remindDate = item.expirationDate ? new Date(targetDate.setDate(targetDate.getDate() - req.body.remindDays)) : new Date(targetDate.setMonth(targetDate.getMonth() + 1));
     await ReminderCollection.updateOneDate(req.params.pantryItemId, remindDate);
     res.status(200).json({

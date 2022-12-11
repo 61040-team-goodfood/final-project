@@ -1,5 +1,36 @@
 <template>
     <div>
+        <div class="modal fade" :id="recipe._id + 'confirmationModal'" tabindex="-1" role="dialog" :aria-labelledby="recipe._id + 'confirmationModalLabel'" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this recipe?
+          </div>
+          <div class="modal-footer">
+            <button 
+              type="button" 
+              class="btn btn-danger" 
+              data-dismiss="modal"
+              @click="deleteRecipe"
+            >
+              Confirm
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
         <div v-if="fetching">
             <strong>Loading...</strong>
         </div>  
@@ -9,7 +40,8 @@
                 <button
                     v-if="$store.state.username === recipe.author" 
                     class="btn btn-danger my-2 bi bi-trash" 
-                    @click="deleteRecipe"
+                    data-toggle="modal" 
+                    :data-target="'#' + recipe._id + 'confirmationModal'"
                 >
                     Delete
                 </button>
@@ -17,11 +49,11 @@
             <p>Recipe by @{{ recipe.author }}</p><br>
             <p class="text-secondary"><i>Cook Time:</i> {{ recipe.cookTime }} minutes</p>
 
-            <div class="border rounded my-3 px-4 py-2">
-                <div class="row">
-                    <h4 class="my-2 col-10">Ingredients</h4>
+            <div class="border rounded my-3 p-4">
+                <div>
+                    <h4 class="my-2 inline">Ingredients</h4>
                     <button 
-                        class="btn btn-info btn-sm mr-2 my-2 right"
+                        class="btn btn-info btn-sm right"
                         @click="addToBasket = !addToBasket"
                     >
                         Add to Baskets
@@ -42,8 +74,8 @@
                 />
             </section>
             </div>
-            <div class="border rounded my-3 px-4 py-2">
-                <h4 class="my-2">Instructions</h4>
+            <div class="border rounded my-3 p-4">
+                <div><h4 class="my-2 inline">Instructions</h4></div>
                 {{ recipe.instructions }}
             </div>
         </main>   
@@ -153,5 +185,9 @@ button {
 
 .right {
   float: right;
+}
+
+.inline {
+    display: inline;
 }
 </style>

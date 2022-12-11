@@ -330,6 +330,7 @@ export default {
           if (field.id === 'ingredients') {
             ingredients = field.collection;
             field.collection = [];
+            field.value = '';
           }
         }
 
@@ -339,7 +340,7 @@ export default {
         };
 
         this.$store.commit('updateFilter', filter);
-        this.$store.commit('refreshRecipes');
+        this.$store.commit('fetchRecipes', true);
         return;
       }
 
@@ -522,7 +523,7 @@ export default {
         }
         
         if (this.refreshRecipes) {
-          this.$store.commit('refreshRecipes');
+          await this.$store.commit('fetchRecipes', false);
         }
 
         if (this.callback) {

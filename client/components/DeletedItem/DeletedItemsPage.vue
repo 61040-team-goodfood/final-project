@@ -5,16 +5,17 @@
     <h1>Deleted Items</h1>
     <p>View all your deleted pantry items here.</p>
     <section
-      v-if="$store.state.pantryItems.length"
+      v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false').length"
     >
       <PantryItemComponent
-        v-for="item in $store.state.pantryItems"
+        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false')"
         :key="item._id"
         :pantryItem="item"
         :reminder="$store.state.reminders[item._id]"
         :isPantry="false"
       />
     </section>
+    <p v-else>No history items.</p>
   </main>
 </template>
 
@@ -25,7 +26,7 @@ export default {
   name: 'PantryItemsPage',
   components: {PantryItemComponent},
   mounted() {
-    this.$store.commit('refreshPantryItems', false);
+    this.$store.commit('refreshPantryItems');
     this.$store.commit('refreshReminders');
   }
 };

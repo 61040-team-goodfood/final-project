@@ -7,10 +7,10 @@
     <h1>My Pantry</h1>
     <p>Keep track and manage the items in your pantry here.</p>
     <section
-      v-if="$store.state.pantryItems.length"
+      v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').length"
     >
       <PantryItemComponent
-        v-for="item in $store.state.pantryItems"
+        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true')"
         :key="item._id"
         :pantryItem="item"
         :isPantry="true"
@@ -26,9 +26,9 @@ import AddPantryItemForm from '@/components/PantryItem/AddPantryItemForm.vue';
 
 export default {
   name: 'PantryItemsPage',
-  components: {PantryItemComponent, AddPantryItemForm},
+  components: { PantryItemComponent, AddPantryItemForm },
   mounted() {
-    this.$store.commit('refreshPantryItems', true);
+    this.$store.commit('refreshPantryItems');
     this.$store.commit('refreshReminders');
   }
 };
@@ -41,13 +41,13 @@ section {
 }
 
 header, header > * {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 section .scrollbox {

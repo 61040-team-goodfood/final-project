@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     alerts: {}, // Blobal success/error messages encountered during submissions to non-visible forms
     keyword: null,
     ingredients: [],
+    fetchingRecipes: false,
     units: [
       'count',
       'mL',
@@ -64,12 +65,12 @@ const store = new Vuex.Store({
       state.keyword = filter.keyword;
       state.ingredients = [...filter.ingredients];
     },
-    async refreshPantryItems(state, inPantry) {
+    async refreshPantryItems(state) {
       /**
        * Request the server for the currently available pantry items.
        * @param inPantry - boolean denoting whether to filter items by currently in pantry
        */
-      const url = `/api/pantryItems?status=${inPantry}`;
+      const url = `/api/pantryItems`;
       const res = await fetch(url).then(async r => r.json());
       state.pantryItems = res;
     },
@@ -81,16 +82,18 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async r => r.json());
       state.baskets = res;
     },
-    async refreshRecipes(state) {
+    async fetchRecipes(state, showLoading) {
       /**
-       * Request the server for the currently available recipes.
+       * Request the server for the currently available recipes
+       * @param showLoading - boolean denoting whether to toggle loading page when loading recipes
        */
-
+      if (showLoading) { state.fetchingRecipes = true; }
       const keyword = state.keyword ? state.keyword : '';
       const ingredients = state.ingredients ? state.ingredients.join(',') : '';
       const url = `/api/recipes?keyword=${keyword}&ingredients=${ingredients}`;
       const res = await fetch(url).then(async r => r.json());
       state.recipes = res;
+      if (showLoading) { state.fetchingRecipes = false; }
     },
     async refreshReminders(state) {
       /**

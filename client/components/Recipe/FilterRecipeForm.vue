@@ -17,7 +17,6 @@ export default {
       ],
       title: 'Filter Recipes',
       tooltip: 'Filter to show recipes that contain both the keyword and list of ingredients.',
-      refreshRecipes: true,
     };
   }
 };

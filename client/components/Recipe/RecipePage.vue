@@ -74,7 +74,7 @@
                 />
             </section>
             </div>
-            <div class="border rounded my-3 p-4">
+            <div class="border rounded my-3 p-4 instructions">
                 <div><h4 class="my-2 inline">Instructions</h4></div>
                 {{ recipe.instructions }}
             </div>
@@ -189,5 +189,9 @@ button {
 
 .inline {
     display: inline;
+}
+
+.instructions {
+    white-space: pre-line;
 }
 </style>

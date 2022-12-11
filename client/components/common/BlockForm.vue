@@ -213,7 +213,8 @@
         type="submit" 
         class="btn btn-block btn-primary mt-4"
       >
-        {{ title }}
+        <span v-if="submitText">{{ submitText }}</span>
+        <span v-else>{{ title }}</span>
       </button>
       <button 
         v-if="dismissible"
@@ -258,6 +259,7 @@ export default {
       checkedFoodItems: [],
       addFromBasket: false,
       dismissible: false,
+      submitText: '',
     };
   },
   created() {

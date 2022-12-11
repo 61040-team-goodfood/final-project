@@ -48,6 +48,7 @@ export default {
       collapsible: false,
       dismissible: true,
       title: 'Edit Item',
+      submitText: 'Done Editing',
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.pantryItem.name, placeholder: 'Enter name...' }, 
         { type: 'quantity', id: 'quantity', label: 'Quantity', value: this.pantryItem.quantity, placeholder: 'Enter number...', unit: this.pantryItem.unit },

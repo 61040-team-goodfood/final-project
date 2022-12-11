@@ -106,6 +106,7 @@
           :pantryItem=this.pantryItem 
           :visible="editing"
           :reminder=this.reminder
+          @stopEditing="toggleEditing"
         />
       </section>
     </article>

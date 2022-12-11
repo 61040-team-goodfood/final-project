@@ -46,6 +46,7 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
+      dismissible: true,
       title: 'Edit Item',
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.pantryItem.name, placeholder: 'Enter name...' }, 

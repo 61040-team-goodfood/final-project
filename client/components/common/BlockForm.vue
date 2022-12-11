@@ -17,6 +17,16 @@
         </h3>
       </button>
     </section>
+    <div v-else-if="dismissible">
+      <h3 style="display: inline">{{ title }}</h3>
+      <button 
+        type="button" 
+        class="close" 
+        @click="$emit('stopEditing')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <h3 v-else>{{ title }}</h3>
     <section v-bind:class="{'collapse show': !collapsible, 'collapse': collapsible}" :id="title">
       <article v-if="fields.length">
@@ -205,6 +215,14 @@
       >
         {{ title }}
       </button>
+      <button 
+        v-if="dismissible"
+        type="button"
+        class="btn btn-block btn-secondary mt-2"
+        @click="$emit('stopEditing')"
+      >
+        Discard Changes
+      </button>
   </section>
   </form>
 </template>
@@ -239,6 +257,7 @@ export default {
       newBasketName: '',
       checkedFoodItems: [],
       addFromBasket: false,
+      dismissible: false,
     };
   },
   created() {

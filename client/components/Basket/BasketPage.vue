@@ -75,6 +75,7 @@
                     :basket=basket
                     :visible="editing"
                     @refreshBasketPage="fetchData"
+                    @stopEditing="toggleEditing"
                 />
             </section>
             <button 

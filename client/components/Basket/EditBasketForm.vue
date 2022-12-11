@@ -37,6 +37,7 @@ export default {
       method: 'PATCH',
       hasBody: true,
       collapsible: false,
+      dismissible: true,
       title: 'Edit Basket',
       fields: [
         { type: 'text', id: 'name', label: 'Name', value: this.basket.name, placeholder: 'Enter name...' }, 

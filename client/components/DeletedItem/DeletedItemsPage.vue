@@ -8,7 +8,7 @@
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false').length"
     >
       <PantryItemComponent
-        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false')"
+        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false').sort((item1, item2) => item2.dateAdded.localeCompare(item1.dateAdded))"
         :key="item._id"
         :pantryItem="item"
         :reminder="$store.state.reminders[item._id]"

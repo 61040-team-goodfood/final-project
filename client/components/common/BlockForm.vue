@@ -263,13 +263,6 @@ export default {
       submitText: '',
     };
   },
-  created() {
-    for (const field of this.fields) {
-      if (field.type === 'date') {
-        this.expires = field.expires;
-      }
-    }
-  },
   methods: {
     addItem(collection, item) {
       const regex = /^[a-zA-Z ]+$/i;

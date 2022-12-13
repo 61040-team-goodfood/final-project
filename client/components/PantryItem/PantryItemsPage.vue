@@ -10,7 +10,7 @@
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').length"
     >
       <PantryItemComponent
-        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').sort((item1, item2) => (item1.expirationDate ? item1.expirationDate : item1.dateAdded).localeCompare(item2.expirationDate ? item2.expirationDate : item2.dateAdded))"
+        v-for="item in $store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').sort((item1, item2) => (item1.expirationDate ? item1.expirationDate : 'a' + item1.dateAdded).localeCompare(item2.expirationDate ? item2.expirationDate : 'a' + item2.dateAdded))"
         :key="item._id"
         :pantryItem="item"
         :isPantry="true"

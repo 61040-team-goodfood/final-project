@@ -34,7 +34,7 @@
               </h3>
             </button>
             <section class="collapse pb-3" id="deleted-items">
-              <p class="mt-3">Once the items are deleted from the pantry, they will appear on the Deleted Items page:</p>
+              <p class="mt-3">Once the items are deleted from the pantry, they will appear on the Deleted Items page, displaying the items with the most recent date added to pantry date first:</p>
               <img src="@/public/deletedItems.png" class="col-9 ml-2 border-left border-5"/>
               <p class="mt-5">This page provides an easy way to add items back into the pantry:</p>
               <img src="@/public/addToPantry.png" class="col-9 ml-2 border-left border-5"/>

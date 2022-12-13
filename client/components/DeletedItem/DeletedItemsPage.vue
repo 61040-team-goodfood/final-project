@@ -2,7 +2,7 @@
 
 <template>
   <main>
-    <h1>Deleted Items</h1>
+    <h1>Deleted Items <i class="bi bi-info-circle" data-toggle="tooltip" data-placement="right" title="Deleted items are displayed in descending date added to pantry order."></i></h1>
     <p>View all your deleted pantry items here.</p>
     <section
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'false').length"

@@ -21,7 +21,7 @@
               <img src="@/public/addPantryItem.png" class="col-9 ml-2 border-left border-5"/>
               <p class="mt-5">When adding items to the pantry, you only need to specify the item name, quantity and unit. If you choose to add an expiration date, you will be allowed to decide when to be reminded about the item. The default date is three days before the expiration date. Else, if no expiration date is provided, we will remind you about the item a month later. The reminders will appear on the Home page once logged in along with a badge indicating how many reminders you have. You will have the option to dismiss the reminder or view recipes that can help you use up the item:</p>
               <img src="@/public/reminders.png" class="col-9 ml-2 border-left border-5"/>
-              <p class="mt-5">After adding the items, you will see them listed in the Pantry page, where you can edit or delete the items as they are being used: </p>
+              <p class="mt-5">After adding the items, you will see them listed in the Pantry page, where you can edit or delete the items as they are being used. Pantry items are displayed by ascending expiration date. If no expiration dates are provided, the items will be displayed by ascending date added after the items with expiration dates. </p>
               <img src="@/public/pantryPage.png" class="col-9 ml-2 border-left border-5"/>
             </section>
           </section>

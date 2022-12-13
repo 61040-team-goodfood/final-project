@@ -4,7 +4,8 @@
   <main>
     <AddPantryItemForm />
     <hr>
-    <h1>My Pantry</h1>
+    <h1>My Pantry <i class="bi bi-info-circle" data-toggle="tooltip" data-placement="right" title="Pantry items are displayed by ascending expiration date. If no expiration dates are provided, the items will be displayed by ascending date added after the items with expiration dates."></i>
+</h1> 
     <p>Keep track and manage the items in your pantry here.</p>
     <section
       v-if="$store.state.pantryItems.filter(pantryItem => pantryItem.inPantry === 'true').length"
